@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>{{ page.title }} - {{ site.title }}</title>
+
+    <!-- Bring in the minimal theme’s built-in stylesheet -->
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+
+    <!-- Your custom overrides -->
+    <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <header>
+      <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
+      <p>{{ site.description }}</p>
+
+      {% if site.nav %}
+        <nav>
+          <ul style="list-style: none; padding: 0;">
+            {% for item in site.nav %}
+              <li style="display: inline; margin-right: 10px;">
+                <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </nav>
+      {% endif %}
+    </header>
+
+    <main>
+      {{ content }}
+    </main>
+  </body>
+</html>
