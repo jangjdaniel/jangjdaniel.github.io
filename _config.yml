@@ -1,6 +1,6 @@
 title: My GitHub Site
 description: A simple multi-page site using Jekyll
-theme: minima
+theme: minimal
 
 #remote_theme: pages-themes/minimal@v0.2.0
 #plugins:
