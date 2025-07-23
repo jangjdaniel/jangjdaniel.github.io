@@ -2,11 +2,14 @@ title: Daniel Jang's Github Site (pending)
 description: My site
 remote_theme: pages-themes/minimal@v0.2.0
 plugins:
-- jekyll-remote-theme # add this line to the plugins list if you already have one
+  - jekyll-remote-theme
 
-#i want to include a legend
 nav:
   - title: Home
     url: /
   - title: Page1
     url: /page1/
+  - title: Page2
+    url: /page2/
+  - title: Page3
+    url: /page3/

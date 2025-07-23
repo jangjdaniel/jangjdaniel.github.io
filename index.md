@@ -6,7 +6,7 @@ title: Home
 
 # Welcome to my Website!
 
-I am a rising senior at Amherst College majoring in Mathematics and Music looking to pursue Biostatistics as a career. I am currently interested in statistical methodology in causal inference, clinical trials, and statistics pedagogy. 
+I am a rising senior at Amherst College majoring in Mathematics and Music looking to pursue Biostatistics as a career. I am currently interested in causal inference, clinical trials, and statistics pedagogy. 
 
 I am currently pursuing two *methodological* projects. The first is affiliated with Memorial Sloan Kettering Cancer Center (MSKCC) in New York City concerning measurement errors in stratified randomization. The second is affiliated with The Karolinska Institute in Stockholm, Sweden, revolved around developing a new multiple imputation (MI) method for continuous and bounded variables with moderate to heavy skew. My current *applied* research concerns using multiple mediation analysis to better understand what factors affect quantitative achivement gaps between historically privileged and marganlized groups of college students. 
 
