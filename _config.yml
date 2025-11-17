@@ -1,9 +1,14 @@
+# Site settings
 title: Daniel Jang's Github Site (pending)
 description: My site
+
+# Theme settings
 remote_theme: pages-themes/minimal@v0.2.0
 plugins:
   - jekyll-remote-theme
+  - jekyll-sass-converter
 
+# Navigation
 nav:
   - title: Home
     url: /
@@ -13,3 +18,13 @@ nav:
     url: /page2/
   - title: Page3
     url: /page3/
+
+# Include custom CSS
+sass:
+  style: compressed
+
+# Optional: Exclude files from build
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
