@@ -1,5 +1,5 @@
 ---
-layout: About
+layout: about
 title: About
 permalink: /
 subtitle: <a href='#'>Biomedical Graduate Studies at the University of Pennsylvania Perelman School of Medicine</a>.
