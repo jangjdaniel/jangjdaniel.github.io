@@ -1,24 +1,16 @@
 ---
 layout: page
-title: project 5
-description: a project with a background image
-img: assets/img/1.jpg
-importance: 3
+title: Dark Shadows
+description: photography project #1
+img: assets/img/6.jpg
+importance: 4
 category: fun
 ---
 
-Every project has a beautiful feature showcase page.
-It's easy to include images in a flexible 3-column grid format.
-Make your photos 1/3, 2/3, or full width.
+I am a big fan of minimalism, both in music and fine art, because it forces one to think about the bare essentials of the art medium. It removes many distractions and imperfections until it becomes uniquely indistinguishable. In these pictures I took (albeit without the intention that I had when thinking about this project), I wanted to capture an emotion without the anxiety of all the unnecessary bits getting in the way. 
 
-To give your project a background in the portfolio page, just add the img tag to the front matter like so:
+I am nowhere near done thinking about this, so I will continue to add to this collection as I go along.
 
-    ---
-    layout: page
-    title: project
-    description: a project with a background image
-    img: /assets/img/12.jpg
-    ---
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
