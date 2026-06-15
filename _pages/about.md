@@ -2,7 +2,7 @@
 layout: about
 title: About
 permalink: /
-subtitle: [Biomedical Graduate Studies at the University of Pennsylvania Perelman School of Medicine](https://www.med.upenn.edu/bgs/)
+subtitle: "<a href='https://www.med.upenn.edu/bgs/'>Biomedical Graduate Studies at the University of Pennsylvania Perelman School of Medicine</a>"
 
 profile:
   align: right
