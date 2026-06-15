@@ -3,7 +3,7 @@ layout: page
 title: Spring 2025 Abroad in Stockholm, Sweden
 description: Blog compilation
 img:
-importance: 3
+importance: 4
 category: fun
 ---
 

@@ -3,7 +3,7 @@ layout: page
 title: Dark Shadows
 description: photography project #1
 img: assets/img/6.jpg
-importance: 4
+importance: 1
 category: fun
 ---
 
