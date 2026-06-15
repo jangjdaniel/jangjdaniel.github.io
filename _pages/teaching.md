@@ -2,13 +2,13 @@
 layout: page
 permalink: /teaching/
 title: Teaching
-description: Course materials, schedules, and resources for classes taught.
+description: Course materials, schedules, and resources for classes taught / assisted.
 nav: false
 calendar: true
 ---
 
-This page displays a collection of courses with detailed schedules, materials, and resources. You can organize your courses by years, terms, or topics.
+I was a Statistics and Data Science Fellow at **Amherst College**, which meant I was a teaching assistant for: MATH/STAT 135 (Introduction to Statistics Via Modeling), STAT 230 (Intermediate Statistics), and STAT 231 (Data Science). 
 
-{% include calendar.liquid calendar_id='test@gmail.com' timezone='Asia/Shanghai' %}
+I am planning to put lecture notes and resources here in the future to facilitate understanding of difficult topics. Currently the courses are all placeholders. 
 
 {% include courses.liquid %}
