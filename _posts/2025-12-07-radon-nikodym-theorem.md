@@ -4,7 +4,7 @@ title: "My Intuition of the Radon-Nikodym Derivative"
 date: 2025-12-07 14:24:00
 description: Extremely Non-rigorous
 tags: theory
-categories: mathematics
+categories: Mathematics
 ---
 
 In calculus, derivatives are taught intuitively as the tangent line of a curve. This extended to the gradient $\nabla f$ in multivariable calculus. Even the real analysis definition was the same in calculus: $ \lim_{h \to 0} \frac{f(x+h) - f(x)}{h} $. Nothing too scary. Then the Radon-Nikodym derivative $f = \frac{d\mu}{dm}$ comes out of nowhere.

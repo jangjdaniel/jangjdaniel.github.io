@@ -1,0 +1,61 @@
+---
+
+title: "Longitudinal Treatment Crossover Methods for Non-survival Outcomes"
+date: 2026-02-07
+layout: single
+mathjax: true
+
+---
+
+## Motivation
+
+For certain clinical trials, it can be unethical to keep patients in one arm. For example, this can include experimental treatments for terminally-ill patients, or addicting painkillers such as fentanyl. Thus, they are allowed to "crossover" to the other arm. Although necessary, this complicates the statistical analysis to provide a conclusion to the trial. In the past, the Intent-to-Treat (ITT) framework was sufficient, but this results in increased Type I errors. 
+
+Furthermore, treatment switching implies that we are in a longitudinal setting, as we need multiple timepoints for patients to even see them switch treatments. This complicates things because longitudinal analyses are difficult and I have rarely done them. I have ran a Linear Mixed Model (LMM) and a Generalized Estimating Equation (GEE) before, but not for an actual study.
+
+The point of this post is to do an overview for how I can deal with this crossover in a non-survival setting. Survival settings are really interesting due to informative censoring affecting the estimation of hazard ratios, and causal methods (Two-Stage Estimation, Inverse Probability of Censoring Weighting, Failure Time) have been developed to deal with the complex confounding of treatment crossover. However, I am interested in a continuous (or technically ordinal) outcome. This means that we do not have a problem of censoring, but we still have this complicated confounding structure that normal methods (such as LMM, GEE) cannot handle directly. Thus, I will be introducing the problem, as well as discuss Marginal Structural Modeling.
+
+Lastly, I will try to avoid notation whenever possible as I don't think it's terribly useful for my project. However, I assume in the future I will dive deeper into the theory as to why these things work.
+
+## A little review for myself: Causal Inference
+
+One main goal of clinical trials is to provide a conclusion of a cause-and-effect of a new treatment compared to the standard-of-care (slightly different in a non-inferiority trial). What this means is that we need to be very precise about how to handle confounding in the variables available to us. Since this is a clinical trial, we will say that we have *no unmeasured confounding*, i.e. Exchangeability/Ignorability, and consistency (the treatment(s) are well-defined). However, the positivity condition (Non-zero probability of all treatment levels) is a bit concerning, as all patients were told to take their randomized treatments for the first night. The treatment crossover is to a completely unique group, so we have to deal with that when we cross that bridge. 
+
+I realized the most basic example of causal inference is literally multiple linear regression (outcome regression)... you just add a vector of confounders $W$ in the model to account for the relationship between $Y$ and $X$. I feel a bit silly that it took me a year to come to this realization. Such is biostatistics.
+
+## Linear Mixed Modeling and Generalized Estimating Equations
+
+Both LMM and GEE can be used as regression tools for repeated-measures / longitudinal data, but their interpretations vary slightly, which means that the values for the estimated parameter of interest are almost always going to be different.
+
+First is LMM: Here are some defining characteristics
+- Focused on individual-level effects (called conditional): How does Y change within a subject, accounting for differences in other patients
+- Deals with correlation over time by treating it as a random effect (I need to be more precise here)
+- Coefficents estimated via Maximum Likelihood Estimation (MAR data are fine here)
+
+Next is GEE: 
+- Focused on population-level effects (called marginal): How does the population mean of Y change...
+- All effects are fixed. The correlation over time problem is dealt with a correlation structure (more math)
+- Following the previous point, one needs to specify a correlation structure, although the choice only affects the efficiency of estimators, and this difference diminishes with increased sample size
+- Coefficents estimated via quasi-likelihood (makes this method biased with missing at random data, which is potentially problematic)
+
+With both models, I believe that you want each row to be a timepoint, and individuals are given multiple rows for timepoints. Also there are more differences in coefficients (i.e. GEE < LMM) with non-continuous outcomes, but I will be keeping my data as continuous to simplify things!
+
+Of course the models have different interpretations and goals, but in the case of continuous data, it is pretty similar. The question becomes "what question do we want to answer" and "what are we willing to sacrifice". For my purposes, GEE matches the idea of causality much better (makes sense, it's population-based after all), so maybe I will have to go with that.
+
+It also seems that the models automatically handle the missing cases in the random effects / time scenario, so I don't have to worry too much about that.
+
+## Marginal Structural Models (MSM)
+
+Now a big problem with GEE is that it becomes biased with MAR data. To fix this, we can use weighted GEE, which is a marginal structural model. The gist of MSM is to use Inverse Probability of Treatment Weighting (IPTW) to create a pseudo-population where treatment assignment is independent of measured confounders. In the case of our RCT, we need to create this independence with our confounder, which is technically also our outcome. For example, if a patient has a weight of four, they are counted four times in the pseudo-population. I think the estimation is different with weights (the formula for the vector of coefficients is different because there is a weight matrix), but once we include that matrix, the interpretations of the parameters become causal.
+
+Unlike the choice of correlation matrix in a GEE, IPTW does affect the point estimate. I don't know why I thought it wouldn't, but it makes sense why it's a tool in causal inference in that case. I guess this is the problem of learning things not in a classroom, I'm bound to be confused and make mistakes.
+
+There are some longitudinal relationships that need to be present for MSM to be an appropriate adjustment. Recall that for our scenario, our confounder is also the outcome: postoperative pain. First, past treatments affect the current confounder (do we have reason to believe that previous treatment affects current pain?). Second, past confounders affect the treatment crossover (do we have reason to believe past pain influences the decision to switch treatments?). Third, past confounders affect the current outcome (do we have reason to believe that previous pain affects current pain?). I think all the answers to these questions are yes, so we should be good to go. If I was wrong, then the only thing we end up seeing is that there is no difference of the coefficients between a regular GEE and a weighted GEE. In that case, oh well. No harm no foul, we really just needed to check.
+
+IPTW is relatively simple in a cross-sectional study, but it becomes complicated in a longitudinal setting. Instead of describing it here, I will refer myself to Section 8 of the Seminal Paper on Marginal Structural Models by Robins, Hernan, and Brumback (2000). It basically is a pooled logistic regression of our treatment $A$ given the confounder (which in our case is also the outcome; only works because it's longitudinal). I'm not entirely sure if there is a package that does this automatically after specifying some things... hopefully there is because I don't feel like coding all that.
+
+## What's next?
+
+I think for the data that I will analyze, I need to do a sensitivity analysis of all three methods (or maybe just GEE and weighted GEE). I think that way, I can give a causal conclusion for the research question at hand.
+
+Also I need to consider more practical things for analysis. We don't have much pain data after day 3, so do we only look at the first three days? That means we will have six timepoints to look at. Additionally, how am I going to code the treatment variable? Maybe I should keep it simple with three levels (0: Non-opioids, 1: Opioids, 2: Crossover from Opioids to OTC), but no matter what I do, I can't make this ordinal. That means instead of the ordinal procedure mentioned in (Robins, Hernan, and Brumback), I need to figure out how to make a purely categorical logistic regression work. My work over the summer leads me to believe that this is possible, but it will be kind of a headache. Another issue is dealing with the positivity, since $A = 2$ cannot happen the first day... they are dropped from the study. One very simplifying assumption I could make is say that Opioids to OTC is kind of like switching to the non-opioid group, since they are taking drugs that are available OTC. I have no idea if that is a good idea or not, but it can be a start. Lastly, just understanding all this notation is a headache. One day I will become used to it.
