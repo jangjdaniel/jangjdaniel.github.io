@@ -1,1 +1,708 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"> <html><body> <h2 id="motivation">Motivation</h2> <p>These are my personal notes adapted from my final project in differential geometry. I want to motivate the Monge and Kantorovich problems in notation that I understand so that I have a reference for myself if I ever need these tools (although I doubt I will need it)</p> <h2 id="background">Background</h2> <p>One needs to know the concept of abstract measures, what a measurable space is, abstract integration, and absolute continuity (radon-nikodym derivatives). I don’t have a background in calculus of variations, functional analysis, or optimization (I will ignore why being convex makes it easier to solve), so hopefully I will be able to get through this without those tools.</p> <p>I will introduce some definitions beyond this, like the pushforward measure, product spaces, and couplings, since these are less familiar definitions.</p> <h2 id="the-monge-formulation">The Monge Formulation</h2> <p>Gaspard Monge asked the following problem in 1781: If I have a pile of dirt and want to move it into a mound, what’s the most optimal way to bring each little bit of dirt into the mound, i.e. what’s the minimal amount of work I need to do? I will define this problem in the realm of probability spaces.</p> <p>Let \((X, \mathscr{B})\) be a measurable space and denote \(\mathcal{P}(X)\) the set of all probability measures defined on \((X, \mathscr{B})\). For a probability measure \(\mu \in \mathcal{P}(X)\) and for an element of the \(\sigma\)-algebra \(B \in \mathscr{B}\), \(\mu(B)\) represents the amount of mass (or dirt) is in the set \(B\). The total mass of a probability distribution is \(1\) by definition, so \(\forall \, \mu \in \mathcal{P}(X)\), \(\mu(X) = 1\).</p> <p>\(\textbf{Question 1:}\) What does it mean to transport some mass from the pile of dirt to the mound?. We need a (measurable) (bijective) function \(T: X \rightarrow X\) that moves the dirt pile \(x \in X\) to the pile in location \(T(x) \in X\). However, since we are moving from one distribution to another, we need a new measure to properly count the mass in the mound. How do we do that?</p> <p>We define the \(\textbf{pushforward measure}\): \(\forall B \in \mathscr{B}\), the pushforward measure \(T_{\#} \mu (B) = \mu(T^{-1}(B))\). This preserves the mass of \(B\) relative to the measure \(\mu\) even after transforming \(B\). The reason it is defined with \(T^{-1}\) is to guarantee the existence of an inverse function. We define \(\nu \in \mathcal{P}(X)\) to be the pushforward measure. Furthermore, this means that \(T\) is called the \(\textbf{transport map}\) from \(\mu\) to \(\nu\).</p> <p>\(\textbf{Question 2:}\) What is the amount of work that is done in transporting the amount of mass from the dirt to the mound? We define the cost function to do exactly this. Let \(c: X \times X \rightarrow [0, + \infty]\) be the cost function, where \(c(x, T(x))\) measures the cost from moving one element in \(x\) to \(T(x)\). Common cost functions are the \(L_1\) and \(L_2\) norm, although \(L_2\) norm is more often used because it’s easier to solve. However, we want to get the cost of moving all elements of \(X\). This means we want integration with respect to our measure \(\mu\), since that is the way we are measuring our masses. Thus, we are curious about the total cost, which we define as a functional (a map with a function as an input and a scalar as an output, in our case, the transport map is the input).</p> \[\mathbb{M}(T) = \int_{X} c(x, T(x))\, d\mu(x)\] <p>Now we can finally define the Monge problem as finding the infimum of the functional, which gives you the lowest cost out of all possible transport maps.</p> \[\inf_{T: X \rightarrow X} \{ \mathbb{M}(T) \mid T_{\#} \mu = \nu \}\] <p>Now we can generalize this a bit more by going from one space \(X\) to another space \(Y\). The idea is still the same: we require the transport map with \(T_{\#}\mu \in \mathcal{P}(Y)\), but we can define each \(y = T(x)\) and the functional \(\mathbb{M}(T) = \int_{X \times Y} c(x, y)\, d\mu(x)\), since we need to integrate over two different spaces (not sure if the details here are correct…)</p> <p>This formulation of the optimal transportation problem is good for a number of applications, but there are two key limitations:</p> <ol> <li>We are not able to split up a mass into two since the pushforward measure requires \(T\) to be injective</li> <li>Solutions may be not unique</li> </ol> <p>There are plenty of canonical examples here which I won’t really explain here. We will move to how these issues were addressed by Kantorovich.</p> <h2 id="the-kantorovich-formulation">The Kantorovich Formulation</h2> <p>One motivation for Kantorovich’s formulation is to address the splitting limitation in Monge’s formulation. This will introduce some flexibility in optimally transporting all the mass from one region to another. Before we can do that, there is one important definition that a lot of notes seem to not touch on.</p> <p>\(\textbf{Definition, Coupling:}\) For a measurable space \((X, \mathscr{B})\), let \(\mu, \nu \in \mathcal{P}(X)\) be two measures, where \(\nu = T_{\#} \mu\). The coupling of \(\mu\) and \(\nu\) is a (probability) measure \(\gamma \in \mathcal{P}(X \times X)\) on the product space \((X \times X, \mathscr{B} \times \mathscr{B})\) such that the marginals of \(\gamma\) coincide with \(\mu\) and \(\nu\). What I mean by that is: \(\gamma(A \times X) = \mu(A)\) and \(\gamma(X \times A) = \nu(A)\).</p> <p>You can surmise that \(\forall B \in \mathscr{B}, \, \gamma(A \times B) \leq \gamma(A \times X) = \mu(A)\). The proof really is trivial, since \(B \subseteq X\). Now we can define the analogue to the transport map:</p> <p>\(\textbf{Definition, Transport Plan:}\) A transport plan is a coupling \(\gamma \in \mathcal{P}(X \times X)\) of \(\mu\) and \(\nu\) such that for a map \(\pi_i: X \times X \rightarrow X\), where \(\pi_i(x_1, x_2) = x_i\), the pushforward measures:</p> <p>\(\pi_{1\#} \gamma = \mu\) and \(\pi_{2\#} \gamma = \nu\), i.e. \(\gamma(\pi_1^{-1}(B)) = \gamma(B \times X) = \mu (B)\) and \(\gamma(\pi_2^{-1}(B)) = \gamma(X \times B) = \nu (B)\) .</p> <p>The set of all transport plans from \(\mu\) to \(\nu\) is \(\Gamma(\mu, \nu)\), and \(\mu\) and \(\nu\) are marginals of \(\gamma\).</p> <p>We can interpret \(\gamma(A \times B)\) as the amount of mass sent from \(A\) to \(B\), but a single mass from \(A\) can be sent to many places in the mound. This is analogus to why we are allowed to split up the mass, since not all the mass is brought over (since \(\gamma(A \times B) \leq \mu(A)\))</p> <p>Now we finally define the Kantorovich formulation: define the following functional of the total cost of transport given some transport plan \(\gamma\):</p> \[\mathbb{K}(\gamma) = \int_{X \times X} c(x_1, x_2)\, d\gamma(x_1, x_2)\] <p>and “minimize” (take the infimum) it once more to get the minimal cost of transport over all transport plans:</p> \[\inf_{\gamma \in \Gamma(\mu, \nu)} \{ \mathbb{K}(\gamma) \mid T_{\#} \mu = \nu \}\] <p>The idea for two different sets \(X\) and \(Y\) is the exact same idea, but the cost function itself is something that needs to be thought of more. Having just one space allows us to use some sort of distance metric like \(l_1\) or more commonly, \(l_2\).</p> <h2 id="transport-map-and-transport-plan-relationship">Transport Map and Transport Plan Relationship</h2> <p>Given a transport map \(T: X \times X\) with \(T_{\#} \mu = \nu\), then the corresponding transport plan is \((\text{id} \times T)_{\#} \mu \in \Gamma(\mu, \nu)\).</p> <p>However, this need not be the most optimal transport plan. In fact, there is a theorem that states:</p> \[\inf_{\gamma \in \Gamma(\mu, \nu)} \{ \mathbb{K}(\gamma) \mid T_{\#} \mu = \nu \} \leq \inf_{T: X \rightarrow X} \{ \mathbb{M}(T) \mid T_{\#} \mu = \nu \}\] <p>I will not be proving this. You cannot make me.</p> <h2 id="wasserstein-metric--earth-mover-distance">Wasserstein Metric / Earth Mover Distance</h2> <p>To be filled (suboptimally), maybe.</p> </body></html>
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Optimal Transportation | Daniel J. Jang </title> <meta name="author" content="Daniel J. Jang"> <meta name="description" content="A culmination of my math journey"> <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <style>
+  :root {
+    --max-content-width: 930px;
+  }
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://jangjdaniel.github.io/blog/2026/optimal-transport/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Daniel</span> J. Jang </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">About </a> </li> <li class="nav-item dropdown "> <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-nav-dropdown-toggle="true" aria-haspopup="true" aria-expanded="false">Academic </a> <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown"> <a class="dropdown-item " href="/publications/">Publications</a> <div class="dropdown-divider"></div> <a class="dropdown-item " href="/blog/">Blog</a> <div class="dropdown-divider"></div> <a class="dropdown-item " href="/teaching/">Teaching</a> </div> </li> <li class="nav-item "> <a class="nav-link" href="/cv/">CV </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">Personal Projects </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Optimal Transportation</h1> <p class="post-meta"> Created on March 29, 2026 </p> <p class="post-tags"> <a href="/blog/2026"> <i class="fa-solid fa-calendar fa-sm"></i> 2026 </a>   ·   <a href="/blog/tag/theory"> <i class="fa-solid fa-hashtag fa-sm"></i> theory</a>   ·   <a href="/blog/category/mathematics"> <i class="fa-solid fa-tag fa-sm"></i> Mathematics</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <h2 id="motivation">Motivation</h2> <p>These are my personal notes adapted from my final project in differential geometry. I want to motivate the Monge and Kantorovich problems in notation that I understand so that I have a reference for myself if I ever need these tools (although I doubt I will need it)</p> <h2 id="background">Background</h2> <p>One needs to know the concept of abstract measures, what a measurable space is, abstract integration, and absolute continuity (radon-nikodym derivatives). I don’t have a background in calculus of variations, functional analysis, or optimization (I will ignore why being convex makes it easier to solve), so hopefully I will be able to get through this without those tools.</p> <p>I will introduce some definitions beyond this, like the pushforward measure, product spaces, and couplings, since these are less familiar definitions.</p> <h2 id="the-monge-formulation">The Monge Formulation</h2> <p>Gaspard Monge asked the following problem in 1781: If I have a pile of dirt and want to move it into a mound, what’s the most optimal way to bring each little bit of dirt into the mound, i.e. what’s the minimal amount of work I need to do? I will define this problem in the realm of probability spaces.</p> <p>Let \((X, \mathscr{B})\) be a measurable space and denote \(\mathcal{P}(X)\) the set of all probability measures defined on \((X, \mathscr{B})\). For a probability measure \(\mu \in \mathcal{P}(X)\) and for an element of the \(\sigma\)-algebra \(B \in \mathscr{B}\), \(\mu(B)\) represents the amount of mass (or dirt) is in the set \(B\). The total mass of a probability distribution is \(1\) by definition, so \(\forall \, \mu \in \mathcal{P}(X)\), \(\mu(X) = 1\).</p> <p>\(\textbf{Question 1:}\) What does it mean to transport some mass from the pile of dirt to the mound?. We need a (measurable) (bijective) function \(T: X \rightarrow X\) that moves the dirt pile \(x \in X\) to the pile in location \(T(x) \in X\). However, since we are moving from one distribution to another, we need a new measure to properly count the mass in the mound. How do we do that?</p> <p>We define the \(\textbf{pushforward measure}\): \(\forall B \in \mathscr{B}\), the pushforward measure \(T_{\#} \mu (B) = \mu(T^{-1}(B))\). This preserves the mass of \(B\) relative to the measure \(\mu\) even after transforming \(B\). The reason it is defined with \(T^{-1}\) is to guarantee the existence of an inverse function. We define \(\nu \in \mathcal{P}(X)\) to be the pushforward measure. Furthermore, this means that \(T\) is called the \(\textbf{transport map}\) from \(\mu\) to \(\nu\).</p> <p>\(\textbf{Question 2:}\) What is the amount of work that is done in transporting the amount of mass from the dirt to the mound? We define the cost function to do exactly this. Let \(c: X \times X \rightarrow [0, + \infty]\) be the cost function, where \(c(x, T(x))\) measures the cost from moving one element in \(x\) to \(T(x)\). Common cost functions are the \(L_1\) and \(L_2\) norm, although \(L_2\) norm is more often used because it’s easier to solve. However, we want to get the cost of moving all elements of \(X\). This means we want integration with respect to our measure \(\mu\), since that is the way we are measuring our masses. Thus, we are curious about the total cost, which we define as a functional (a map with a function as an input and a scalar as an output, in our case, the transport map is the input).</p> \[\mathbb{M}(T) = \int_{X} c(x, T(x))\, d\mu(x)\] <p>Now we can finally define the Monge problem as finding the infimum of the functional, which gives you the lowest cost out of all possible transport maps.</p> \[\inf_{T: X \rightarrow X} \{ \mathbb{M}(T) \mid T_{\#} \mu = \nu \}\] <p>Now we can generalize this a bit more by going from one space \(X\) to another space \(Y\). The idea is still the same: we require the transport map with \(T_{\#}\mu \in \mathcal{P}(Y)\), but we can define each \(y = T(x)\) and the functional \(\mathbb{M}(T) = \int_{X \times Y} c(x, y)\, d\mu(x)\), since we need to integrate over two different spaces (not sure if the details here are correct…)</p> <p>This formulation of the optimal transportation problem is good for a number of applications, but there are two key limitations:</p> <ol> <li>We are not able to split up a mass into two since the pushforward measure requires \(T\) to be injective</li> <li>Solutions may be not unique</li> </ol> <p>There are plenty of canonical examples here which I won’t really explain here. We will move to how these issues were addressed by Kantorovich.</p> <h2 id="the-kantorovich-formulation">The Kantorovich Formulation</h2> <p>One motivation for Kantorovich’s formulation is to address the splitting limitation in Monge’s formulation. This will introduce some flexibility in optimally transporting all the mass from one region to another. Before we can do that, there is one important definition that a lot of notes seem to not touch on.</p> <p>\(\textbf{Definition, Coupling:}\) For a measurable space \((X, \mathscr{B})\), let \(\mu, \nu \in \mathcal{P}(X)\) be two measures, where \(\nu = T_{\#} \mu\). The coupling of \(\mu\) and \(\nu\) is a (probability) measure \(\gamma \in \mathcal{P}(X \times X)\) on the product space \((X \times X, \mathscr{B} \times \mathscr{B})\) such that the marginals of \(\gamma\) coincide with \(\mu\) and \(\nu\). What I mean by that is: \(\gamma(A \times X) = \mu(A)\) and \(\gamma(X \times A) = \nu(A)\).</p> <p>You can surmise that \(\forall B \in \mathscr{B}, \, \gamma(A \times B) \leq \gamma(A \times X) = \mu(A)\). The proof really is trivial, since \(B \subseteq X\). Now we can define the analogue to the transport map:</p> <p>\(\textbf{Definition, Transport Plan:}\) A transport plan is a coupling \(\gamma \in \mathcal{P}(X \times X)\) of \(\mu\) and \(\nu\) such that for a map \(\pi_i: X \times X \rightarrow X\), where \(\pi_i(x_1, x_2) = x_i\), the pushforward measures:</p> <p>\(\pi_{1\#} \gamma = \mu\) and \(\pi_{2\#} \gamma = \nu\), i.e. \(\gamma(\pi_1^{-1}(B)) = \gamma(B \times X) = \mu (B)\) and \(\gamma(\pi_2^{-1}(B)) = \gamma(X \times B) = \nu (B)\) .</p> <p>The set of all transport plans from \(\mu\) to \(\nu\) is \(\Gamma(\mu, \nu)\), and \(\mu\) and \(\nu\) are marginals of \(\gamma\).</p> <p>We can interpret \(\gamma(A \times B)\) as the amount of mass sent from \(A\) to \(B\), but a single mass from \(A\) can be sent to many places in the mound. This is analogus to why we are allowed to split up the mass, since not all the mass is brought over (since \(\gamma(A \times B) \leq \mu(A)\))</p> <p>Now we finally define the Kantorovich formulation: define the following functional of the total cost of transport given some transport plan \(\gamma\):</p> \[\mathbb{K}(\gamma) = \int_{X \times X} c(x_1, x_2)\, d\gamma(x_1, x_2)\] <p>and “minimize” (take the infimum) it once more to get the minimal cost of transport over all transport plans:</p> \[\inf_{\gamma \in \Gamma(\mu, \nu)} \{ \mathbb{K}(\gamma) \mid T_{\#} \mu = \nu \}\] <p>The idea for two different sets \(X\) and \(Y\) is the exact same idea, but the cost function itself is something that needs to be thought of more. Having just one space allows us to use some sort of distance metric like \(l_1\) or more commonly, \(l_2\).</p> <h2 id="transport-map-and-transport-plan-relationship">Transport Map and Transport Plan Relationship</h2> <p>Given a transport map \(T: X \times X\) with \(T_{\#} \mu = \nu\), then the corresponding transport plan is \((\text{id} \times T)_{\#} \mu \in \Gamma(\mu, \nu)\).</p> <p>However, this need not be the most optimal transport plan. In fact, there is a theorem that states:</p> \[\inf_{\gamma \in \Gamma(\mu, \nu)} \{ \mathbb{K}(\gamma) \mid T_{\#} \mu = \nu \} \leq \inf_{T: X \rightarrow X} \{ \mathbb{M}(T) \mid T_{\#} \mu = \nu \}\] <p>I will not be proving this. You cannot make me.</p> <h2 id="wasserstein-metric--earth-mover-distance">Wasserstein Metric / Earth Mover Distance</h2> <p>To be filled (suboptimally), maybe.</p> </div> </article> <br> <hr> <br> <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2> <p class="mb-2">Here are some more articles you might like to read next:</p> <ul class="list-disc pl-7 my-3 space-y-2 marker:text-[var(--global-theme-color)]"> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="https://blog.google/technology/ai/google-gemini-update-flash-ai-assistant-io-2024/" target="_blank" rel="noopener noreferrer">Google Gemini updates: Flash 1.5, Gemma 2 and Project Astra</a> <svg width="1rem" height="1rem" viewbox="0 0 30 30" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"> <path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path> </svg> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="https://medium.com/@al-folio/displaying-external-posts-on-your-al-folio-blog-b60a1d241a0a?source=rss-17feae71c3c4------2" target="_blank" rel="noopener noreferrer">Displaying External Posts on Your al-folio Blog</a> <svg width="1rem" height="1rem" viewbox="0 0 30 30" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"> <path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path> </svg> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/2025-12-14-learning-SAS/"></a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/MCMC-examples/">MCMC for Approximating Distributions</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/frechet-gateaux/">Frechet and Gateaux Derivatives</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/banach-hilbert-pt2/">Banach and Hilbert Spaces (Part 2)</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/banach-hilbert-pt1/">Banach and Hilbert Spaces (Part 1)</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/functionals/">Functionals</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/mice/">Multiple Imputation via Chained Equations (MICE)</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/bayesian-log-regression/">Bayesian Regression</a> </li> </ul> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Daniel J. Jang. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>. </div> </footer> <script>
+  window.alFolio = {
+    compatBootstrap: false
+  };
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "About",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/";
+    },
+  },{id: "dropdown-publications",
+              title: "Publications",
+              description: "",
+              section: "Dropdown",
+              handler: () => {
+                window.location.href = "/publications/";
+              },
+            },{id: "dropdown-blog",
+              title: "Blog",
+              description: "",
+              section: "Dropdown",
+              handler: () => {
+                window.location.href = "/blog/";
+              },
+            },{id: "dropdown-teaching",
+              title: "Teaching",
+              description: "",
+              section: "Dropdown",
+              handler: () => {
+                window.location.href = "/teaching/";
+              },
+            },{id: "nav-cv",
+          title: "CV",
+          description: "Please contact me if you wish for a copy of my CV. I am currently not hosting it here.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/cv/";
+          },
+        },{id: "nav-personal-projects",
+          title: "Personal Projects",
+          description: "A growing collection of your cool projects.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/projects/";
+          },
+        },{id: "post-",
+        
+          title: "",
+        
+        description: "",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/2025-12-14-learning-SAS/";
+          
+        },
+      },{id: "post-mcmc-for-approximating-distributions",
+        
+          title: "MCMC for Approximating Distributions",
+        
+        description: "A small review",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/MCMC-examples/";
+          
+        },
+      },{id: "post-frechet-and-gateaux-derivatives",
+        
+          title: "Frechet and Gateaux Derivatives",
+        
+        description: "More functional analysis!",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/frechet-gateaux/";
+          
+        },
+      },{id: "post-banach-and-hilbert-spaces-part-2",
+        
+          title: "Banach and Hilbert Spaces (Part 2)",
+        
+        description: "More functional analysis!",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/banach-hilbert-pt2/";
+          
+        },
+      },{id: "post-banach-and-hilbert-spaces-part-1",
+        
+          title: "Banach and Hilbert Spaces (Part 1)",
+        
+        description: "More functional analysis!",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/banach-hilbert-pt1/";
+          
+        },
+      },{id: "post-functionals",
+        
+          title: "Functionals",
+        
+        description: "First post out of few of functional analysis",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/functionals/";
+          
+        },
+      },{id: "post-multiple-imputation-via-chained-equations-mice",
+        
+          title: "Multiple Imputation via Chained Equations (MICE)",
+        
+        description: "Methods from the 1990s",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/mice/";
+          
+        },
+      },{id: "post-bayesian-regression",
+        
+          title: "Bayesian Regression",
+        
+        description: "Methods from the 1990s",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/bayesian-log-regression/";
+          
+        },
+      },{id: "post-",
+        
+          title: "",
+        
+        description: "Methods from the 1990s",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/firth-penalized-logreg/";
+          
+        },
+      },{id: "post-optimal-transportation",
+        
+          title: "Optimal Transportation",
+        
+        description: "A culmination of my math journey",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/optimal-transport/";
+          
+        },
+      },{id: "post-generalized-estimating-equations",
+        
+          title: "Generalized Estimating Equations",
+        
+        description: "This feels familiar...",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/gee/";
+          
+        },
+      },{id: "post-ipcw-iptw-in-a-longitudinal-setting",
+        
+          title: "IPCW + IPTW in a Longitudinal Setting",
+        
+        description: "How much difference does this make?",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/ipcw_iptw/";
+          
+        },
+      },{id: "post-longitudinal-treatment-crossover-methods-for-non-survival-outcomes",
+        
+          title: "Longitudinal Treatment Crossover Methods for Non-survival Outcomes",
+        
+        description: "Why are all these methods for survival outcomes?",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/longitudinal-treatment-crossover/";
+          
+        },
+      },{id: "post-",
+        
+          title: "",
+        
+        description: "Incomplete!",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/kmeans-python/";
+          
+        },
+      },{id: "post-ridge-and-lasso-regression",
+        
+          title: "Ridge and LASSO Regression",
+        
+        description: "Extremely Non-rigorous",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/ridge-LASSO-elastic/";
+          
+        },
+      },{id: "post-my-intuition-of-the-radon-nikodym-derivative",
+        
+          title: "My Intuition of the Radon-Nikodym Derivative",
+        
+        description: "Extremely Non-rigorous",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/radon-nikodym-theorem/";
+          
+        },
+      },{id: "post-a-post-with-plotly-js",
+        
+          title: "a post with plotly.js",
+        
+        description: "this is what included plotly.js code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/plotly/";
+          
+        },
+      },{id: "post-a-post-with-image-galleries",
+        
+          title: "a post with image galleries",
+        
+        description: "this is what included image galleries could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/photo-gallery/";
+          
+        },
+      },{id: "post-google-gemini-updates-flash-1-5-gemma-2-and-project-astra",
+        
+          title: 'Google Gemini updates: Flash 1.5, Gemma 2 and Project Astra <svg width="1.2rem" height="1.2rem" top=".5rem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
+        
+        description: "We’re sharing updates across our Gemini family of models and a glimpse of Project Astra, our vision for the future of AI assistants.",
+        section: "Posts",
+        handler: () => {
+          
+            window.open("https://blog.google/technology/ai/google-gemini-update-flash-ai-assistant-io-2024/", "_blank");
+          
+        },
+      },{id: "post-a-post-with-tabs",
+        
+          title: "a post with tabs",
+        
+        description: "this is what included tabs in a post could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/tabs/";
+          
+        },
+      },{id: "post-a-post-with-typograms",
+        
+          title: "a post with typograms",
+        
+        description: "this is what included typograms code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/typograms/";
+          
+        },
+      },{id: "post-a-post-that-can-be-cited",
+        
+          title: "a post that can be cited",
+        
+        description: "this is what a post that can be cited looks like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/post-citation/";
+          
+        },
+      },{id: "post-a-post-with-pseudo-code",
+        
+          title: "a post with pseudo code",
+        
+        description: "this is what included pseudo code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/pseudocode/";
+          
+        },
+      },{id: "post-a-post-with-code-diff",
+        
+          title: "a post with code diff",
+        
+        description: "this is how you can display code diffs",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/code-diff/";
+          
+        },
+      },{id: "post-a-post-with-advanced-image-components",
+        
+          title: "a post with advanced image components",
+        
+        description: "this is what advanced image components could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/advanced-images/";
+          
+        },
+      },{id: "post-a-post-with-vega-lite",
+        
+          title: "a post with vega lite",
+        
+        description: "this is what included vega lite code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/vega-lite/";
+          
+        },
+      },{id: "post-a-post-with-geojson",
+        
+          title: "a post with geojson",
+        
+        description: "this is what included geojson code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/geojson-map/";
+          
+        },
+      },{id: "post-a-post-with-echarts",
+        
+          title: "a post with echarts",
+        
+        description: "this is what included echarts code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/echarts/";
+          
+        },
+      },{id: "post-a-post-with-chart-js",
+        
+          title: "a post with chart.js",
+        
+        description: "this is what included chart.js code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/chartjs/";
+          
+        },
+      },{id: "post-a-post-with-tikzjax",
+        
+          title: "a post with TikZJax",
+        
+        description: "this is what included TikZ code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/tikzjax/";
+          
+        },
+      },{id: "post-a-post-with-bibliography",
+        
+          title: "a post with bibliography",
+        
+        description: "an example of a blog post with bibliography",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/post-bibliography/";
+          
+        },
+      },{id: "post-a-post-with-jupyter-notebook",
+        
+          title: "a post with jupyter notebook",
+        
+        description: "an example of a blog post with jupyter notebook",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/jupyter-notebook/";
+          
+        },
+      },{id: "post-a-post-with-custom-blockquotes",
+        
+          title: "a post with custom blockquotes",
+        
+        description: "an example of a blog post with custom blockquotes",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/custom-blockquotes/";
+          
+        },
+      },{id: "post-a-post-with-table-of-contents-on-a-sidebar",
+        
+          title: "a post with table of contents on a sidebar",
+        
+        description: "an example of a blog post with table of contents on a sidebar",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/sidebar-table-of-contents/";
+          
+        },
+      },{id: "post-a-post-with-audios",
+        
+          title: "a post with audios",
+        
+        description: "this is what included audios could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/audios/";
+          
+        },
+      },{id: "post-a-post-with-videos",
+        
+          title: "a post with videos",
+        
+        description: "this is what included videos could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/videos/";
+          
+        },
+      },{id: "post-displaying-beautiful-interactive-tables",
+        
+          title: "displaying beautiful interactive tables",
+        
+        description: "an example of how to use interactive tables in al-folio",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/tables/";
+          
+        },
+      },{id: "post-a-post-with-table-of-contents",
+        
+          title: "a post with table of contents",
+        
+        description: "an example of a blog post with table of contents",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/table-of-contents/";
+          
+        },
+      },{id: "post-a-post-with-giscus-comments",
+        
+          title: "a post with giscus comments",
+        
+        description: "an example of a blog post with giscus comments",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2022/giscus-comments/";
+          
+        },
+      },{id: "post-displaying-external-posts-on-your-al-folio-blog",
+        
+          title: 'Displaying External Posts on Your al-folio Blog <svg width="1.2rem" height="1.2rem" top=".5rem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
+        
+        description: "",
+        section: "Posts",
+        handler: () => {
+          
+            window.open("https://medium.com/@al-folio/displaying-external-posts-on-your-al-folio-blog-b60a1d241a0a?source=rss-17feae71c3c4------2", "_blank");
+          
+        },
+      },{id: "post-a-post-with-redirect",
+        
+          title: "a post with redirect",
+        
+        description: "you can also redirect to assets like pdf",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/assets/pdf/example_pdf.pdf";
+          
+        },
+      },{id: "post-a-post-with-diagrams",
+        
+          title: "a post with diagrams",
+        
+        description: "an example of a blog post with diagrams",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2021/diagrams/";
+          
+        },
+      },{id: "post-a-distill-style-blog-post",
+        
+          title: "a distill-style blog post",
+        
+        description: "an example of a distill-style blog post and main elements",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2021/distill/";
+          
+        },
+      },{id: "post-a-post-with-twitter",
+        
+          title: "a post with twitter",
+        
+        description: "an example of a blog post with twitter",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2020/twitter/";
+          
+        },
+      },{id: "post-a-post-with-disqus-comments",
+        
+          title: "a post with disqus comments",
+        
+        description: "an example of a blog post with disqus comments",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2015/disqus-comments/";
+          
+        },
+      },{id: "post-a-post-with-math",
+        
+          title: "a post with math",
+        
+        description: "an example of a blog post with some math",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2015/math/";
+          
+        },
+      },{id: "post-a-post-with-code",
+        
+          title: "a post with code",
+        
+        description: "an example of a blog post with some code",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2015/code/";
+          
+        },
+      },{id: "post-a-post-with-images",
+        
+          title: "a post with images",
+        
+        description: "this is what included images could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2015/images/";
+          
+        },
+      },{id: "post-a-post-with-formatting-and-links",
+        
+          title: "a post with formatting and links",
+        
+        description: "march &amp; april, looking forward to summer",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2015/formatting-and-links/";
+          
+        },
+      },{id: "news-moved-to-philadelphia-to-start-my-ph-d",
+          title: 'Moved to Philadelphia to start my Ph.D.',
+          description: "",
+          section: "News",handler: () => {
+              window.location.href = "/news/announcement_1/";
+            },},{id: "projects-project-1",
+          title: 'project 1',
+          description: "with background image",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/1_project/";
+            },},{id: "projects-project-2",
+          title: 'project 2',
+          description: "a project with a background image and giscus comments",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/2_project/";
+            },},{id: "projects-project-3-with-very-long-name",
+          title: 'project 3 with very long name',
+          description: "a project that redirects to another website",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/3_project/";
+            },},{id: "projects-project-8",
+          title: 'project 8',
+          description: "an other project with a background image and giscus comments",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/8_project/";
+            },},{id: "projects-my-north-american-travel-map",
+          title: 'My North American Travel Map',
+          description: "Goal is to travel to all 50 states in the U.S. + some of the provinces in Canada",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/america_canada_travel_map_project/";
+            },},{id: "projects-bela-kovacs-hommages",
+          title: 'Bela Kovacs Hommages',
+          description: "Clarinet Recordings",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/bela_kovacs_hommages_project/";
+            },},{id: "projects-composition",
+          title: 'Composition',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/composition_project/";
+            },},{id: "projects-dark-shadows",
+          title: 'Dark Shadows',
+          description: "Photography project 1",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/shadow_photos_project/";
+            },},{id: "projects-study-abroad-in-sweden",
+          title: 'Study Abroad in Sweden',
+          description: "Blog Archive",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/stockholm_blog_project/";
+            },},{id: "teachings-data-science-fundamentals",
+          title: 'Data Science Fundamentals',
+          description: "This course covers the foundational aspects of data science, including data collection, cleaning, analysis, and visualization. Students will learn practical skills for working with real-world datasets.",
+          section: "Teachings",handler: () => {
+              window.location.href = "/teachings/data-science-fundamentals/";
+            },},{id: "teachings-introduction-to-machine-learning",
+          title: 'Introduction to Machine Learning',
+          description: "This course provides an introduction to machine learning concepts, algorithms, and applications. Students will learn about supervised and unsupervised learning, model evaluation, and practical implementations.",
+          section: "Teachings",handler: () => {
+              window.location.href = "/teachings/introduction-to-machine-learning/";
+            },},{
+        id: 'social-cv',
+        title: 'CV',
+        section: 'Socials',
+        handler: () => {
+          window.open("/assets/pdf/example_pdf.pdf", "_blank");
+        },
+      },{
+        id: 'social-email',
+        title: 'email',
+        section: 'Socials',
+        handler: () => {
+          window.open("mailto:%64%61%6E%69%65%6C.%6A%61%6E%67@%70%65%6E%6E%6D%65%64%69%63%69%6E%65.%75%70%65%6E%6E.%65%64%75", "_blank");
+        },
+      },{
+        id: 'social-scholar',
+        title: 'Google Scholar',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://scholar.google.com/citations?user=qc6CJjYAAAAJ", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script> <script src="/assets/al_search/js/shortcut-key.js"></script> </body> </html>
