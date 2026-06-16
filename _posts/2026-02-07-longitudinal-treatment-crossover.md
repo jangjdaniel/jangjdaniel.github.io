@@ -1,10 +1,10 @@
 ---
-
-title: "Longitudinal Treatment Crossover Methods for Non-survival Outcomes"
+layout: post
+title: Longitudinal Treatment Crossover Methods for Non-survival Outcomes
 date: 2026-02-07
-layout: single
-mathjax: true
-
+description: Why are all these methods for survival outcomes?
+tags: methods regression
+categories: Statistics
 ---
 
 ## Motivation

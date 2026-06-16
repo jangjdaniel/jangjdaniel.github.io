@@ -1,6 +1,13 @@
 ---
+layout: post
+title: Firth's Penalized Logistic Regression
+date: 2026-04-04
+description: Methods from the 1990s
+tags: methods regression
+categories: Statistics
 
-title: "Firth's Penalized Logistic Regression"
+
+title: ""
 date: 2026-04-04
 layout: single
 mathjax: true

@@ -1,11 +1,10 @@
 ---
-
-title: "Fechet and Gateaux Derivatives"
+layout: post
+title: Frechet and Gateaux Derivatives
 date: 2026-05-20
-layout: single
-mathjax: true
-private: true
-
+description: More functional analysis!
+tags: theory
+categories: Mathematics
 ---
 
 Now that I have a background in the definition of a functional, as well as Banach and Hilbert spaces, I want to discuss functional derivatives. A lot of this is taken from wikipedia.

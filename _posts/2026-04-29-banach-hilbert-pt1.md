@@ -1,10 +1,10 @@
 ---
-
-title: "Banach and Hilbert Spaces (Part 1)"
+layout: post
+title: Banach and Hilbert Spaces (Part 1)
 date: 2026-04-29
-layout: single
-mathjax: true
-
+description: More functional analysis!
+tags: theory
+categories: Mathematics
 ---
 
 Unfortunately, I am unsure how to motivate a lot of these results from Banach and Hilbert spaces. I think one day I should try out the proofs myself (especially of the representation theorem), but I think this is sufficient for right now.

@@ -1,10 +1,10 @@
 ---
-
-title: "Functionals"
+layout: post
+title: Functionals
 date: 2026-04-28
-layout: single
-mathjax: true
-
+description: First post out of few of functional analysis
+tags: theory
+categories: Mathematics
 ---
 
 This is the beginning of numerous blog posts where I learn the basics of functionals, both in an abstract lens (functional analysis) and an applied lens (calculus of variations and statistics). My goal is to understand the intuition behind the Gateaux derivative, which is what an influence function is. I will be channeling my knowledge from real analysis and differential geometry (just being comfortable with differentials). There is a chance these concepts come up in my future, but I want to be prepared, as well as understand the concepts at a deeper level. 

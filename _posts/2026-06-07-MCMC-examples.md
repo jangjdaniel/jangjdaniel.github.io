@@ -1,10 +1,10 @@
 ---
-
-title: "MCMC for Approximating Distributions"
+layout: post
+title: MCMC for Approximating Distributions
 date: 2026-06-07
-layout: single
-mathjax: true
-private: true
+description: A small review
+tags: methods
+categories: Statistics
 
 ---
 

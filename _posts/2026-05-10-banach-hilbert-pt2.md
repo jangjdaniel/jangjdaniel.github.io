@@ -1,10 +1,10 @@
 ---
-
-title: "Banach and Hilbert Spaces (Part 2)"
+layout: post
+title: Banach and Hilbert Spaces (Part 2)
 date: 2026-05-10
-layout: single
-mathjax: true
-
+description: More functional analysis!
+tags: theory
+categories: Mathematics
 ---
 
 This is a continuition from my previous blog post on Banach and Hilbert Spaces. I hope to cover some important results and why we should care in statistics.

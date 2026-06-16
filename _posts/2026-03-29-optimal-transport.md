@@ -1,10 +1,10 @@
 ---
-
-title: "Optimal Transport"
+layout: post
+title: Optimal Transportation
 date: 2026-03-29
-layout: single
-mathjax: true
-
+description: A culmination of my math journey
+tags: theory
+categories: Mathematics
 ---
 
 ## Motivation

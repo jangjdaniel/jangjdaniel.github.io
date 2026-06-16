@@ -1,10 +1,10 @@
 ---
-
-title: "Bayesian Regression"
+layout: post
+title: Bayesian Regression
 date: 2026-04-24
-layout: single
-mathjax: true
-
+description: Methods from the 1990s
+tags: methods regression bayesian
+categories: Statistics
 ---
 
 The motivation for this post is because I want to test different regression penalties, and there is a family of methods that is motivated from finding an alternative prior to the jeffrey's prior (equivalent to firth's penalty) in logistic regression to handle rare events and complete / quasi separation.

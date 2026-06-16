@@ -1,10 +1,10 @@
 ---
-
-title: "Ridge and LASSO Regression"
+layout: post
+title: Ridge and LASSO Regression
 date: 2025-12-20
-layout: single
-mathjax: true
-
+description: Extremely Non-rigorous
+tags: methods regression
+categories: Statistics
 ---
 
 One thing I felt that was missing from my undergraduate training was a comprehensive look at machine learning / high-dimensional statistics. I often confused the two together, which in hindsight is silly of me (machine learning concerns precise predictions; high-dimensional statistics is statistics with a lot of variables and how to deal with that, especially when sample sizes may prevent regressions from converging). Right now, I am going through some of the more popular methods for supervised learning (where we have access to an outcome variable $Y$) that have connections to high-dimensional statistics. Hopefully this will serve as a foundation for things I explore in the future.
