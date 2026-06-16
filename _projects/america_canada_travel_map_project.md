@@ -1,7 +1,7 @@
 ---
 layout: page
-title: My American + Canadian Travel Map
-description: Travelling to all 50 states + some of the provinces
+title: My North American Travel Map
+description: Goal is to travel to all 50 states in the U.S. + some of the provinces in Canada
 img:
 importance: 3
 category: fun

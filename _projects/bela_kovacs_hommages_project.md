@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Bela Kovacs: Hommages
+title: Bela Kovacs Hommages
 description: Clarinet Recordings
 img: assets/img/1.jpg
 importance: 2
