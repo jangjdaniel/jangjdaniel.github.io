@@ -27,7 +27,10 @@ I am nowhere near done thinking about this, so I will continue to add to this co
 </div>
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" 
+        path="assets/img/5.jpg" 
+        title="example image" 
+        class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -38,10 +41,16 @@ As a fiscally-consious student studying abroad, I chose my vacations by how chea
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/photography/dark_shadows_warsaw.jpg "title="Warsaw, Poland" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid 
+        path="assets/img/photography/dark_shadows_warsaw.jpg 
+        title="Warsaw, Poland" 
+        class="img-fluid rounded z-depth-1" %}
     </div>
     <div class="col-sm-4 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/photography/dark_shadows_krakow.jpg" title="Krakow, Poland" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid 
+        path="assets/img/photography/dark_shadows_krakow.jpg" 
+        title="Krakow, Poland" 
+        class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
