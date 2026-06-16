@@ -1,666 +1,81 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://jangjdaniel.github.io/feed.xml" rel="self" type="application/atom+xml"/><link href="https://jangjdaniel.github.io/" rel="alternate" type="text/html" hreflang="en"/><updated>2026-06-16T18:26:35+00:00</updated><id>https://jangjdaniel.github.io/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design. </subtitle><entry><title type="html">My Intuition of the Radon-Nikodym Derivative</title><link href="https://jangjdaniel.github.io/blog/2025/radon-nikodym-theorem/" rel="alternate" type="text/html" title="My Intuition of the Radon-Nikodym Derivative"/><published>2025-12-07T14:24:00+00:00</published><updated>2025-12-07T14:24:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2025/radon-nikodym-theorem</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2025/radon-nikodym-theorem/"><![CDATA[<p>In calculus, derivatives are taught intuitively as the tangent line of a curve. This extended to the gradient $\nabla f$ in multivariable calculus. Even the real analysis definition was the same in calculus: $ \lim_{h \to 0} \frac{f(x+h) - f(x)}{h} $. Nothing too scary. Then the Radon-Nikodym derivative $f = \frac{d\mu}{dm}$ comes out of nowhere.</p> <div class="definition"> <strong>Definition:</strong> Let $(X, \mathcal{M})$ be a measurable space. Let $\mu: \mathcal{M} \to \mathbb{R}$ be a signed finite measure and $m: \mathcal{M} \to [0, +\infty)$ be an unsigned $\sigma$-finite measure s.t. $\mu$ is absolutely continuous w.r.t $m$ (Notation: $\mu &lt;&lt; m$). The <strong>Radon–Nikodym derivative</strong> of $\mu$ w.r.t $m$ is a measurable function $f: X \to \mathbb{R}$ s.t. $$ \mu(A) = \int_A f \, dm \quad \forall A \in \mathcal{M}. $$ </div> <p>How on earth does this generalize the classical derivative we have come to love? I feel like I should attempt to develop my intuition here and have the masses correct me if I got some details wrong.</p> <hr/> <p><strong>Idea: </strong> Consider the function $F: \mathbb{R} \rightarrow \mathbb{R}$ in a measurable space $(\mathbb{R}, \mathcal{M})$. For examples sake, let $F(x) = x^2$. The derivative $F’(x)$ is of the form $ \lim_{h \to 0} \frac{F(x+h) - F(x)}{h} = 2x$, which is continuous. The radon-nikodym derivative on a set $A = [a,b]$ is given as</p> \[\mu([a, b]) = \int_{[a,b]} f(x) \, dm(x) = \int_{[a,b]} f(x) \, dx\] <p>Notice that by the fundamental theorem of calculus, this integral is simply $F(b) - F(a)$. Thus, $\mu([a, b]) = F(b) - F(a)$. I don’t think this is a fully kosher measure, but this is in terms of a continuous function $f$ in calculus land, so I think we’re allowed to make simplifying assumptions here. This measure is also absolutely continuous w.r.t. lebesgue measure. Also notice that $\mu$ can take on negative values (not in this example because $x^2 \geq 0$).</p> <p>We can consider for each point $x \in [a,b]$ what the classical derivative looks like by looking at $ \mu([x, x+h]) = \int_{[x,x+h]} f(x) \, dm(x) $. Taking the limit as h approaches 0 gives us:</p> \[\lim_{h \to 0} \frac{\mu([x, x+h])}{m([x, x+h])} = \lim_{h \to 0} \frac{F(x+h) - F(x)}{h} = F'(x)\] <p>which is exactly the classical derivative definition.</p> <hr/> <p>In general, the “rise-over-run” intuition breaks down with the Radon-Nikodym derivative. Rather it describes the density of $\mu$ w.r.t $m$. For my intuition, this means that how much mass of $\mu$ is there in one unit of $m$? In terms of measure theory, removing a null set does not affect the mass, which is where we can see RN derivatives shine where the classic derivative fails (although the applications in probability are slightly different and more broad).</p> <p><strong>Example: </strong> Consider $f(x) = 2x \, \chi_{\mathbb{R} \setminus \mathbb{Q}}(x)$, where $\chi$ is the characteristic/indicator function. Let $A \subset \mathbb{R}$ be arbitrary in the same measurable space as the first example: $(\mathbb{R}, \mathcal{M})$. Thanks to the tools we developed in measure theory, we can easily decompose this integral by integration properties since the intersection between the rationals and irrationals is empty:</p> \[\mu(A) = \int_A f(x) \, dm(x) = \int_{A \cap (\mathbb{R} \setminus \mathbb{Q})} f(x) \, dm(x) + \int_{A \cap \mathbb{Q}} f(x) \, dm(x)\] <p>Remember that we cannot use a FoTC result, so we must actually evaluate the integral if we want to know the “antiderivative” per-se. Recall that $A \cap \mathbb{Q}$ forms a null set w.r.t Lebesgue measure (the measure we’re integrating with respect to). Thus, the second integral is just zero. We are left with:</p> \[\mu(A) = \int_{A \cap (\mathbb{R} \setminus \mathbb{Q})} 2x \, \chi_{\mathbb{R} \setminus \mathbb{Q}}(x) \, dm(x) = x^2 \, \text{m-a.e.}\] <p>For example, with $A = [0,2]$, $\mu(A) = 4$ and $m(A) = 2$. With the derivative being simply $\frac{d\mu}{dm}(x) = f(x)$, we have that ratio/density captured. I know that this is improper notation, but please cut me some slack.</p> <p>So basically, the derivative of $x^2$ is unique up to a null set. That is, the derivative of $x^2$ can be the function $2x$ without the rationals, or just $2x$, or $2x$ minus some point. The classical derivative could not do this! (This is definitely something that needs to be proved, and I think it’s quite simple: just do the decomposition but store the entire null set in the second integral so that it goes to zero).</p> <p>Now if we were to do the same thing with $g(x) = 2x \, \chi_{\mathbb{Q}}(x)$, the RN derivative would be 0, since the part with $2x$ mass is on a null set. Again, this goes back to how we do integration!</p> <p>These derivatives have applications in probability theory, specifically when defining the PMF (integrate w.r.t the counting measure), doing changes in measure (not sure when this would become necessary), and some things in conditional expectation. Unlike with integration and learning some of the most important theorems (Monotone Convergence Theorem, Fatou’s Lemma, Dominated Convergence Theorem), I can’t really see how these derivatives are useful (beyond taking out a null set) until I take a probability course. However, hopefully I understand it a bit better now.</p> <hr/> <p>P.S. I almost surely left out details about integrability of these functions (something about the function being in $L^1$ norm), but my examples don’t necessarily break down. I should be more careful next time, however.</p>]]></content><author><name></name></author><category term="mathematics"/><category term="theory"/><summary type="html"><![CDATA[Extremely Non-rigorous]]></summary></entry><entry><title type="html">a post with plotly.js</title><link href="https://jangjdaniel.github.io/blog/2025/plotly/" rel="alternate" type="text/html" title="a post with plotly.js"/><published>2025-03-26T14:24:00+00:00</published><updated>2025-03-26T14:24:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2025/plotly</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2025/plotly/"><![CDATA[<p>This is an example post with some <a href="https://plotly.com/javascript/">plotly</a> code.</p> <div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">plotly
-</span><span class="sb">{
-  "data": [
-    {
-      "x": [1, 2, 3, 4],
-      "y": [10, 15, 13, 17],
-      "type": "scatter"
-    },
-    {
-      "x": [1, 2, 3, 4],
-      "y": [16, 5, 11, 9],
-      "type": "scatter"
-    }
-  ]
-}</span>
-<span class="p">```</span>
-</code></pre></div></div> <p>Which generates:</p> <pre><code class="language-plotly">{
-  "data": [
-    {
-      "x": [1, 2, 3, 4],
-      "y": [10, 15, 13, 17],
-      "type": "scatter"
-    },
-    {
-      "x": [1, 2, 3, 4],
-      "y": [16, 5, 11, 9],
-      "type": "scatter"
-    }
-  ]
-}
-</code></pre> <p>Also another example chart.</p> <div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">plotly
-</span><span class="sb">{
-  "data": [
-    {
-      "x": [1, 2, 3, 4],
-      "y": [10, 15, 13, 17],
-      "mode": "markers"
-    },
-    {
-      "x": [2, 3, 4, 5],
-      "y": [16, 5, 11, 9],
-      "mode": "lines"
-    },
-    {
-      "x": [1, 2, 3, 4],
-      "y": [12, 9, 15, 12],
-      "mode": "lines+markers"
-    }
-  ],
-  "layout": {
-    "title": {
-      "text": "Line and Scatter Plot"
-    }
-  }
-}</span>
-<span class="p">```</span>
-</code></pre></div></div> <p>This is how it looks like:</p> <pre><code class="language-plotly">{
-  "data": [
-    {
-      "x": [1, 2, 3, 4],
-      "y": [10, 15, 13, 17],
-      "mode": "markers"
-    },
-    {
-      "x": [2, 3, 4, 5],
-      "y": [16, 5, 11, 9],
-      "mode": "lines"
-    },
-    {
-      "x": [1, 2, 3, 4],
-      "y": [12, 9, 15, 12],
-      "mode": "lines+markers"
-    }
-  ],
-  "layout": {
-    "title": {
-      "text": "Line and Scatter Plot"
-    }
-  }
-}
-</code></pre>]]></content><author><name></name></author><category term="sample-posts"/><category term="formatting"/><category term="charts"/><summary type="html"><![CDATA[this is what included plotly.js code could look like]]></summary></entry><entry><title type="html">a post with image galleries</title><link href="https://jangjdaniel.github.io/blog/2024/photo-gallery/" rel="alternate" type="text/html" title="a post with image galleries"/><published>2024-12-04T01:59:00+00:00</published><updated>2024-12-04T01:59:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2024/photo-gallery</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2024/photo-gallery/"><![CDATA[<p>The images in this post are all zoomable, arranged into different mini-galleries using different libraries.</p> <h2 id="lightbox2">Lightbox2</h2> <p><a href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/1/img-2500.jpg" data-lightbox="roadtrip"><img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/1/img-200.jpg"/></a> <a href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/2/img-2500.jpg" data-lightbox="roadtrip"><img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/2/img-200.jpg"/></a> <a href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-2500.jpg" data-lightbox="roadtrip"><img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-200.jpg"/></a></p> <hr/> <h2 id="photoswipe"><a href="https://photoswipe.com/">PhotoSwipe</a></h2> <div class="pswp-gallery pswp-gallery--single-column" id="gallery--getting-started"> <a href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/2/img-2500.jpg" data-pswp-width="1669" data-pswp-height="2500" target="_blank"> <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/2/img-200.jpg" alt=""/> </a> <a href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/7/img-2500.jpg" data-pswp-width="1875" data-pswp-height="2500" data-cropped="true" target="_blank"> <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/7/img-200.jpg" alt=""/> </a> <a href="https://unsplash.com" data-pswp-src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-2500.jpg" data-pswp-width="2500" data-pswp-height="1666" target="_blank"> <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-200.jpg" alt=""/> </a> <div> <a href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/6/img-2500.jpg" data-pswp-width="2500" data-pswp-height="1667" target="_blank"> <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/6/img-200.jpg" alt=""/> </a> </div> </div> <hr/> <h2 id="spotlight-js"><a href="https://nextapps-de.github.io/spotlight/">Spotlight JS</a></h2> <div class="spotlight-group"> <a class="spotlight" href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/1/img-2500.jpg"> <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/1/img-200.jpg"/> </a> <a class="spotlight" href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/2/img-2500.jpg"> <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/2/img-200.jpg"/> </a> <a class="spotlight" href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-2500.jpg"> <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-200.jpg"/> </a> </div> <div class="spotlight-group"> <a class="spotlight" href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/4/img-2500.jpg"> <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/4/img-200.jpg"/> </a> <a class="spotlight" href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/5/img-2500.jpg"> <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/5/img-200.jpg"/> </a> <a class="spotlight" href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/6/img-2500.jpg"> <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/6/img-200.jpg"/> </a> </div> <hr/> <h2 id="venobox"><a href="https://veno.es/venobox/">Venobox</a></h2> <p><a class="venobox" data-gall="myGallery" href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/1/img-2500.jpg"><img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/1/img-200.jpg"/></a> <a class="venobox" data-gall="myGallery" href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/2/img-2500.jpg"><img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/2/img-200.jpg"/></a> <a class="venobox" data-gall="myGallery" href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-2500.jpg"><img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-200.jpg"/></a></p>]]></content><author><name></name></author><category term="sample-posts"/><category term="formatting"/><category term="images"/><summary type="html"><![CDATA[this is what included image galleries could look like]]></summary></entry><entry><title type="html">Google Gemini updates: Flash 1.5, Gemma 2 and Project Astra</title><link href="https://jangjdaniel.github.io/blog/2024/google-gemini-updates-flash-15-gemma-2-and-project-astra/" rel="alternate" type="text/html" title="Google Gemini updates: Flash 1.5, Gemma 2 and Project Astra"/><published>2024-05-14T00:00:00+00:00</published><updated>2024-05-14T00:00:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2024/google-gemini-updates-flash-15-gemma-2-and-project-astra</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2024/google-gemini-updates-flash-15-gemma-2-and-project-astra/"><![CDATA[<p>Learn more:Learn more:Learn more:Learn more:Learn more:Learn more:Learn more:Learn more:Learn more:May 14, 2024 We’re introducing a series of updates across the Gemini family of models, including the new 1.5 Flash, our lightweight model for speed and efficiency, and Project Astra, our vision for the future of AI assistants. In December, we launched our first natively multimodal model Gemini 1.0 in three sizes: Ultra, Pro and Nano. Just a few months later we released 1.5 Pro, with enhanced performance and a breakthrough long context window of 1 million tokens.Developers and enterprise customers have been putting 1.5 Pro to use in incredible ways and finding its long context window, multimodal reasoning capabilities and impressive overall performance incredibly useful.We know from user feedback that some applications need lower latency and a lower cost to serve. This inspired us to keep innovating, so today, we’re introducing Gemini 1.5 Flash: a model that’s lighter-weight than 1.5 Pro, and designed to be fast and efficient to serve at scale.Both 1.5 Pro and 1.5 Flash are available in public preview with a 1 million token context window in Google AI Studio and Vertex AI. And now, 1.5 Pro is also available with a 2 million token context window via waitlist to developers using the API and to Google Cloud customers.We’re also introducing updates across the Gemini family of models, announcing our next generation of open models, Gemma 2, and sharing progress on the future of AI assistants, with Project Astra.Context lengths of leading foundation models compared with Gemini 1.5’s 2 million token capability1.5 Flash is the newest addition to the Gemini model family and the fastest Gemini model served in the API. It’s optimized for high-volume, high-frequency tasks at scale, is more cost-efficient to serve and features our breakthrough long context window.While it’s a lighter weight model than 1.5 Pro, it’s highly capable of multimodal reasoning across vast amounts of information and delivers impressive quality for its size.The new Gemini 1.5 Flash model is optimized for speed and efficiency, is highly capable of multimodal reasoning and features our breakthrough long context window.1.5 Flash excels at summarization, chat applications, image and video captioning, data extraction from long documents and tables, and more. This is because it’s been trained by 1.5 Pro through a process called “distillation,” where the most essential knowledge and skills from a larger model are transferred to a smaller, more efficient model.Read more about 1.5 Flash in our updated Gemini 1.5 technical report, on the Gemini technology page, and learn about 1.5 Flash’s availability and pricing.Over the last few months, we’ve significantly improved 1.5 Pro, our best model for general performance across a wide range of tasks.Beyond extending its context window to 2 million tokens, we’ve enhanced its code generation, logical reasoning and planning, multi-turn conversation, and audio and image understanding through data and algorithmic advances. We see strong improvements on public and internal benchmarks for each of these tasks.1.5 Pro can now follow increasingly complex and nuanced instructions, including ones that specify product-level behavior involving role, format and style. We’ve improved control over the model’s responses for specific use cases, like crafting the persona and response style of a chat agent or automating workflows through multiple function calls. And we’ve enabled users to steer model behavior by setting system instructions.We added audio understanding in the Gemini API and Google AI Studio, so 1.5 Pro can now reason across image and audio for videos uploaded in Google AI Studio. And we’re now integrating 1.5 Pro into Google products, including Gemini Advanced and in Workspace apps.Read more about 1.5 Pro in our updated Gemini 1.5 technical report and on the Gemini technology page.Gemini Nano is expanding beyond text-only inputs to include images as well. Starting with Pixel, applications using Gemini Nano with Multimodality will be able to understand the world the way people do — not just through text, but also through sight, sound and spoken language.Read more about Gemini 1.0 Nano on Android.Today, we’re also sharing a series of updates to Gemma, our family of open models built from the same research and technology used to create the Gemini models.We’re announcing Gemma 2, our next generation of open models for responsible AI innovation. Gemma 2 has a new architecture designed for breakthrough performance and efficiency, and will be available in new sizes.The Gemma family is also expanding with PaliGemma, our first vision-language model inspired by PaLI-3. And we’ve upgraded our Responsible Generative AI Toolkit with LLM Comparator for evaluating the quality of model responses.Read more on the Developer blog.As part of Google DeepMind’s mission to build AI responsibly to benefit humanity, we’ve always wanted to develop universal AI agents that can be helpful in everyday life. That’s why today, we’re sharing our progress in building the future of AI assistants with Project Astra (advanced seeing and talking responsive agent).To be truly useful, an agent needs to understand and respond to the complex and dynamic world just like people do — and take in and remember what it sees and hears to understand context and take action. It also needs to be proactive, teachable and personal, so users can talk to it naturally and without lag or delay.While we’ve made incredible progress developing AI systems that can understand multimodal information, getting response time down to something conversational is a difficult engineering challenge. Over the past few years, we’ve been working to improve how our models perceive, reason and converse to make the pace and quality of interaction feel more natural.Building on Gemini, we’ve developed prototype agents that can process information faster by continuously encoding video frames, combining the video and speech input into a timeline of events, and caching this information for efficient recall.By leveraging our leading speech models, we also enhanced how they sound, giving the agents a wider range of intonations. These agents can better understand the context they’re being used in, and respond quickly, in conversation.With technology like this, it’s easy to envision a future where people could have an expert AI assistant by their side, through a phone or glasses. And some of these capabilities are coming to Google products, like the Gemini app and web experience, later this year.We’ve made incredible progress so far with our family of Gemini models, and we’re always striving to advance the state-of-the-art even further. By investing in a relentless production line of innovation, we’re able to explore new ideas at the frontier, while also unlocking the possibility of new and exciting Gemini use cases.Learn more about Gemini and its capabilities. Your information will be used in accordance with Google’s privacy policy.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      Done. Just one step more.
-    
-      Check your inbox to confirm your subscription.
-    You are already subscribed to our newsletter.
-    You can also subscribe with a
-    different email address
-    
-    .
-    
-  Let’s stay in touch. Get the latest news from Google in your inbox.
-          Follow Us
-</code></pre></div></div>]]></content><author><name></name></author><category term="external-posts"/><category term="google"/><summary type="html"><![CDATA[We’re sharing updates across our Gemini family of models and a glimpse of Project Astra, our vision for the future of AI assistants.]]></summary></entry><entry><title type="html">a post with tabs</title><link href="https://jangjdaniel.github.io/blog/2024/tabs/" rel="alternate" type="text/html" title="a post with tabs"/><published>2024-05-01T00:32:13+00:00</published><updated>2024-05-01T00:32:13+00:00</updated><id>https://jangjdaniel.github.io/blog/2024/tabs</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2024/tabs/"><![CDATA[<p>This is how a post with <a href="https://github.com/Ovski4/jekyll-tabs">tabs</a> looks like. Note that the tabs could be used for different purposes, not only for code.</p> <h2 id="first-tabs">First tabs</h2> <p>To add tabs, use the following syntax:</p> <div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">{%</span><span class="w"> </span><span class="nt">tabs</span><span class="w"> </span><span class="nv">group-name</span><span class="w"> </span><span class="cp">%}</span>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://jangjdaniel.github.io/feed.xml" rel="self" type="application/atom+xml"/><link href="https://jangjdaniel.github.io/" rel="alternate" type="text/html" hreflang="en"/><updated>2026-06-16T18:33:30+00:00</updated><id>https://jangjdaniel.github.io/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design. </subtitle><entry><title type="html"></title><link href="https://jangjdaniel.github.io/blog/2026/2025-12-14-learning-SAS/" rel="alternate" type="text/html" title=""/><published>2026-06-16T18:33:30+00:00</published><updated>2026-06-16T18:33:30+00:00</updated><id>https://jangjdaniel.github.io/blog/2026/2025-12-14-learning-SAS</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2026/2025-12-14-learning-SAS/"><![CDATA[<p>I haven’t touched SAS since SIBS almost 2.5 years ago. I took on the challenge of learning how to do data wrangling, simple data visualization, and some other things in SAS for my special topics course in the Spring. Below is my attempt at gathering examples and trying to relate the syntax back into R. I’m hoping to have a copy-paste template for myself after this post. These will be my notes / highlights from following along <a href="https://support.sas.com/content/dam/SAS/support/en/books/free-books/sas-programming-for-r-users.pdf">this resource published by SAS</a></p> <h2 id="what-do-i-remember">What do I remember?</h2> <p>At the moment, all I know is that SAS is not open-source (unlike R) and that I need to put semicolons everywhere. I’m not entirely sure what its benefit is, other than the fact that some healthcare companies still use it.</p> <h2 id="basics-load-in-data">Basics: Load in data</h2> <p>This is how we load in data and make sure we’re in the proper file path. First we specify the working directory, then we define the data using this syntax. One thing to notice is the incessant use of semicolons. Note that this is all base SAS.</p> <div class="language-sas highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">libname</span> <span class="nv">mylib</span> <span class="s1">'C:/path_to_data'</span><span class="p">;</span>
 
-<span class="cp">{%</span><span class="w"> </span><span class="nt">tab</span><span class="w"> </span><span class="nv">group-name</span><span class="w"> </span><span class="nv">tab-name-1</span><span class="w"> </span><span class="cp">%}</span>
-
-Content 1
-
-<span class="cp">{%</span><span class="w"> </span><span class="nt">endtab</span><span class="w"> </span><span class="cp">%}</span>
-
-<span class="cp">{%</span><span class="w"> </span><span class="nt">tab</span><span class="w"> </span><span class="nv">group-name</span><span class="w"> </span><span class="nv">tab-name-2</span><span class="w"> </span><span class="cp">%}</span>
-
-Content 2
-
-<span class="cp">{%</span><span class="w"> </span><span class="nt">endtab</span><span class="w"> </span><span class="cp">%}</span>
-
-<span class="cp">{%</span><span class="w"> </span><span class="nt">endtabs</span><span class="w"> </span><span class="cp">%}</span>
-</code></pre></div></div> <p>With this you can generate visualizations like:</p> <ul id="log" class="tab" data-tab="34b80588-13da-4388-9112-cf187020ed0f" data-name="log"> <li class="active" id="log-php"> <a href="#">php </a> </li> <li id="log-js"> <a href="#">js </a> </li> <li id="log-ruby"> <a href="#">ruby </a> </li> </ul> <ul class="tab-content" id="34b80588-13da-4388-9112-cf187020ed0f" data-name="log"> <li class="active"> <div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">var_dump</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">);</span>
-</code></pre></div></div> </li> <li> <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">hello</span><span class="dl">"</span><span class="p">);</span>
-</code></pre></div></div> </li> <li> <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">pputs</span> <span class="dl">'</span><span class="s1">hello</span><span class="dl">'</span>
-</code></pre></div></div> </li> </ul> <h2 id="another-example">Another example</h2> <ul id="data-struct" class="tab" data-tab="d7076aa7-5e23-432f-8f59-807a2d9284a7" data-name="data-struct"> <li class="active" id="data-struct-yaml"> <a href="#">yaml </a> </li> <li id="data-struct-json"> <a href="#">json </a> </li> </ul> <ul class="tab-content" id="d7076aa7-5e23-432f-8f59-807a2d9284a7" data-name="data-struct"> <li class="active"> <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">hello</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="s2">"</span><span class="s">whatsup"</span>
-  <span class="pi">-</span> <span class="s2">"</span><span class="s">hi"</span>
-</code></pre></div></div> </li> <li> <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"hello"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"whatsup"</span><span class="p">,</span><span class="w"> </span><span class="s2">"hi"</span><span class="p">]</span><span class="w">
+<span class="k">data</span> <span class="nv">my_data</span><span class="p">;</span>
+ <span class="k">set</span> <span class="n">mylib</span><span class="p">.</span><span class="n">my_data</span><span class="p">;</span>
+<span class="k">run</span><span class="p">;</span>
+</code></pre></div></div> <p>Now if you want to inspect data (like the head function and that function that extracts all column names). As a SAS cheat sheet, <code class="language-plaintext highlighter-rouge">proc</code> refers to a procedure in manipulating data or calculating a statistic. Also, note that comments use /* */ and in-line comments must start with a * and end with a semicolon (WHY??)</p> <div class="language-sas highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">proc</span> <span class="k">print</span> <span class="k">data</span><span class="o">=</span><span class="n">my_data</span> <span class="p">(</span><span class="k">obs</span><span class="o">=</span><span class="m">10</span><span class="p">);</span> <span class="c1">* print out the first 10 observations from my_data;</span>
+<span class="k">run</span><span class="p">;</span>
+</code></pre></div></div> <div class="language-sas highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">proc</span> <span class="k">contents</span> <span class="k">data</span><span class="o">=</span><span class="n">my_data</span><span class="p">;</span> <span class="c1">* extracts variables from my_data;</span>
+<span class="k">run</span><span class="p">;</span>
+</code></pre></div></div> <hr/> <h2 id="data-wrangling">Data Wrangling</h2> <p>Now we’re going to do some data wrangling and manipulations. The subtitles will refer to the tidyverse equivalent because I love tidyverse. The thing about SAS is that it’s less intuitive to data wrangle as there is no one function that does everything for you. Also we are using data steps instead of procedures, since we’re manipulating the data itself.</p> <h3 id="add-a-new-variable">Add a new variable</h3> <p>Notice that we can do everything within one data call (what is the proper term for this)</p> <div class="language-sas highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">data</span> <span class="nv">my_data</span><span class="p">;</span>
+ <span class="k">set</span> <span class="n">my_data</span><span class="p">;</span> <span class="c1">* not entirely sure what this does;</span>
+ <span class="n">transformed_variable</span> <span class="o">=</span> <span class="k">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">* length variable increases by 1;</span>
+<span class="k">run</span><span class="p">;</span>
+</code></pre></div></div> <p>Now based on a conditional, we use IF __ THEN <em>__, ELSE IF __</em> as follows</p> <div class="language-sas highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">data</span> <span class="nv">my_data</span><span class="p">;</span>
+ <span class="k">set</span> <span class="n">my_data</span><span class="p">;</span> <span class="c1">* not entirely sure what this does;</span>
+ <span class="n">transformed_variable</span> <span class="o">=</span> <span class="k">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">* length variable increases by 1;</span>
+<span class="k">run</span><span class="p">;</span>
+</code></pre></div></div> <p>Now for characters, we use some vector stuff</p> <div class="language-sas highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">data</span> <span class="nv">my_data</span><span class="p">;</span>
+ <span class="k">set</span> <span class="n">my_data</span><span class="p">;</span> <span class="c1">* not entirely sure what this does;</span>
+ <span class="n">transformed_variable</span> <span class="o">=</span> <span class="k">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">* length variable increases by 1;</span>
+<span class="k">run</span><span class="p">;</span>
+</code></pre></div></div> <h3 id="rename-a-variable">Rename a variable</h3> <h3 id="mutate-a-variable-based-on-a-condition">Mutate a variable based on a condition</h3> <h3 id="filter-a-variable-based-on-a-condition">Filter a variable based on a condition</h3> <h3 id="select-a-subset-of-data">Select a subset of data</h3> <h3 id="pivoting-data">Pivoting data</h3> <h3 id="joining-two-datasets">Joining two datasets</h3> <hr/> <h2 id="basic-statistics">Basic Statistics</h2> <h3 id="descriptive-statistics">Descriptive Statistics</h3> <h3 id="something-else">Something else?</h3> <hr/> <h2 id="visualizations">Visualizations</h2> <p>Here are some code chunks for the basics of visualizations (a different package?)</p> <hr/> <h2 id="regression-example">Regression Example</h2> <p>Is this also a special package? I also should describe what stuff <code class="language-plaintext highlighter-rouge">my_data</code> contains for us to run logistic regression successfully.</p> <div class="language-sas highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">proc</span> <span class="k">logistic</span> <span class="k">data</span><span class="o">=</span><span class="n">one</span><span class="p">;</span>
+     <span class="n">class</span> <span class="n">yrs2</span> <span class="p">(</span><span class="n">ref</span><span class="o">=</span><span class="s1">'0'</span><span class="p">)</span> <span class="o">/</span> <span class="n">param</span><span class="o">=</span><span class="n">ref</span><span class="p">;</span>
+     <span class="n">model</span> <span class="n">iqlt84</span> <span class="p">(</span><span class="n">event</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span> <span class="o">=</span> <span class="n">ses</span> <span class="n">yrs2</span><span class="p">;</span>
+	 <span class="k">title</span> <span class="s1">'Logistic Regression Adjusted for SES'</span><span class="p">;</span>
+<span class="k">run</span><span class="p">;</span> <span class="n">quit</span><span class="p">;</span>
+</code></pre></div></div> <hr/> <h2 id="packages">Packages</h2> <h2 id="function-setups">Function setups</h2> <h2 id="creating-a-report">Creating a report</h2>]]></content><author><name></name></author></entry><entry><title type="html">MCMC for Approximating Distributions</title><link href="https://jangjdaniel.github.io/blog/2026/MCMC-examples/" rel="alternate" type="text/html" title="MCMC for Approximating Distributions"/><published>2026-06-07T00:00:00+00:00</published><updated>2026-06-07T00:00:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2026/MCMC-examples</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2026/MCMC-examples/"><![CDATA[<p>This is a quick blog post reviewing the metropolis-hastings algorithm and the gibbs sampler, as well as an intuitive understanding on how they work. I just want to get an intuition behind some of the algorithms I take for granted in monte-carlo simulations.</p> <h1 id="metropolis-hastings-algorithm">Metropolis Hastings Algorithm</h1> <p>The posterior can be simulated with the metropolis-hastings algorithm, which is a markov-chain monte-carlo method (something only depends on the most recent thing). Thankfully I did a project where I had to recreate that algorithm in R, so if I needed to do it by hand, I could. I’m just going to copy down what I wrote back then here for ease of finding it in the future, which will be unedited, out of context, and riddled with mistakes.</p> <hr/> <p>In our example, we have a beta prior and multinomial data. This is not a conjugate prior result we are familiar with, so how do we get our posterior so we can do our bayesian analysis? Well we can use one of the most popular Markov Chain Monte Carlo (MCMC) Algorithms: The Metropolis Hastings Algorithm. Let’s do a toy example related to the aspirin data. Consider a beta prior with alpha = 3 and beta = 4, and data with a binomial distribution with p = 0.4 and n = 50. Let’s multiply these terms (without coefficients) for the target function. However, we will go through this algorithm without assuming we know the beta/binomial conjugate prior result, and show that the algorithm gives us a histogram that closely approximates the posterior we expect.</p> <p>Monte Carlo is similar to the simulations we have done before. We take a distribution, specify a parameter, and take many random samples to build a new distribution. Markov Chain is like Monte Carlo, but it is kind of like recursion, where the next sample taken is dependent on the parameter previously chosen. A combination of both Markov Chains and Monte Carlo gives us MCMC algorithms that have wide applications, especially in statistics.</p> <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">target</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">#creating our target distribution</span><span class="w">
+  </span><span class="n">x</span><span class="o">^</span><span class="p">(</span><span class="m">3-1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="m">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span><span class="o">^</span><span class="p">(</span><span class="m">4-1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="m">20</span><span class="o">*</span><span class="p">(</span><span class="m">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span><span class="o">^</span><span class="p">(</span><span class="m">50-20</span><span class="p">)</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div></div> </li> </ul> <h2 id="tabs-for-something-else">Tabs for something else</h2> <ul id="something-else" class="tab" data-tab="a2b2bfd2-4ff1-4ded-a490-7367d06e4a91" data-name="something-else"> <li class="active" id="something-else-text"> <a href="#">text </a> </li> <li id="something-else-quote"> <a href="#">quote </a> </li> <li id="something-else-list"> <a href="#">list </a> </li> </ul> <ul class="tab-content" id="a2b2bfd2-4ff1-4ded-a490-7367d06e4a91" data-name="something-else"> <li class="active"> <p>Regular text</p> </li> <li> <blockquote> <p>A quote</p> </blockquote> </li> <li> <p>Hipster list</p> <ul> <li>brunch</li> <li>fixie</li> <li>raybans</li> <li>messenger bag</li> </ul> </li> </ul>]]></content><author><name></name></author><category term="sample-posts"/><category term="formatting"/><category term="code"/><summary type="html"><![CDATA[this is what included tabs in a post could look like]]></summary></entry><entry><title type="html">a post with typograms</title><link href="https://jangjdaniel.github.io/blog/2024/typograms/" rel="alternate" type="text/html" title="a post with typograms"/><published>2024-04-29T23:36:10+00:00</published><updated>2024-04-29T23:36:10+00:00</updated><id>https://jangjdaniel.github.io/blog/2024/typograms</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2024/typograms/"><![CDATA[<p>This is an example post with some <a href="https://github.com/google/typograms/">typograms</a> code.</p> <div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">typograms
-</span><span class="sb">+----+
-|    |---&gt; My first diagram!
-+----+</span>
-<span class="p">```</span>
-</code></pre></div></div> <p>Which generates:</p> <pre><code class="language-typograms">+----+
-|    |---&gt; My first diagram!
-+----+
-</code></pre> <p>Another example:</p> <div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">typograms
-</span><span class="sb">.------------------------.
-|.----------------------.|
-||"https://example.com" ||
-|'----------------------'|
-| ______________________ |
-||                      ||
-||   Welcome!           ||
-||                      ||
-||                      ||
-||  .----------------.  ||
-||  | username       |  ||
-||  '----------------'  ||
-||  .----------------.  ||
-||  |"*******"       |  ||
-||  '----------------'  ||
-||                      ||
-||  .----------------.  ||
-||  |   "Sign-up"    |  ||
-||  '----------------'  ||
-||                      ||
-|+----------------------+|
-.------------------------.</span>
-<span class="p">```</span>
-</code></pre></div></div> <p>which generates:</p> <pre><code class="language-typograms">.------------------------.
-|.----------------------.|
-||"https://example.com" ||
-|'----------------------'|
-| ______________________ |
-||                      ||
-||   Welcome!           ||
-||                      ||
-||                      ||
-||  .----------------.  ||
-||  | username       |  ||
-||  '----------------'  ||
-||  .----------------.  ||
-||  |"*******"       |  ||
-||  '----------------'  ||
-||                      ||
-||  .----------------.  ||
-||  |   "Sign-up"    |  ||
-||  '----------------'  ||
-||                      ||
-|+----------------------+|
-.------------------------.
-</code></pre> <p>For more examples, check out the <a href="https://google.github.io/typograms/#examples">typograms documentation</a>.</p>]]></content><author><name></name></author><category term="sample-posts"/><category term="formatting"/><category term="diagrams"/><summary type="html"><![CDATA[this is what included typograms code could look like]]></summary></entry><entry><title type="html">a post that can be cited</title><link href="https://jangjdaniel.github.io/blog/2024/post-citation/" rel="alternate" type="text/html" title="a post that can be cited"/><published>2024-04-28T15:06:00+00:00</published><updated>2024-04-28T15:06:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2024/post-citation</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2024/post-citation/"><![CDATA[<p>This is an example post that can be cited. The content of the post ends here, while the citation information is automatically provided below. The only thing needed is for you to set the <code class="language-plaintext highlighter-rouge">citation</code> key in the front matter to <code class="language-plaintext highlighter-rouge">true</code>.</p>]]></content><author><name></name></author><category term="sample-posts"/><category term="formatting"/><category term="citation"/><summary type="html"><![CDATA[this is what a post that can be cited looks like]]></summary></entry><entry><title type="html">a post with pseudo code</title><link href="https://jangjdaniel.github.io/blog/2024/pseudocode/" rel="alternate" type="text/html" title="a post with pseudo code"/><published>2024-04-15T00:01:00+00:00</published><updated>2024-04-15T00:01:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2024/pseudocode</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2024/pseudocode/"><![CDATA[<p>This is an example post with some pseudo code rendered by <a href="https://github.com/SaswatPadhi/pseudocode.js">pseudocode</a>. The example presented here is the same as the one in the <a href="https://saswat.padhi.me/pseudocode.js/">pseudocode.js</a> documentation, with only one simple but important change: everytime you would use <code class="language-plaintext highlighter-rouge">$</code>, you should use <code class="language-plaintext highlighter-rouge">$$</code> instead. Also, note that the <code class="language-plaintext highlighter-rouge">pseudocode</code> key in the front matter is set to <code class="language-plaintext highlighter-rouge">true</code> to enable the rendering of pseudo code. As an example, using this code:</p> <div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">pseudocode
-</span><span class="sb">% This quicksort algorithm is extracted from Chapter 7, Introduction to Algorithms (3rd edition)
-\begin{algorithm}
-\caption{Quicksort}
-\begin{algorithmic}
-\PROCEDURE{Quicksort}{$$A, p, r$$}
-    \IF{$$p &lt; r$$}
-        \STATE $$q = $$ \CALL{Partition}{$$A, p, r$$}
-        \STATE \CALL{Quicksort}{$$A, p, q - 1$$}
-        \STATE \CALL{Quicksort}{$$A, q + 1, r$$}
-    \ENDIF
-\ENDPROCEDURE
-\PROCEDURE{Partition}{$$A, p, r$$}
-    \STATE $$x = A[r]$$
-    \STATE $$i = p - 1$$
-    \FOR{$$j = p$$ \TO $$r - 1$$}
-        \IF{$$A[j] &lt; x$$}
-            \STATE $$i = i + 1$$
-            \STATE exchange
-            $$A[i]$$ with $$A[j]$$
-        \ENDIF
-        \STATE exchange $$A[i]$$ with $$A[r]$$
-    \ENDFOR
-\ENDPROCEDURE
-\end{algorithmic}
-\end{algorithm}</span>
-<span class="p">```</span>
-</code></pre></div></div> <p>Generates:</p> <pre><code class="language-pseudocode">% This quicksort algorithm is extracted from Chapter 7, Introduction to Algorithms (3rd edition)
-\begin{algorithm}
-\caption{Quicksort}
-\begin{algorithmic}
-\PROCEDURE{Quicksort}{$$A, p, r$$}
-    \IF{$$p &lt; r$$}
-        \STATE $$q = $$ \CALL{Partition}{$$A, p, r$$}
-        \STATE \CALL{Quicksort}{$$A, p, q - 1$$}
-        \STATE \CALL{Quicksort}{$$A, q + 1, r$$}
-    \ENDIF
-\ENDPROCEDURE
-\PROCEDURE{Partition}{$$A, p, r$$}
-    \STATE $$x = A[r]$$
-    \STATE $$i = p - 1$$
-    \FOR{$$j = p$$ \TO $$r - 1$$}
-        \IF{$$A[j] &lt; x$$}
-            \STATE $$i = i + 1$$
-            \STATE exchange
-            $$A[i]$$ with $$A[j]$$
-        \ENDIF
-        \STATE exchange $$A[i]$$ with $$A[r]$$
-    \ENDFOR
-\ENDPROCEDURE
-\end{algorithmic}
-\end{algorithm}
-</code></pre>]]></content><author><name></name></author><category term="sample-posts"/><category term="formatting"/><category term="code"/><summary type="html"><![CDATA[this is what included pseudo code could look like]]></summary></entry><entry><title type="html">a post with code diff</title><link href="https://jangjdaniel.github.io/blog/2024/code-diff/" rel="alternate" type="text/html" title="a post with code diff"/><published>2024-01-27T19:22:00+00:00</published><updated>2024-01-27T19:22:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2024/code-diff</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2024/code-diff/"><![CDATA[<p>You can display diff code by using the regular markdown syntax:</p> <div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">diff
-</span><span class="gh">diff --git a/sample.js b/sample.js
-index 0000001..0ddf2ba
-</span><span class="gd">--- a/sample.js
-</span><span class="gi">+++ b/sample.js
-</span><span class="p">@@ -1 +1 @@</span>
-<span class="gd">-console.log("Hello World!")
-</span><span class="gi">+console.log("Hello from Diff2Html!")</span>
-<span class="p">```</span>
-</code></pre></div></div> <p>Which generates:</p> <div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh">diff --git a/sample.js b/sample.js
-index 0000001..0ddf2ba
-</span><span class="gd">--- a/sample.js
-</span><span class="gi">+++ b/sample.js
-</span><span class="p">@@ -1 +1 @@</span>
-<span class="gd">-console.log("Hello World!")
-</span><span class="gi">+console.log("Hello from Diff2Html!")
-</span></code></pre></div></div> <p>But this is difficult to read, specially if you have a large diff. You can use <a href="https://diff2html.xyz/">diff2html</a> to display a more readable version of the diff. For this, just use <code class="language-plaintext highlighter-rouge">diff2html</code> instead of <code class="language-plaintext highlighter-rouge">diff</code> for the code block language:</p> <div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">diff2html
-</span><span class="sb">diff --git a/sample.js b/sample.js
-index 0000001..0ddf2ba
---- a/sample.js
-+++ b/sample.js
-@@ -1 +1 @@
--console.log("Hello World!")
-+console.log("Hello from Diff2Html!")</span>
-<span class="p">```</span>
-</code></pre></div></div> <p>If we use a longer example, for example <a href="https://github.com/rtfpessoa/diff2html/commit/c2c253d3e3f8b8b267f551e659f72b44ca2ac927">this commit from diff2html</a>, it will generate the following output:</p> <pre><code class="language-diff2html">From 2aaae31cc2a37bfff83430c2c914b140bee59b6a Mon Sep 17 00:00:00 2001
-From: Rodrigo Fernandes &lt;rtfrodrigo@gmail.com&gt;
-Date: Sun, 9 Oct 2016 16:41:54 +0100
-Subject: [PATCH 1/2] Initial template override support
+</span></code></pre></div></div> <p>The bulk of the algorithm happens in the following function. We propose an uninformative distribution (flat) because we are assuming we know nothing about the posterior distribution.</p> <p>We draw one value of x from both the target and proposal (proposed_x) distribution. Then, comparing the ratios, if it is greater than 1, we automatically keep the new value of x. If our proposal distribution has a much higher value than our target, we might reject the value of x being in our distribution, depending on how much bigger the proposal was from the target. If a randomly drawn number from a uniform(0,1) distribution is less than the ratio, then we accept the new value. Otherwise, we reject the value and use our old parameter value for the next iteration. The proposal distribution doesn’t move in that case. There is a proof behind why this works, but it is omitted.</p> <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">metropolis_step</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">sigma</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">proposed_x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rbeta</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">shape1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">shape2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="c1">#uninformative! equivalent to a uniform(0,1)</span><span class="w">
+  </span><span class="n">accept_prob</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">(</span><span class="n">proposed_x</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">target</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="w">
+  </span><span class="n">u</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">runif</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="w">
+  </span><span class="k">if</span><span class="p">(</span><span class="n">u</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">accept_prob</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">value</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">proposed_x</span><span class="w">
+    </span><span class="n">accepted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">TRUE</span><span class="w">
+  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">value</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">x</span><span class="w">
+    </span><span class="n">accepted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">FALSE</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="n">out</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">accepted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accepted</span><span class="p">)</span><span class="w"> </span><span class="c1">#only accepted values allowed</span><span class="w">
+  </span><span class="n">out</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div> <p>There are other important considerations that mitigate common issues with the algorithm. Mainly, I was concerned with the initial sample being too autocorrelated, which is a common issue for Metropolis-Hastings. To solve this issue, the below code removes the first 500 observations. We still sample 2500, as to prevent a sample size issue.</p> <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#does certain conditions such as burnin, lag, and the variance</span><span class="w">
 
----
- scripts/hulk.js                    |  4 ++--
- src/diff2html.js                   |  3 +--
- src/file-list-printer.js           | 11 ++++++++---
- src/hoganjs-utils.js               | 29 +++++++++++++++++------------
- src/html-printer.js                |  6 ++++++
- src/line-by-line-printer.js        |  6 +++++-
- src/side-by-side-printer.js        |  6 +++++-
- test/file-list-printer-tests.js    |  2 +-
- test/hogan-cache-tests.js          | 18 +++++++++++++++---
- test/line-by-line-tests.js         |  3 +--
- test/side-by-side-printer-tests.js |  3 +--
- 11 files changed, 62 insertions(+), 29 deletions(-)
+</span><span class="n">metropolis_sampler</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">initial_value</span><span class="p">,</span><span class="w"> 
+                               </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2500</span><span class="p">,</span><span class="w"> 
+                               </span><span class="n">sigma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> 
+                               </span><span class="n">burnin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">500</span><span class="p">,</span><span class="w"> </span><span class="c1">#burn in deletes the first n samples: helps with issue</span><span class="w">
+                               </span><span class="n">lag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> 
+  
+  </span><span class="n">results</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">()</span><span class="w">
+  </span><span class="n">current_state</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">initial_value</span><span class="w">
+  </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">burnin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">out</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">metropolis_step</span><span class="p">(</span><span class="n">current_state</span><span class="p">,</span><span class="w"> </span><span class="n">sigma</span><span class="p">)</span><span class="w">
+    </span><span class="n">current_state</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">out</span><span class="o">$</span><span class="n">value</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">lag</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">out</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">metropolis_step</span><span class="p">(</span><span class="n">current_state</span><span class="p">,</span><span class="w"> </span><span class="n">sigma</span><span class="p">)</span><span class="w">
+      </span><span class="n">current_state</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">out</span><span class="o">$</span><span class="n">value</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="n">results</span><span class="p">[[</span><span class="n">i</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">out</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="n">results</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">do.call</span><span class="p">(</span><span class="n">rbind</span><span class="p">,</span><span class="w"> </span><span class="n">results</span><span class="p">)</span><span class="w">
+  </span><span class="n">results</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div> <p>Lastly, we can overlay the conjugate prior result (which is a beta(23,34) distribution) to verify that the metropolis-hastings algorithm really did approximate the correct distribution. As we can see, the metropolis-hastings algorithm works! This can be extended to posteriors that are not conjugate priors, like the aspirin example!</p> <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">set.seed</span><span class="p">(</span><span class="m">1234</span><span class="p">)</span><span class="w">
+</span><span class="n">out</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">metropolis_sampler</span><span class="p">(</span><span class="n">initial_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w">
 
-diff --git a/scripts/hulk.js b/scripts/hulk.js
-index 5a793c18..a4b1a4d5 100755
---- a/scripts/hulk.js
-+++ b/scripts/hulk.js
-@@ -173,11 +173,11 @@ function namespace(name) {
- // write a template foreach file that matches template extension
- templates = extractFiles(options.argv.remain)
-   .map(function(file) {
--    var openedFile = fs.readFileSync(file, 'utf-8');
-+    var openedFile = fs.readFileSync(file, 'utf-8').trim();
-     var name;
-     if (!openedFile) return;
-     name = namespace(path.basename(file).replace(/\..*$/, ''));
--    openedFile = removeByteOrderMark(openedFile.trim());
-+    openedFile = removeByteOrderMark(openedFile);
-     openedFile = wrap(file, name, openedFile);
-     if (!options.outputdir) return openedFile;
-     fs.writeFileSync(path.join(options.outputdir, name + '.js')
-diff --git a/src/diff2html.js b/src/diff2html.js
-index 21b0119e..64e138f5 100644
---- a/src/diff2html.js
-+++ b/src/diff2html.js
-@@ -7,7 +7,6 @@
+</span><span class="c1">#building pdf beta</span><span class="w">
+</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10000</span><span class="p">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dbeta</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">shape1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">23</span><span class="p">,</span><span class="w"> </span><span class="n">shape2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">34</span><span class="p">)</span><span class="w">
 
- (function() {
-   var diffParser = require('./diff-parser.js').DiffParser;
--  var fileLister = require('./file-list-printer.js').FileListPrinter;
-   var htmlPrinter = require('./html-printer.js').HtmlPrinter;
+</span><span class="c1">#plot histogram of sampled values</span><span class="w">
+</span><span class="n">hist</span><span class="p">(</span><span class="n">out</span><span class="o">$</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">freq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Histogram with Overlay"</span><span class="p">,</span><span class="w">
+     </span><span class="n">xlab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Sampled Values"</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Density"</span><span class="p">)</span><span class="w">
 
-   function Diff2Html() {
-@@ -43,7 +42,7 @@
-
-     var fileList = '';
-     if (configOrEmpty.showFiles === true) {
--      fileList = fileLister.generateFileList(diffJson, configOrEmpty);
-+      fileList = htmlPrinter.generateFileListSummary(diffJson, configOrEmpty);
-     }
-
-     var diffOutput = '';
-diff --git a/src/file-list-printer.js b/src/file-list-printer.js
-index e408d9b2..1e0a2c61 100644
---- a/src/file-list-printer.js
-+++ b/src/file-list-printer.js
-@@ -8,11 +8,16 @@
- (function() {
-   var printerUtils = require('./printer-utils.js').PrinterUtils;
-
--  var hoganUtils = require('./hoganjs-utils.js').HoganJsUtils;
-+  var hoganUtils;
-+
-   var baseTemplatesPath = 'file-summary';
-   var iconsBaseTemplatesPath = 'icon';
-
--  function FileListPrinter() {
-+  function FileListPrinter(config) {
-+    this.config = config;
-+
-+    var HoganJsUtils = require('./hoganjs-utils.js').HoganJsUtils;
-+    hoganUtils = new HoganJsUtils(config);
-   }
-
-   FileListPrinter.prototype.generateFileList = function(diffFiles) {
-@@ -38,5 +43,5 @@
-     });
-   };
-
--  module.exports.FileListPrinter = new FileListPrinter();
-+  module.exports.FileListPrinter = FileListPrinter;
- })();
-diff --git a/src/hoganjs-utils.js b/src/hoganjs-utils.js
-index 9949e5fa..0dda08d7 100644
---- a/src/hoganjs-utils.js
-+++ b/src/hoganjs-utils.js
-@@ -8,18 +8,19 @@
- (function() {
-   var fs = require('fs');
-   var path = require('path');
--
-   var hogan = require('hogan.js');
-
-   var hoganTemplates = require('./templates/diff2html-templates.js');
-
--  var templatesPath = path.resolve(__dirname, 'templates');
-+  var extraTemplates;
-
--  function HoganJsUtils() {
-+  function HoganJsUtils(configuration) {
-+    this.config = configuration || {};
-+    extraTemplates = this.config.templates || {};
-   }
-
--  HoganJsUtils.prototype.render = function(namespace, view, params, configuration) {
--    var template = this.template(namespace, view, configuration);
-+  HoganJsUtils.prototype.render = function(namespace, view, params) {
-+    var template = this.template(namespace, view);
-     if (template) {
-       return template.render(params);
-     }
-@@ -27,17 +28,16 @@
-     return null;
-   };
-
--  HoganJsUtils.prototype.template = function(namespace, view, configuration) {
--    var config = configuration || {};
-+  HoganJsUtils.prototype.template = function(namespace, view) {
-     var templateKey = this._templateKey(namespace, view);
-
--    return this._getTemplate(templateKey, config);
-+    return this._getTemplate(templateKey);
-   };
-
--  HoganJsUtils.prototype._getTemplate = function(templateKey, config) {
-+  HoganJsUtils.prototype._getTemplate = function(templateKey) {
-     var template;
-
--    if (!config.noCache) {
-+    if (!this.config.noCache) {
-       template = this._readFromCache(templateKey);
-     }
-
-@@ -53,6 +53,7 @@
-
-     try {
-       if (fs.readFileSync) {
-+        var templatesPath = path.resolve(__dirname, 'templates');
-         var templatePath = path.join(templatesPath, templateKey);
-         var templateContent = fs.readFileSync(templatePath + '.mustache', 'utf8');
-         template = hogan.compile(templateContent);
-@@ -66,12 +67,16 @@
-   };
-
-   HoganJsUtils.prototype._readFromCache = function(templateKey) {
--    return hoganTemplates[templateKey];
-+    return extraTemplates[templateKey] || hoganTemplates[templateKey];
-   };
-
-   HoganJsUtils.prototype._templateKey = function(namespace, view) {
-     return namespace + '-' + view;
-   };
-
--  module.exports.HoganJsUtils = new HoganJsUtils();
-+  HoganJsUtils.prototype.compile = function(templateStr) {
-+    return hogan.compile(templateStr);
-+  };
-+
-+  module.exports.HoganJsUtils = HoganJsUtils;
- })();
-diff --git a/src/html-printer.js b/src/html-printer.js
-index 585d5b66..13f83047 100644
---- a/src/html-printer.js
-+++ b/src/html-printer.js
-@@ -8,6 +8,7 @@
- (function() {
-   var LineByLinePrinter = require('./line-by-line-printer.js').LineByLinePrinter;
-   var SideBySidePrinter = require('./side-by-side-printer.js').SideBySidePrinter;
-+  var FileListPrinter = require('./file-list-printer.js').FileListPrinter;
-
-   function HtmlPrinter() {
-   }
-@@ -22,5 +23,10 @@
-     return sideBySidePrinter.generateSideBySideJsonHtml(diffFiles);
-   };
-
-+  HtmlPrinter.prototype.generateFileListSummary = function(diffJson, config) {
-+    var fileListPrinter = new FileListPrinter(config);
-+    return fileListPrinter.generateFileList(diffJson);
-+  };
-+
-   module.exports.HtmlPrinter = new HtmlPrinter();
- })();
-diff --git a/src/line-by-line-printer.js b/src/line-by-line-printer.js
-index b07eb53c..d230bedd 100644
---- a/src/line-by-line-printer.js
-+++ b/src/line-by-line-printer.js
-@@ -11,7 +11,8 @@
-   var utils = require('./utils.js').Utils;
-   var Rematch = require('./rematch.js').Rematch;
-
--  var hoganUtils = require('./hoganjs-utils.js').HoganJsUtils;
-+  var hoganUtils;
-+
-   var genericTemplatesPath = 'generic';
-   var baseTemplatesPath = 'line-by-line';
-   var iconsBaseTemplatesPath = 'icon';
-@@ -19,6 +20,9 @@
-
-   function LineByLinePrinter(config) {
-     this.config = config;
-+
-+    var HoganJsUtils = require('./hoganjs-utils.js').HoganJsUtils;
-+    hoganUtils = new HoganJsUtils(config);
-   }
-
-   LineByLinePrinter.prototype.makeFileDiffHtml = function(file, diffs) {
-diff --git a/src/side-by-side-printer.js b/src/side-by-side-printer.js
-index bbf1dc8d..5e3033b3 100644
---- a/src/side-by-side-printer.js
-+++ b/src/side-by-side-printer.js
-@@ -11,7 +11,8 @@
-   var utils = require('./utils.js').Utils;
-   var Rematch = require('./rematch.js').Rematch;
-
--  var hoganUtils = require('./hoganjs-utils.js').HoganJsUtils;
-+  var hoganUtils;
-+
-   var genericTemplatesPath = 'generic';
-   var baseTemplatesPath = 'side-by-side';
-   var iconsBaseTemplatesPath = 'icon';
-@@ -26,6 +27,9 @@
-
-   function SideBySidePrinter(config) {
-     this.config = config;
-+
-+    var HoganJsUtils = require('./hoganjs-utils.js').HoganJsUtils;
-+    hoganUtils = new HoganJsUtils(config);
-   }
-
-   SideBySidePrinter.prototype.makeDiffHtml = function(file, diffs) {
-diff --git a/test/file-list-printer-tests.js b/test/file-list-printer-tests.js
-index a502a46f..60ea3208 100644
---- a/test/file-list-printer-tests.js
-+++ b/test/file-list-printer-tests.js
-@@ -1,6 +1,6 @@
- var assert = require('assert');
-
--var fileListPrinter = require('../src/file-list-printer.js').FileListPrinter;
-+var fileListPrinter = new (require('../src/file-list-printer.js').FileListPrinter)();
-
- describe('FileListPrinter', function() {
-   describe('generateFileList', function() {
-diff --git a/test/hogan-cache-tests.js b/test/hogan-cache-tests.js
-index 190bf6f8..3bb754ac 100644
---- a/test/hogan-cache-tests.js
-+++ b/test/hogan-cache-tests.js
-@@ -1,6 +1,6 @@
- var assert = require('assert');
-
--var HoganJsUtils = require('../src/hoganjs-utils.js').HoganJsUtils;
-+var HoganJsUtils = new (require('../src/hoganjs-utils.js').HoganJsUtils)();
- var diffParser = require('../src/diff-parser.js').DiffParser;
-
- describe('HoganJsUtils', function() {
-@@ -21,16 +21,28 @@ describe('HoganJsUtils', function() {
-       });
-       assert.equal(emptyDiffHtml, result);
-     });
-+
-     it('should render view without cache', function() {
-       var result = HoganJsUtils.render('generic', 'empty-diff', {
-         contentClass: 'd2h-code-line',
-         diffParser: diffParser
-       }, {noCache: true});
--      assert.equal(emptyDiffHtml + '\n', result);
-+      assert.equal(emptyDiffHtml, result);
-     });
-+
-     it('should return null if template is missing', function() {
--      var result = HoganJsUtils.render('generic', 'missing-template', {}, {noCache: true});
-+      var hoganUtils = new (require('../src/hoganjs-utils.js').HoganJsUtils)({noCache: true});
-+      var result = hoganUtils.render('generic', 'missing-template', {});
-       assert.equal(null, result);
-     });
-+
-+    it('should allow templates to be overridden', function() {
-+      var emptyDiffTemplate = HoganJsUtils.compile('&lt;p&gt;&lt;/p&gt;');
-+
-+      var config = {templates: {'generic-empty-diff': emptyDiffTemplate}};
-+      var hoganUtils = new (require('../src/hoganjs-utils.js').HoganJsUtils)(config);
-+      var result = hoganUtils.render('generic', 'empty-diff', {myName: 'Rodrigo Fernandes'});
-+      assert.equal('&lt;p&gt;Rodrigo Fernandes&lt;/p&gt;', result);
-+    });
-   });
- });
-diff --git a/test/line-by-line-tests.js b/test/line-by-line-tests.js
-index 1cd92073..8869b3df 100644
---- a/test/line-by-line-tests.js
-+++ b/test/line-by-line-tests.js
-@@ -14,7 +14,7 @@ describe('LineByLinePrinter', function() {
-         '            File without changes\n' +
-         '        &lt;/div&gt;\n' +
-         '    &lt;/td&gt;\n' +
--        '&lt;/tr&gt;\n';
-+        '&lt;/tr&gt;';
-
-       assert.equal(expected, fileHtml);
-     });
-@@ -422,7 +422,6 @@ describe('LineByLinePrinter', function() {
-         '        &lt;/div&gt;\n' +
-         '    &lt;/td&gt;\n' +
-         '&lt;/tr&gt;\n' +
--        '\n' +
-         '                &lt;/tbody&gt;\n' +
-         '            &lt;/table&gt;\n' +
-         '        &lt;/div&gt;\n' +
-diff --git a/test/side-by-side-printer-tests.js b/test/side-by-side-printer-tests.js
-index 76625f8e..771daaa5 100644
---- a/test/side-by-side-printer-tests.js
-+++ b/test/side-by-side-printer-tests.js
-@@ -14,7 +14,7 @@ describe('SideBySidePrinter', function() {
-         '            File without changes\n' +
-         '        &lt;/div&gt;\n' +
-         '    &lt;/td&gt;\n' +
--        '&lt;/tr&gt;\n';
-+        '&lt;/tr&gt;';
-
-       assert.equal(expectedRight, fileHtml.right);
-       assert.equal(expectedLeft, fileHtml.left);
-@@ -324,7 +324,6 @@ describe('SideBySidePrinter', function() {
-         '        &lt;/div&gt;\n' +
-         '    &lt;/td&gt;\n' +
-         '&lt;/tr&gt;\n' +
--        '\n' +
-         '                    &lt;/tbody&gt;\n' +
-         '                &lt;/table&gt;\n' +
-         '            &lt;/div&gt;\n' +
-
-From f3cadb96677d0eb82fc2752dc3ffbf35ca9b5bdb Mon Sep 17 00:00:00 2001
-From: Rodrigo Fernandes &lt;rtfrodrigo@gmail.com&gt;
-Date: Sat, 15 Oct 2016 13:21:22 +0100
-Subject: [PATCH 2/2] Allow uncompiled templates
-
----
- README.md                 |  3 +++
- src/hoganjs-utils.js      |  7 +++++++
- test/hogan-cache-tests.js | 24 +++++++++++++++++++++++-
- 3 files changed, 33 insertions(+), 1 deletion(-)
-
-diff --git a/README.md b/README.md
-index 132c8a28..46909f25 100644
---- a/README.md
-+++ b/README.md
-@@ -98,6 +98,9 @@ The HTML output accepts a Javascript object with configuration. Possible options
-   - `synchronisedScroll`: scroll both panes in side-by-side mode: `true` or `false`, default is `false`
-   - `matchWordsThreshold`: similarity threshold for word matching, default is 0.25
-   - `matchingMaxComparisons`: perform at most this much comparisons for line matching a block of changes, default is `2500`
-+  - `templates`: object with previously compiled templates to replace parts of the html
-+  - `rawTemplates`: object with raw not compiled templates to replace parts of the html
-+  &gt; For more information regarding the possible templates look into [src/templates](https://github.com/rtfpessoa/diff2html/tree/master/src/templates)
-
- ## Diff2HtmlUI Helper
-
-diff --git a/src/hoganjs-utils.js b/src/hoganjs-utils.js
-index 0dda08d7..b2e9c275 100644
---- a/src/hoganjs-utils.js
-+++ b/src/hoganjs-utils.js
-@@ -17,6 +17,13 @@
-   function HoganJsUtils(configuration) {
-     this.config = configuration || {};
-     extraTemplates = this.config.templates || {};
-+
-+    var rawTemplates = this.config.rawTemplates || {};
-+    for (var templateName in rawTemplates) {
-+      if (rawTemplates.hasOwnProperty(templateName)) {
-+        if (!extraTemplates[templateName]) extraTemplates[templateName] = this.compile(rawTemplates[templateName]);
-+      }
-+    }
-   }
-
-   HoganJsUtils.prototype.render = function(namespace, view, params) {
-diff --git a/test/hogan-cache-tests.js b/test/hogan-cache-tests.js
-index 3bb754ac..a34839c0 100644
---- a/test/hogan-cache-tests.js
-+++ b/test/hogan-cache-tests.js
-@@ -36,7 +36,7 @@ describe('HoganJsUtils', function() {
-       assert.equal(null, result);
-     });
-
--    it('should allow templates to be overridden', function() {
-+    it('should allow templates to be overridden with compiled templates', function() {
-       var emptyDiffTemplate = HoganJsUtils.compile('&lt;p&gt;&lt;/p&gt;');
-
-       var config = {templates: {'generic-empty-diff': emptyDiffTemplate}};
-@@ -44,5 +44,27 @@ describe('HoganJsUtils', function() {
-       var result = hoganUtils.render('generic', 'empty-diff', {myName: 'Rodrigo Fernandes'});
-       assert.equal('&lt;p&gt;Rodrigo Fernandes&lt;/p&gt;', result);
-     });
-+
-+    it('should allow templates to be overridden with uncompiled templates', function() {
-+      var emptyDiffTemplate = '&lt;p&gt;&lt;/p&gt;';
-+
-+      var config = {rawTemplates: {'generic-empty-diff': emptyDiffTemplate}};
-+      var hoganUtils = new (require('../src/hoganjs-utils.js').HoganJsUtils)(config);
-+      var result = hoganUtils.render('generic', 'empty-diff', {myName: 'Rodrigo Fernandes'});
-+      assert.equal('&lt;p&gt;Rodrigo Fernandes&lt;/p&gt;', result);
-+    });
-+
-+    it('should allow templates to be overridden giving priority to compiled templates', function() {
-+      var emptyDiffTemplate = HoganJsUtils.compile('&lt;p&gt;&lt;/p&gt;');
-+      var emptyDiffTemplateUncompiled = '&lt;p&gt;Not used!&lt;/p&gt;';
-+
-+      var config = {
-+        templates: {'generic-empty-diff': emptyDiffTemplate},
-+        rawTemplates: {'generic-empty-diff': emptyDiffTemplateUncompiled}
-+      };
-+      var hoganUtils = new (require('../src/hoganjs-utils.js').HoganJsUtils)(config);
-+      var result = hoganUtils.render('generic', 'empty-diff', {myName: 'Rodrigo Fernandes'});
-+      assert.equal('&lt;p&gt;Rodrigo Fernandes&lt;/p&gt;', result);
-+    });
-   });
- });
-</code></pre>]]></content><author><name></name></author><category term="sample-posts"/><category term="formatting"/><category term="code"/><summary type="html"><![CDATA[this is how you can display code diffs]]></summary></entry><entry><title type="html">a post with advanced image components</title><link href="https://jangjdaniel.github.io/blog/2024/advanced-images/" rel="alternate" type="text/html" title="a post with advanced image components"/><published>2024-01-27T11:46:00+00:00</published><updated>2024-01-27T11:46:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2024/advanced-images</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2024/advanced-images/"><![CDATA[<p>This is an example post with advanced image components.</p> <h2 id="image-slider">Image Slider</h2> <p>This is a simple image slider. It uses the <a href="https://swiperjs.com/">Swiper</a> library. Check the <a href="https://swiperjs.com/demos">examples page</a> for more information of what you can achieve with it.</p> <swiper-container keyboard="true" navigation="true" pagination="true" pagination-clickable="true" pagination-dynamic-bullets="true" rewind="true"> <swiper-slide> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/9-480.webp 480w,/assets/img/9-800.webp 800w,/assets/img/9-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/9.jpg" class="img-fluid rounded z-depth-1" width="100%" height="auto" loading="eager" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"/> </picture> </figure> </swiper-slide> <swiper-slide> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/7-480.webp 480w,/assets/img/7-800.webp 800w,/assets/img/7-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/7.jpg" class="img-fluid rounded z-depth-1" width="100%" height="auto" loading="eager" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"/> </picture> </figure> </swiper-slide> <swiper-slide> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/8-480.webp 480w,/assets/img/8-800.webp 800w,/assets/img/8-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/8.jpg" class="img-fluid rounded z-depth-1" width="100%" height="auto" loading="eager" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"/> </picture> </figure> </swiper-slide> <swiper-slide> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/10-480.webp 480w,/assets/img/10-800.webp 800w,/assets/img/10-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/10.jpg" class="img-fluid rounded z-depth-1" width="100%" height="auto" loading="eager" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"/> </picture> </figure> </swiper-slide> <swiper-slide> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/12-480.webp 480w,/assets/img/12-800.webp 800w,/assets/img/12-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/12.jpg" class="img-fluid rounded z-depth-1" width="100%" height="auto" loading="eager" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"/> </picture> </figure> </swiper-slide> </swiper-container> <h2 id="image-comparison-slider">Image Comparison Slider</h2> <p>This is a simple image comparison slider. It uses the <a href="https://img-comparison-slider.sneas.io/">img-comparison-slider</a> library. Check the <a href="https://img-comparison-slider.sneas.io/examples.html">examples page</a> for more information of what you can achieve with it.</p> <img-comparison-slider> <figure slot="first"> <picture> <source class="responsive-img-srcset" srcset="/assets/img/prof_pic-480.webp 480w,/assets/img/prof_pic-800.webp 800w,/assets/img/prof_pic-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/prof_pic.jpg" class="img-fluid rounded z-depth-1" width="100%" height="auto" loading="lazy" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"/> </picture> </figure> <figure slot="second"> <picture> <source class="responsive-img-srcset" srcset="/assets/img/prof_pic_color-480.webp 480w,/assets/img/prof_pic_color-800.webp 800w,/assets/img/prof_pic_color-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/prof_pic_color.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" loading="lazy" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"/> </picture> </figure> </img-comparison-slider>]]></content><author><name></name></author><category term="sample-posts"/><category term="formatting"/><category term="images"/><summary type="html"><![CDATA[this is what advanced image components could look like]]></summary></entry></feed>
+</span><span class="c1">#overlay Beta distribution PDF</span><span class="w">
+</span><span class="n">lines</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">pdf</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"blue"</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div> <h1 id="gibbs-sampler">Gibbs Sampler</h1>]]></content><author><name></name></author><summary type="html"><![CDATA[This is a quick blog post reviewing the metropolis-hastings algorithm and the gibbs sampler, as well as an intuitive understanding on how they work. I just want to get an intuition behind some of the algorithms I take for granted in monte-carlo simulations.]]></summary></entry><entry><title type="html">Fechet and Gateaux Derivatives</title><link href="https://jangjdaniel.github.io/blog/2026/frechet-gateaux/" rel="alternate" type="text/html" title="Fechet and Gateaux Derivatives"/><published>2026-05-20T00:00:00+00:00</published><updated>2026-05-20T00:00:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2026/frechet-gateaux</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2026/frechet-gateaux/"><![CDATA[<p>Now that I have a background in the definition of a functional, as well as Banach and Hilbert spaces, I want to discuss functional derivatives. A lot of this is taken from wikipedia.</p> <h1 id="in-calculus-of-variations">In Calculus of Variations</h1> <p>We first need to define what we mean by a “small change in a function \(f\)”, which leads us to the concept of a variation.</p> <p>A pertubation of a function \(f(x)\) is defined as \(f(x) \rightarrow f(x) + \epsilon h(x)\), where \(h(x)\) is an arbitrary function and \(\epsilon &gt; 0\) is some real parameter.</p> <p>A variation of a function \(f(x)\), denoted \(\delta f\) is… (why do we take the derivative with respect to epsilon?)</p> <h1 id="big-o-and-little-o-notation">Big O and Little o-notation</h1> <p>Apparently this is common notation in math and stats when it comes to asymptotics (makes sense since we want to see the growth behavior when we approach infinity and see when that kicks in), so I might as well clear out any confusion, especially if I want to look at data structures in the future.</p> <p>\(O(g)\) refers to a set of functions such that for some \(f \in O(g)\), \(f(x) \leq kg(x)\) (where \(k \in \mathbb{R}^{+}\) is a constant) for all \(x &gt; a\). This basically means that the growth of \(f\) to infinity is no faster than the growth of \(g\). Little o is similar, but with \(f(x) &lt; kg(x)\), (and with an extra condition that I am not sure about)</p> <p>In terms of a limit definition, big O is \(\limsup_{x \to \infty} \frac{f(x)}{g(x)} &lt; \infty\) and little O is \(\limsup_{x \to \infty} \frac{f(x)}{g(x)} = 0\).</p> <p>Why the limit supremum? Because there are some functions where the limit does not exist (but recall from analysis that the \(\limsup\) always exists in the extended real number line).</p> <p>Here are some examples:</p> <p>\(400x^2 \in O(x^2)\) \(3 + (n \mod 2) \in O(1)\) \(3x \notin o(x)\) but \(3x \in O(x)\)</p> <h1 id="multivariable-calculus-and-differentials">Multivariable Calculus and Differentials</h1> <p>The gradient as the “total derivative”, we write that in terms of a vector. That is the linear map that is induced (which I know from differential geometry). We can extend that to vector fields by adding another dimension. In one dimension, the total derivative is literally just the derivative, so that’s where I was initially confused.</p> <p>Definition of a directional derivative in limit form: include because I don’t think I learned this</p> <h1 id="the-derivatives">The Derivatives</h1> <p>Let \(B\) be a banach space (remember this can be a set of functions, but it doesn’t have to be), and let \(F: B \rightarrow \mathbb{R}\) be some functional. The differential of \(F\) at a point \(\rho \in B\) is a linear functional \(\delta F_{\rho}[\cdot]\) such that for all \(\phi \in B\),</p> \[F[\rho + \phi] - F[\rho] = \delta F_{\rho}[\phi] + \epsilon \| \phi \|\] <p>With the property that as \(\| \phi \| \rightarrow 0\), then \(\epsilon \rightarrow 0\). In fact, the Frechet derivative of \(F\) at \(\rho\) is given by this differential as the “total derivative”.</p> <p>(There is the limit form of this equation), we shrink the norm of an arbitrary \(\phi\), so it can approach zero from any direction.</p> <p>What if we fix an arbitrary direction \(\phi\)? We shrink everything based on one direction, analogous to the directional derivative.</p> <p>In fact, if a Frechet derivative exists, it is equal to the gateaux derivative. One terminology thing: Frechet = Strong, Gateaux = Weak, Pathwise.</p> <p>Functional derivatives don’t need to be defined with a banach space, but that makes things a bit too complicated for my purposes.</p> <h1 id="example-a-simple-functional">Example: A simple functional</h1> <p>Let \(J[f] = \int (f(x))^2 dx\) be a functional. We want to compute its frechet derivative.</p> <p>Now a case where the Frechet derivative doesn’t exist but the Gateaux derivative does:</p> <h1 id="application-influence-functions">Application: Influence Functions</h1> <p>What we are doing is not trying to optimize, so we don’t need the tools from calculus of variations (although I would still like to cover Euler-Lagrange Equations). Instead, we want to see how much of a pertutation changes a statistical quantity we are interested in, such as the mean or the conditional mean (regression).</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Now that I have a background in the definition of a functional, as well as Banach and Hilbert spaces, I want to discuss functional derivatives. A lot of this is taken from wikipedia.]]></summary></entry><entry><title type="html">Banach and Hilbert Spaces (Part 2)</title><link href="https://jangjdaniel.github.io/blog/2026/banach-hilbert-pt2/" rel="alternate" type="text/html" title="Banach and Hilbert Spaces (Part 2)"/><published>2026-05-10T00:00:00+00:00</published><updated>2026-05-10T00:00:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2026/banach-hilbert-pt2</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2026/banach-hilbert-pt2/"><![CDATA[<p>This is a continuition from my previous blog post on Banach and Hilbert Spaces. I hope to cover some important results and why we should care in statistics.</p> <h1 id="weak-convergence">Weak Convergence</h1> <p>The idea behind the large numbers of convergences is to have a notion of a sequence of values (maybe numbers or functions) approaching some value. This can differ with how we define the “distance” between two values. This is why convergence in measure exists for measure spaces, convergence in metric space exists for metric spaces, and what I am doing to focus on: convergence in norm (strong convergence) and convergence in inner product (weak convergence). Notice that this will apply to hilbert spaces.</p> <p>A sequence of vectors \(v_n\) in an inner product space \(H\) converges strongly to a vector \(v\) if the norm between \(v_n\) and \(v\) is zero as \(n \to \infty\), i.e. \(\lim_{n \to \infty} \| v_n - v \| = 0\). Similarly, that sequence converges weakly if for all \(y \in H\), \(\lim_{n \to \infty} &lt;x_n , y&gt; = &lt;x, y&gt;\).</p> <p>Strong convergence implies weak convergence. The proof requires using the triangle inequality a bunch and is probably a good exercise for me to do when I read this again.</p> <h1 id="riesz-representation-for-hilbert-spaces">Riesz Representation for Hilbert Spaces</h1> <p>Every continuous linear functional on a Hilbert space is an inner product with a unique element</p> <p>Which then implies that a hilbert space is isomorphic to its dual space? Why exactly is that important?</p> <h1 id="orthogonal-projections">Orthogonal Projections</h1> <h1 id="tanget-spaces">Tanget Spaces</h1> <p>Need to channel my knowledge from differential geometry…</p> <h1 id="examples-in-statistics">Examples in Statistics</h1> <p>I can think of two ways hilbert spaces play into topics I am interested in: functional data analysis (FDA) and semiparametric theory.</p> <p>For FDA, each observation (which is a function) lives in a function space. For all the math to work out really nicely, we usually think of a subset of a general function space, such as only square-integrable functions equipped with an inner product so we can discuss angles and norms between different functions. This fits nicely with hilbert spaces. There is also something called the reproducing kernel hilbert space (RKHS).</p> <p>Since I haven’t learned about nusiance parameters, I find it difficult to understand the connection of hilbert spaces to semiparametric theory that well. All I know is that the nonparametric part (which we make no assumptions about its distribution, which means it lives in an infinite dimensional space. Since we don’t care about it for estimation, this is labeled as “nusiance”) needs to be understood first before we talk about the parametric part (finite dimensional, we make some assumptions about their distribution?)</p> <p>There are also machine learning applications, but I don’t really care about that right now. Maybe I will in the future?</p>]]></content><author><name></name></author><summary type="html"><![CDATA[This is a continuition from my previous blog post on Banach and Hilbert Spaces. I hope to cover some important results and why we should care in statistics.]]></summary></entry><entry><title type="html">Banach and Hilbert Spaces (Part 1)</title><link href="https://jangjdaniel.github.io/blog/2026/banach-hilbert-pt1/" rel="alternate" type="text/html" title="Banach and Hilbert Spaces (Part 1)"/><published>2026-04-29T00:00:00+00:00</published><updated>2026-04-29T00:00:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2026/banach-hilbert-pt1</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2026/banach-hilbert-pt1/"><![CDATA[<p>Unfortunately, I am unsure how to motivate a lot of these results from Banach and Hilbert spaces. I think one day I should try out the proofs myself (especially of the representation theorem), but I think this is sufficient for right now.</p> <h1 id="completeness-and-definitions">Completeness and Definitions</h1> <p>There were specific types of metric spaces we disucssed: complete metric spaces (all cauchy sequences converge to an element in the set) and compact metric spaces (every open cover has a finite subcover). There’s also connected metric space (cannot be partitioned into two nonempty disjoint open subsets, i.e. the only open and closed sets are the empty set and the set itself).</p> <p>In terms of normed vector spaces, they are always connected (something about a vector space being a convex set) and never compact (infinite-dimension issues). However, they need not be complete. Completeness is a mathematically nice property because it allows us to discuss convergence within the same set. This is why complete normed vector spaces get their own special name… you guessed it!</p> <p>Banach spaces are normed vector spaces that are complete w.r.t the norm, and Hilbert spaces are inner product spaces that are complete w.r.t the inner product. In statistics, hilbert spaces are more important since we want a notion of an angle along with a notion of distance with elements that follow the axioms of vector spaces. I think we can think about correlation between two random variables via an inner product, and besides, we can induce a norm if needed.</p> <p>I am not going to prove much about these spaces. Rather, I want to understand at a high level why they are so important and some examples in statistics that I may need in the future.</p> <h1 id="examples-of-banach-and-hilbert-spaces">Examples of Banach and Hilbert Spaces</h1> <p>\(\mathbb{R}^n\) with euclidean norm is a finite-dimensional banach space. With the dot product we know from multivariable calculus (discrete version), it’s a hilbert space, so it is also a banach space. However, this is not that interesting.</p> <table> <tbody> <tr> <td>In general, the lebesgue space \(L_p\) is the set of all measurable functions (depends on the measure space we are in…) with a finite p-th moment (using probability terms), i.e. $$ \int</td> <td>f</td> <td>^p \, d\mu &lt; \infty $$. This is a set of functions (infinite-dimensional)!</td> </tr> </tbody> </table> <p>\(L_2\) is a space of square-integrable functions (which means it has a finite second moment in probability terms… variance!). We use the definition of the \(l_p\) norm on this function space to create a banach space (and also the idea of convergence in \(l_2\) norm). Specifically for \(L_2\), this is also a hilbert space. The inner product is defined as \(&lt;f,g&gt; = \int f(x)g(x) \, dx\) (a continuous analog of the discrete dot product).</p> <h2 id="parallelogram-law-why-l_p-spaces-are-not-hilbert-spaces-except-when-p--2">Parallelogram Law: Why L_p spaces are not Hilbert Spaces except when p = 2</h2> <p>The parallelogram law (like in multivariable calc) is: \(\| x+y \| ^2 + \| x-y \| ^2 = 2 \|x\|^2 + 2 \|y\|^2\). By the Jordan-von Neumann theorem, an inner product exists if and only if the norm satisfies the parallelogram law. To keep things at a high level, I won’t prove this here.</p> <p>Any norms in \(L_p\) where \(p \neq 2\) will not satisfy this law for all functions. For example, take \(f = \chi _{[0, 1]}\) and \(g = \chi _{(1, 2]}\). \(\|f\|_p = (\int_{\mathbb{R}} f^p \, dm)^{\frac{1}{p}} = (1)^{\frac{1}{p}}\), and similarly, \(\|g\|_p = (1)^{\frac{1}{p}}\). Notice that \(\|f + g \|_p = \|f - g \|_p = 2\), so the only case where the parallelogram law holds is when \(p = 2\).</p> <h1 id="why-are-norms-in-finite-dimensional-spaces-equivalent">Why are norms in finite-dimensional spaces equivalent?</h1> <p>For any two norms in a finite-dimensional space \(\| \cdot \|_a\) and \(\| \cdot \|_b\), there exists constants \(C, K\) such that \(C \| \cdot \|_a \leq \| \cdot \|_b \leq D \| \cdot \|_a\). Norms that are equivalent induce the same topology (I don’t really care about topology, but you can define a topology using metrics (somehow), just like you can define a metric with norms). I’m just going to take the math god’s word for it.</p> <h1 id="linear-operators-operator-norm-and-dual-spaces">Linear Operators, Operator Norm, and Dual Spaces</h1> <p>We need to be careful thinking about linear transformations (which we are calling linear operators. Some places make a distincition where linear operators have the same domain and codomain) for vector spaces of infinite dimension. The reason we didn’t talk about “boundedness” in linear algebra are two-fold. Firstly, we only really worked with finite-dimension vector spaces, and there is a theorem that states any linear transformation between finite-dimension vector spaces are bounded. Second, we didn’t even have a notion of norm (aka length of vector). So we never worried about \(\| T(v) \| = \infty\) for all \(v \in V\).</p> <p>However, this is not necessarily true for infinite-dimensional vector spaces. Consider the following linear transformation between two normed vector spaces \(X, Y\):</p> \[T: X \rightarrow Y\] <p>We use the classic idea of boundedness, i.e. there exists some number \(M &gt; 0\) such that \(\| T(v) \| \leq M \| v \|\) for all \(v \in V\). The smallest such \(M\) is called the operator norm of \(T\), and is denoted as \(\| T \|\).</p> <p>A good way to verify if a linear operator is bounded is iff it is continuous (the epsilon delta definition but with metrics… learned this briefly in measure theory for some reason).</p> <p>Operator theory studies these linear operators between function spaces, which is a bit more general than what we need (since we are in the realm of Banach and Hilbert spaces)</p> <p>The dual space is the set of linear functionals on a vector space \(V\). We denote this as \(V'\), so this is just a set of functionals. Furthermore, it’s useful to talk about the continuous dual space (only continuous functionals) for this bounded property.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Unfortunately, I am unsure how to motivate a lot of these results from Banach and Hilbert spaces. I think one day I should try out the proofs myself (especially of the representation theorem), but I think this is sufficient for right now.]]></summary></entry><entry><title type="html">Functionals</title><link href="https://jangjdaniel.github.io/blog/2026/functionals/" rel="alternate" type="text/html" title="Functionals"/><published>2026-04-28T00:00:00+00:00</published><updated>2026-04-28T00:00:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2026/functionals</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2026/functionals/"><![CDATA[<p>This is the beginning of numerous blog posts where I learn the basics of functionals, both in an abstract lens (functional analysis) and an applied lens (calculus of variations and statistics). My goal is to understand the intuition behind the Gateaux derivative, which is what an influence function is. I will be channeling my knowledge from real analysis and differential geometry (just being comfortable with differentials). There is a chance these concepts come up in my future, but I want to be prepared, as well as understand the concepts at a deeper level.</p> <p>I am following notes from MIT and UW. I will be doing everything in \(\mathbb{R}\) because I do not respect complex numbers (just kidding).</p> <h1 id="vector-spaces">Vector Spaces</h1> <p>A very loose definition of a function space is a set of functions between two fixed sets (domain to codomain, with the codomain being either \(\mathbb{R}\) or \(\mathbb{C}\)). It is useful to give a function space some sort of structure, such as the linearity property (ring any bells? a vector space!), or maybe all functions must be continuous and bounded. I have encountered function spaces in my undergrad, namely the set of all continuous functions \(C^{\infty}\), but mostly just as an example of an infinite-dimensional vector space (since a lot of infinite-dimensional vector spaces are function spaces). Unlike finite-dimensional vector spaces, which have really nice properties, infinite-dimensional vector spaces require some extra structure to study them.</p> <p>Just like how we might want to define what distances are for some set \(X\) to measure closeness of two arbitrary elements, i.e. a metric space \((X, d)\), we want to create a notion of distance for a vector space \(V\), which is called a normed vector space. It is defined as a function \(\| \cdot \|: V \rightarrow [0, \infty)\) that satisfies definiteness, absolute homogeneity, and triangle inequality. The first and third property are similar to properties found in a metric, but absolute homogeneity is just pulling out constants!</p> <p>We can induce a metric from a norm as \(d(x,y) = \| x - y \|\). It should be clear why normed vector spaces are a subset of metric spaces.</p> <p>Now we might want to think about the angle between vectors. We cannot accomplish this with just a norm, we need an inner product (a generalizaion of the dot product). Channeling my differential geometry knowledge, we can induce a norm from an inner product (\(\| v \| = \sqrt{&lt; v,v &gt;}\)). I am unsure how important this is for my purposes, but I am putting it here just in case.</p> <h1 id="functionals-from-functional-analysis">Functionals from Functional Analysis</h1> <p>A functional is a map \(J: V \rightarrow \mathbb{R}\), where \(V\) is a vector space equipped with some extra structure (e.g. a norm), and the codomain is its field of scalars (since I am working with \(\mathbb{R}\), I am just keeping it as \(\mathbb{R}\)). A linear functional satisfies the linearity property, i.e. \(J[\alpha f+ \beta g] = \alpha J[f] + \beta J[g]\) for some \(\alpha, \beta \in \mathbb{R}\) and \(f, g \in V\). This is important to make everything well-behaved, but I am unsure if I need to generalize later.</p> <p>Notice that \(X\) doesn’t have to be a space of functions. I think historically, functionals were defined as functions of functions, but this is a more general form that includes this loose definition. There are some more things I need to develop in my understanding before moving on.</p> <p>In practice (i.e. calculus of variations), a functional is a map \(J: \mathcal{F} \rightarrow \mathbb{R}\), where \(\mathcal{F}\) is a collection of functions. The most standard form is</p> \[J[f] = \int_a^b L(x, f(x), f'(x)) dx\] <p>A caveat is that \(\mathcal{F}\) is not just all possible functions. For example, we might only want to look at continuous functions. Furthermore, we want a notion of how close one function is from another. For example, how different are \(f(x) = 1 + x\) and \(g(x) = 5\) from the interval \(x \in [0,1]\) from one another? We might choose the \(L_2\) norm to define that. This is why we need a notion of a normed vector space. In fact, we need something a bit stronger, but I will discuss that in the next blog post about functional analysis. I’m tired right now.</p> <h1 id="examples-in-statistics">Examples in Statistics</h1> <p>We can think of a lot of objects from basic statistics in terms of functionals. A reason to do this is to unify all these concepts of describing features of a population into one mathematical idea. For the following examples, consider a functional \(T\) that inputs a probability distribution (its CDF, call it \(P\)) and outputs a number.</p> <p>The mean: \(T[P] = \int x dP(x)\)</p> <p>The variance: \(T[P] = \int x^2 dP(x) - (\int x dP(x)) ^2\)</p> <p>These are both in integral form (with respect to probability measure) to unite discrete and continuous probability distributions into one framework. In either case, it will be the expectation formula we expect from basic probability theory. Furthermore, if we input an empirical distribution function (i.e. a CDF with observed data), the expectation integral reduces to the sample mean. This is currently beyond the scope of what I was trying to do here, so I won’t write it in notation.</p> <p>The median (non-linear): \(T[P] = P^{-1}(0.5)\)</p> <p>Nonparameteric statistics is connected to infinite dimensional spaces, because we say that the distribution is some unknown distribution in the set of all distributions, which is infinite dimensional. Just thought that was an importnat note to say.</p> <p>Furthermore, being non-linear makes the existence of derivatives a bit more difficult. I don’t know how much detail to go into here, but it seems like the median and IQR are well-behaved enough. This can be an issue with influence functions on these features of a population.</p> <h1 id="what-i-will-cover-later">What I will cover later</h1> <p>In a future blog post, I will cover Banach and Hilbert spaces, as well as some other definitions like bounded linear operators, pertubations, the riesz representation etc. Hopefully this will get us to a slightly more rigorous formulation of functional derivatives than what might be covered in calculus of variations, but is still in the realm of reality to not make me go completely insane.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[This is the beginning of numerous blog posts where I learn the basics of functionals, both in an abstract lens (functional analysis) and an applied lens (calculus of variations and statistics). My goal is to understand the intuition behind the Gateaux derivative, which is what an influence function is. I will be channeling my knowledge from real analysis and differential geometry (just being comfortable with differentials). There is a chance these concepts come up in my future, but I want to be prepared, as well as understand the concepts at a deeper level.]]></summary></entry><entry><title type="html">Multiple Imputation via Chained Equations</title><link href="https://jangjdaniel.github.io/blog/2026/mice/" rel="alternate" type="text/html" title="Multiple Imputation via Chained Equations"/><published>2026-04-25T00:00:00+00:00</published><updated>2026-04-25T00:00:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2026/mice</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2026/mice/"><![CDATA[<p>I think it might be a wise idea to learn about MICE (since I already have knowledge of multiple imputation) just in case I encounter a specific missing data problem in the future that I can’t easily use IPW (e.g. multiple missing variables, systematically missing data, etc.)</p> <p>As a caveat (and something that took me way too long to learn), missing data methods are primarily to reduce bias (especially in a missing at random scenario) while maintaining the uncertainity (variance) with the number of observed data, i.e. we cannot improve statistical power.</p> <h1 id="the-setup">The setup</h1> <p>Imagine a simple scenario with three variables \((C_1, C_2, B_1)\), where C is continuous and B is binary, with some degree of missingness for all three (not systematic, or else that would be MNAR I think). We will look at one imputed dataset, but these steps need to be done for \(m\) copies of the original data (guidelines say this should be the ceiling of the percentage of missing data present?). Before we get started, each variable gets a temporary imputation for every missing value. For continuous data, the mean is a solid choice. For binary, I would also think the mean (i.e. the proportion of 1’s), but I am not entirely sure.</p> <p>The following steps should be done for each feature with missing data.</p> <ol> <li>Get rid of the temporary imputations for \(C_1\)</li> <li>Sample (with replacement) on the data with observed \(C_1\) (I think? This is kind of what happens in Multiple Imputation too)</li> <li>Generate a linear regression model \(C_1 \sim C_2 + B_1\) to be the imputation model for \(C_1\) for this imputed dataset. Notice that \(C_2\) and \(B_1\) still have the temporary imputations.</li> </ol> <p>Iterate this process through the three variables. The reason why we call this “chained equations” is because the imputed values for \(C_1\) become the actual imputed values for the rest of the iterations. The \(m\) iterations will give us \(m\) imputed datasets, which we can fit the same statistical model for each and combine the same parameter estimatates via rubin’s rules to get our final parameter estimate. Hooray!</p> <p>I think this is what it means by when they say MICE uses correlations between variables to predict missing values rather than relying on a complete-case analysis (like MI), provided the data are MAR. It’s an iterative process.</p> <h1 id="some-confusions-i-need-to-square-away">Some confusions I need to square away</h1> <p>Since I am not doing much with MICE (and I doubt I will), I have some questions that I still need to get answered. Not a huge priority, but it’s there for whenever I pick this back up!</p> <ol> <li> <p>The output of MI or MICE or whatever are \(m\) imputed datasets. We don’t immediately need to fit a model. I think I knew this, but I had some confusion about this over the summer… oops.</p> </li> <li> <p>Does 80% missing data mean that one column can have 80% missing data, or in the overall data, 80% of observations can have some missing data? I don’t think it can be the first one because MICE with one variable is essentially the same as MI, which can only go up to 80% in very specific scenarios.</p> </li> <li> <p>Specific order? Least to most missing data?</p> </li> <li> <p>What about other types of variables? Do we just use GLMs as the imputation model? Also is the temporary choice for imputation always the mean? Does it matter?</p> </li> </ol>]]></content><author><name></name></author><summary type="html"><![CDATA[I think it might be a wise idea to learn about MICE (since I already have knowledge of multiple imputation) just in case I encounter a specific missing data problem in the future that I can’t easily use IPW (e.g. multiple missing variables, systematically missing data, etc.)]]></summary></entry><entry><title type="html">Bayesian Regression</title><link href="https://jangjdaniel.github.io/blog/2026/bayesian-log-regression/" rel="alternate" type="text/html" title="Bayesian Regression"/><published>2026-04-24T00:00:00+00:00</published><updated>2026-04-24T00:00:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2026/bayesian-log-regression</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2026/bayesian-log-regression/"><![CDATA[<p>The motivation for this post is because I want to test different regression penalties, and there is a family of methods that is motivated from finding an alternative prior to the jeffrey’s prior (equivalent to firth’s penalty) in logistic regression to handle rare events and complete / quasi separation.</p> <p>I know the basics of bayesian statistics from a unit in my undergraduate mathematical statistics class. The idea is we let parameters be random variables and we fix the observed data. I guess this high-level interpretation confuses me because at the point of analysis, don’t we fix the data to what we have? I’m probably reading too much into this and should focus on the different marginal distributions each is trying to target for credible or confidence intervals (parameter given X v.s. X given parameter). I also had a great analogy for hypothesis testing between frequentists and bayesians, but I honestly forgot it… I’ll circle back in the future.</p> <p>Regardless, we set a prior distribution for the parameters, and the data adjusts the distribution to give us the posterior distribution. I am adding some notation from my class:</p> <p>The posterior distribution/density of a parameter \(\theta\) given a vector of our data \(X\), denoted as \(g^{*} (\theta \mid X)\) is proportional to \(Pr(X \mid \theta) \, g(\theta)\), where \(g\) is the prior distribution and \(Pr(X \mid \theta) = L(\theta \mid X)\) is the likelihood function (I think we only need proportion to get the correct shape of the posterior, then we can normalize it to 1 without having to calculate the complicated marginal density). This was derived from Bayes theorem to target a flipped conditional probability from frequentist statistics: Likelihood of X given the (oftentimes unknown) parameter value.</p> <h1 id="logistic-regression">Logistic Regression</h1> <p>Using an uninformative prior is analogous to doing a frequentist analysis (since the posterior will be proportional to just the likelihood of the data given the parameter). In the context of logistic regression, having an uninformative prior on the parameters \(\beta_0\) and \(\beta_1\) and obtaining the maximum a posteriori (MAP) point estimate (e.g. the mode of the distribution) yields the same value as ML Estimation (since this is also finding the mode of the likelihood distribution). Of course the interpretations will differ since just because the values of the two marginal distributions are the same does not mean they’re equivalent structures.</p> <p>The likelihood function for logistic regression is given as:</p> \[L(\beta) = \prod_{i=1}^n \left(\frac{\exp(x_i^\top \beta)}{1 + \exp(x_i^\top \beta)}\right)^{y_i} \left(\frac{1}{1 + \exp(x_i^\top \beta)}\right)^{1 - y_i}\] <h1 id="logfmm">logF(m,m)</h1> <p>We can set priors: \(\beta_0 \sim logF(m,m)\) and \(\beta_1 \sim logF(m,m)\). Along with the likelihood function, we have all tools to calculate the posterior distribution (most likely through approximation methods, as I highly doubt anyone would want to solve this analytically). Apparently simulations showed that \(m = 1\) performs well and has similar properties to the Jeffrey’s prior, although for certain extreme situations, stronger priors should be chosen? I find this all very arbitrary, but I also awknowledge that my knowledge in this subject matter is limited. Who knows, maybe one day this won’t feel arbitrary to me anymore.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[The motivation for this post is because I want to test different regression penalties, and there is a family of methods that is motivated from finding an alternative prior to the jeffrey’s prior (equivalent to firth’s penalty) in logistic regression to handle rare events and complete / quasi separation.]]></summary></entry><entry><title type="html">Firth’s Penalized Logistic Regression</title><link href="https://jangjdaniel.github.io/blog/2026/firth-penalized-logreg/" rel="alternate" type="text/html" title="Firth’s Penalized Logistic Regression"/><published>2026-04-04T00:00:00+00:00</published><updated>2026-04-04T00:00:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2026/firth-penalized-logreg</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2026/firth-penalized-logreg/"><![CDATA[<p>The motivation for why I’m learning about Firth’s Penalized Logistic Regression is because it’s deals with rare events better than classic logistic regression (it also deals with complete or quasi-separation where one variable perfectly or nearly perfectly explains or is related to another). This is in context of censoring weighting over time, where the number of patients who are censored at each time point is proportionally pretty small (between 10 to 100 out of 1,400). I want to make sure our models have unbiased estimations at these sample sizes so we can do some proper prediction</p> <h2 id="penalization-in-the-context-of-logistic-regression">Penalization in the Context of Logistic Regression</h2> <p>The usual log-likelihood of logistic regression looks like:</p> \[\ell(\beta) = \sum_{i=1}^n \left[ y_i \log(p_i) + (1 - y_i)\log(1 - p_i) \right]\] <p>where</p> \[p_i = \frac{1}{1 + \exp(-x_i^\top \beta)}\] <p>But we add a penalty term (apparently some people don’t like calling this a penalty term?) based on the fisher information.</p> \[\ell^*(\beta) = \ell(\beta) + \frac{1}{2} \log \left| I(\beta) \right|\] <p>Basically when we have lower fisher information, we have less precision in our estimate (think fisher’s inequality: lower bound of the variance of an estimator). This means the penalty term increases.</p> <p>I don’t know all the details on why this works mathematically because it requires asymptotic theory. My colloquial understanding is that the bias of the MLE has a \(\frac{1}{n}\) term in it. As \(n \rightarrow \infty\), this term approaches \(0\), but we can’t guarantee that for finite samples, especially smaller samples. Thus the penalization properly removes that \(\frac{1}{n}\) term in the MLE so that finite samples are unbiased. I don’t really know how this means the model deals with complete or quasi-separation, but that’s a thought for 2-3 years in the future, if at all.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[The motivation for why I’m learning about Firth’s Penalized Logistic Regression is because it’s deals with rare events better than classic logistic regression (it also deals with complete or quasi-separation where one variable perfectly or nearly perfectly explains or is related to another). This is in context of censoring weighting over time, where the number of patients who are censored at each time point is proportionally pretty small (between 10 to 100 out of 1,400). I want to make sure our models have unbiased estimations at these sample sizes so we can do some proper prediction]]></summary></entry><entry><title type="html">Optimal Transport</title><link href="https://jangjdaniel.github.io/blog/2026/optimal-transport/" rel="alternate" type="text/html" title="Optimal Transport"/><published>2026-03-29T00:00:00+00:00</published><updated>2026-03-29T00:00:00+00:00</updated><id>https://jangjdaniel.github.io/blog/2026/optimal-transport</id><content type="html" xml:base="https://jangjdaniel.github.io/blog/2026/optimal-transport/"><![CDATA[<h2 id="motivation">Motivation</h2> <p>These are my personal notes adapted from my final project in differential geometry. I want to motivate the Monge and Kantorovich problems in notation that I understand so that I have a reference for myself if I ever need these tools (although I doubt I will need it)</p> <h2 id="background">Background</h2> <p>One needs to know the concept of abstract measures, what a measurable space is, abstract integration, and absolute continuity (radon-nikodym derivatives). I don’t have a background in calculus of variations, functional analysis, or optimization (I will ignore why being convex makes it easier to solve), so hopefully I will be able to get through this without those tools.</p> <p>I will introduce some definitions beyond this, like the pushforward measure, product spaces, and couplings, since these are less familiar definitions.</p> <h2 id="the-monge-formulation">The Monge Formulation</h2> <p>Gaspard Monge asked the following problem in 1781: If I have a pile of dirt and want to move it into a mound, what’s the most optimal way to bring each little bit of dirt into the mound, i.e. what’s the minimal amount of work I need to do? I will define this problem in the realm of probability spaces.</p> <p>Let \((X, \mathscr{B})\) be a measurable space and denote \(\mathcal{P}(X)\) the set of all probability measures defined on \((X, \mathscr{B})\). For a probability measure \(\mu \in \mathcal{P}(X)\) and for an element of the \(\sigma\)-algebra \(B \in \mathscr{B}\), \(\mu(B)\) represents the amount of mass (or dirt) is in the set \(B\). The total mass of a probability distribution is \(1\) by definition, so \(\forall \, \mu \in \mathcal{P}(X)\), \(\mu(X) = 1\).</p> <p>\(\textbf{Question 1:}\) What does it mean to transport some mass from the pile of dirt to the mound?. We need a (measurable) (bijective) function \(T: X \rightarrow X\) that moves the dirt pile \(x \in X\) to the pile in location \(T(x) \in X\). However, since we are moving from one distribution to another, we need a new measure to properly count the mass in the mound. How do we do that?</p> <p>We define the \(\textbf{pushforward measure}\): \(\forall B \in \mathscr{B}\), the pushforward measure \(T_{\#} \mu (B) = \mu(T^{-1}(B))\). This preserves the mass of \(B\) relative to the measure \(\mu\) even after transforming \(B\). The reason it is defined with \(T^{-1}\) is to guarantee the existence of an inverse function. We define \(\nu \in \mathcal{P}(X)\) to be the pushforward measure. Furthermore, this means that \(T\) is called the \(\textbf{transport map}\) from \(\mu\) to \(\nu\).</p> <p>\(\textbf{Question 2:}\) What is the amount of work that is done in transporting the amount of mass from the dirt to the mound? We define the cost function to do exactly this. Let \(c: X \times X \rightarrow [0, + \infty]\) be the cost function, where \(c(x, T(x))\) measures the cost from moving one element in \(x\) to \(T(x)\). Common cost functions are the \(L_1\) and \(L_2\) norm, although \(L_2\) norm is more often used because it’s easier to solve. However, we want to get the cost of moving all elements of \(X\). This means we want integration with respect to our measure \(\mu\), since that is the way we are measuring our masses. Thus, we are curious about the total cost, which we define as a functional (a map with a function as an input and a scalar as an output, in our case, the transport map is the input).</p> \[\mathbb{M}(T) = \int_{X} c(x, T(x))\, d\mu(x)\] <p>Now we can finally define the Monge problem as finding the infimum of the functional, which gives you the lowest cost out of all possible transport maps.</p> \[\inf_{T: X \rightarrow X} \{ \mathbb{M}(T) \mid T_{\#} \mu = \nu \}\] <p>Now we can generalize this a bit more by going from one space \(X\) to another space \(Y\). The idea is still the same: we require the transport map with \(T_{\#}\mu \in \mathcal{P}(Y)\), but we can define each \(y = T(x)\) and the functional \(\mathbb{M}(T) = \int_{X \times Y} c(x, y)\, d\mu(x)\), since we need to integrate over two different spaces (not sure if the details here are correct…)</p> <p>This formulation of the optimal transportation problem is good for a number of applications, but there are two key limitations:</p> <ol> <li>We are not able to split up a mass into two since the pushforward measure requires \(T\) to be injective</li> <li>Solutions may be not unique</li> </ol> <p>There are plenty of canonical examples here which I won’t really explain here. We will move to how these issues were addressed by Kantorovich.</p> <h2 id="the-kantorovich-formulation">The Kantorovich Formulation</h2> <p>One motivation for Kantorovich’s formulation is to address the splitting limitation in Monge’s formulation. This will introduce some flexibility in optimally transporting all the mass from one region to another. Before we can do that, there is one important definition that a lot of notes seem to not touch on.</p> <p>\(\textbf{Definition, Coupling:}\) For a measurable space \((X, \mathscr{B})\), let \(\mu, \nu \in \mathcal{P}(X)\) be two measures, where \(\nu = T_{\#} \mu\). The coupling of \(\mu\) and \(\nu\) is a (probability) measure \(\gamma \in \mathcal{P}(X \times X)\) on the product space \((X \times X, \mathscr{B} \times \mathscr{B})\) such that the marginals of \(\gamma\) coincide with \(\mu\) and \(\nu\). What I mean by that is: \(\gamma(A \times X) = \mu(A)\) and \(\gamma(X \times A) = \nu(A)\).</p> <p>You can surmise that \(\forall B \in \mathscr{B}, \, \gamma(A \times B) \leq \gamma(A \times X) = \mu(A)\). The proof really is trivial, since \(B \subseteq X\). Now we can define the analogue to the transport map:</p> <p>\(\textbf{Definition, Transport Plan:}\) A transport plan is a coupling \(\gamma \in \mathcal{P}(X \times X)\) of \(\mu\) and \(\nu\) such that for a map \(\pi_i: X \times X \rightarrow X\), where \(\pi_i(x_1, x_2) = x_i\), the pushforward measures:</p> <p>\(\pi_{1\#} \gamma = \mu\) and \(\pi_{2\#} \gamma = \nu\), i.e. \(\gamma(\pi_1^{-1}(B)) = \gamma(B \times X) = \mu (B)\) and \(\gamma(\pi_2^{-1}(B)) = \gamma(X \times B) = \nu (B)\) .</p> <p>The set of all transport plans from \(\mu\) to \(\nu\) is \(\Gamma(\mu, \nu)\), and \(\mu\) and \(\nu\) are marginals of \(\gamma\).</p> <p>We can interpret \(\gamma(A \times B)\) as the amount of mass sent from \(A\) to \(B\), but a single mass from \(A\) can be sent to many places in the mound. This is analogus to why we are allowed to split up the mass, since not all the mass is brought over (since \(\gamma(A \times B) \leq \mu(A)\))</p> <p>Now we finally define the Kantorovich formulation: define the following functional of the total cost of transport given some transport plan \(\gamma\):</p> \[\mathbb{K}(\gamma) = \int_{X \times X} c(x_1, x_2)\, d\gamma(x_1, x_2)\] <p>and “minimize” (take the infimum) it once more to get the minimal cost of transport over all transport plans:</p> \[\inf_{\gamma \in \Gamma(\mu, \nu)} \{ \mathbb{K}(\gamma) \mid T_{\#} \mu = \nu \}\] <p>The idea for two different sets \(X\) and \(Y\) is the exact same idea, but the cost function itself is something that needs to be thought of more. Having just one space allows us to use some sort of distance metric like \(l_1\) or more commonly, \(l_2\).</p> <h2 id="transport-map-and-transport-plan-relationship">Transport Map and Transport Plan Relationship</h2> <p>Given a transport map \(T: X \times X\) with \(T_{\#} \mu = \nu\), then the corresponding transport plan is \((\text{id} \times T)_{\#} \mu \in \Gamma(\mu, \nu)\).</p> <p>However, this need not be the most optimal transport plan. In fact, there is a theorem that states:</p> \[\inf_{\gamma \in \Gamma(\mu, \nu)} \{ \mathbb{K}(\gamma) \mid T_{\#} \mu = \nu \} \leq \inf_{T: X \rightarrow X} \{ \mathbb{M}(T) \mid T_{\#} \mu = \nu \}\] <p>I will not be proving this. You cannot make me.</p> <h2 id="wasserstein-metric--earth-mover-distance">Wasserstein Metric / Earth Mover Distance</h2> <p>To be filled (suboptimally), maybe.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Motivation]]></summary></entry></feed>
