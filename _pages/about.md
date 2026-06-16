@@ -31,4 +31,4 @@ latest_posts:
 
 I am a Ph.D. Student in Biostatistics at the **University of Pennsylvania** with research interests in causal inference, imaging statistics, and semiparametric theory. I hope that these broad interests will facilitate numerous and diverse collaborations in the biomedical and public health fields. My long-term career goal is to continue working in academia as a professor with an added focus in pedagogical techniques for statistics education, particularly for undergraduate students.
 
-I recently finished my undergraduate studies at **Amherst College**, where I received my B.A. in Mathematics and Music and was inducted into *Phi Beta Kappa*. Tusks up!
+I recently finished my undergraduate studies at **Amherst College**, where I received my B.A. in Mathematics and Music and was inducted into *Phi Beta Kappa*. Go mammoths!

@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Spring 2025 Abroad in Stockholm, Sweden
-description: Blog compilation
+title: Study Abroad in Sweden
+description: Blog Archive
 img:
 importance: 4
 category: fun
