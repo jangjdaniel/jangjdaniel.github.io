@@ -1,17 +1,10 @@
 ---
 layout: post
-title: Firth's Penalized Logistic Regression
+title: Firths Penalized Logistic Regression
 date: 2026-04-04
 description: Methods from the 1990s
 tags: methods regression
 categories: Statistics
-
-
-title: ""
-date: 2026-04-04
-layout: single
-mathjax: true
-
 ---
 
 The motivation for why I'm learning about Firth's Penalized Logistic Regression is because it's deals with rare events better than classic logistic regression (it also deals with complete or quasi-separation where one variable perfectly or nearly perfectly explains or is related to another). This is in context of censoring weighting over time, where the number of patients who are censored at each time point is proportionally pretty small (between 10 to 100 out of 1,400). I want to make sure our models have unbiased estimations at these sample sizes so we can do some proper prediction
