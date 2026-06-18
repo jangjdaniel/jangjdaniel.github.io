@@ -32,7 +32,7 @@ I am nowhere near done thinking about this, so I will continue to add to this co
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.liquid loading="eager" 
         path="assets/img/photography/dark_shadows_nyc.jpg" 
-        title="example image" 
+        title="The Met Cloisters, New York City" 
         class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
