@@ -2,7 +2,7 @@
 layout: page
 title: Dark Shadows
 description: Photography project 1
-img: assets/img/6.jpg
+img: assets/img/photography/dark_shadows_helsinki.jpg
 importance: 1
 category: photography
 ---
