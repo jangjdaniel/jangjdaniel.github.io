@@ -4,32 +4,32 @@ title: European Adventures
 description: Blog Archive
 img:
 importance: 4
-category: fun
+category: travel
 ---
 
 I initally put these blog posts on Wix, but I thought it would be worthwhile to put them on my personal website (with some edits and omissions of course).
 
-# Copenhagen, Denmark
+## Copenhagen, Denmark
 
 ---
 
-# Riga, Latvia
+## Riga, Latvia
 
 ---
 
-# London, UK
+## London, UK
 
 ---
 
-# Oslo, Norway
+## Oslo, Norway
 
 ---
 
-# Krakow and Warsaw, Poland + Prauge, Czechia
+## Krakow and Warsaw, Poland + Prauge, Czechia
 
 ---
 
-# Helsinki, Finland + Tallinn, Estonia
+## Helsinki, Finland + Tallinn, Estonia
 
 
 

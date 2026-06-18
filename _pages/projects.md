@@ -2,7 +2,7 @@
 layout: page
 title: Personal Projects
 permalink: /projects/
-description: A growing collection of your cool projects.
+description: Outside of work, I am a musician (clarinet, classical voice, electric bass guitar), a photographer, and a home cook. I also like to travel whenever I can (with the express goal of visiting all 50 states in the United States), listen to music (currently my favorite genre is jazz), and stay active. This page is to share compilations of these hobbies.
 nav: true
 nav_order: 3
 display_categories: [work, fun]

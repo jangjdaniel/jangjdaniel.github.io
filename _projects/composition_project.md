@@ -4,8 +4,7 @@ title: Composition
 description: 
 img: assets/img/4.jpg
 importance: 5
-category: fun
-related_publications: true
+category: music
 ---
 
 I am currently working on improving my composition skills to write an art song using my friends' poems. 

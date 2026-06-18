@@ -4,7 +4,7 @@ title: Bela Kovacs Hommages
 description: Clarinet Recordings
 img: assets/img/1.jpg
 importance: 2
-category: fun
+category: music
 ---
 
 I am no longer an aspiring clarinetist. That dream ended years ago on my own volition. However, I still hold out a couple of goals for the instrument, one of which is to have a complete (albeit imperfect) recording of Bela Kovacs' Hommages to nine great composers through the ages. I currently have three recordings from the early 2020s (Bach, De Falla, Strauss). As of June 2026, I am currently practicing Khachaturian. 

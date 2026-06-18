@@ -4,7 +4,7 @@ title: Dark Shadows
 description: Photography project 1
 img: assets/img/6.jpg
 importance: 1
-category: fun
+category: photography
 ---
 
 I am a big fan of minimalism, both in music and fine art, because it forces one to think about the bare essentials of the art medium. It removes many distractions and imperfections until it becomes uniquely indistinguishable. In these pictures I took (albeit without the intention that I had when thinking about this project), I wanted to capture an emotion without the anxiety of all the unnecessary bits getting in the way. 
