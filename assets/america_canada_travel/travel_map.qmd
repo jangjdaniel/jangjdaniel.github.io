@@ -35,11 +35,36 @@ THIS IS STILL A MAJOR WORK IN PROGRESS. I JUST HAVE THE RAW FORMAT HERE.
 
 # The United States
 
+```{r}
+# Regions defined by the U.S. census bureau
+northeast <- c("Massachusetts", "New Hampshire", "Vermont", "Connecticut", "Maine", "Rhode Island", 
+               "New York", "New Jersey", "Pennsylvania")
+
+midwest <- c("Illinois", "Indiana", "Michigan", "Ohio", "Wisconsin", 
+             "Iowa", "Kansas", "Minnesota", "Missouri", "Nebraska", "North Dakota", "South Dakota")
+
+south <- c("Delaware", "DC", "Florida", "Georgia", "Maryland", "North Carolina", "South Carolina", "Virginia", "West Virginia",
+           "Alabama", "Kentucky", "Mississippi", "Tennessee",
+           "Arkansas", "Louisiana", "Oklahoma", "Texas")
+
+west <- c("Arizona", "Colorado", "Idaho", "Montana", "Nevada", "New Mexico", "Utah", "Wyoming", 
+          "Alaska", "California", "Hawaii", "Oregon", "Washington")
+```
+
+
 ```{r, output = FALSE}
 # data that I type in manually
 daniel_travel_map <- readxl::read_xlsx("trip_data.xlsx") |> # I can also add coordinate information here... maybe play around with that?
   mutate(start_date = as_date(start_date),
-         end_date   = as_date(end_date))
+         end_date   = as_date(end_date)) |>
+  mutate(region = case_when(
+    state %in% northeast ~ "Northeast",
+    state %in% midwest ~ "Midwest",
+    state %in% south ~ "South",
+    state %in% west ~ "West"
+    )) |>
+  mutate(travel_length = as.integer(end_date - start_date) + 1) |>
+  drop_na() #any NA is removed
 
 # US states shapefile
 us <- states(cb = TRUE) |>
@@ -83,17 +108,20 @@ first_travel <- daniel_travel_map |>
   group_by(state) |>
   filter(start_date == min(start_date)) |> # somehow this worked lol
   rename(first_visit_date = start_date) |> 
-  ungroup(state) |> 
+  ungroup(state)
+
+first_travel <- first_travel |>
   mutate(states_visited_order = nrow(first_travel) - row_number() + 1) #again, stupid fix but it works
 
 # now we can plot it
 ggplot(data = first_travel, aes(x = first_visit_date, y = states_visited_order)) +
   geom_step() + 
-  geom_text(aes(label = state), nudge_x = -225, size = 3) + 
+  geom_text(aes(label = state, color = region), nudge_x = -225, size = 3) + 
   theme_bw() +
   labs(x = "Date of Travel",
        y = "Number of States",
-       title = "States visited for the first time")
+       title = "States visited for the first time",
+       color = "Region")
 ```
 
 3. Small multiples visualization of states I have visited each year + lived in (e.g. 2025 will have MA and NY as "lived" and RI, TX as travelled)
@@ -103,25 +131,55 @@ ggplot(data = first_travel, aes(x = first_visit_date, y = states_visited_order))
 
 ```
 
-3.5. Similar version but with a lineplot ordered by when the state joined the union (this wouldn't be the exact thing)
-> This will allow me to see when I visited each state ANd how many times
+3.5. Approximately when did I visit each state?
 
 ```{r}
-ggplot(data = daniel_travel_map, aes(x = start_date, y = state)) +
-  geom_line()
-```
+state_dates <- data.frame(
+  state = c(
+    "Delaware","Pennsylvania","New Jersey","Georgia","Connecticut","Massachusetts",
+    "Maryland","South Carolina","New Hampshire","Virginia","New York","North Carolina",
+    "Rhode Island","Vermont","Kentucky","Tennessee","Ohio","Louisiana","Indiana",
+    "Mississippi","Illinois","Alabama","Maine","Missouri","Arkansas","Michigan",
+    "Florida","Texas","Iowa","Wisconsin","California","Minnesota","Oregon",
+    "Kansas","West Virginia","Nevada","Nebraska","Colorado","North Dakota",
+    "South Dakota","Montana","Washington","Idaho","Wyoming","Utah","Oklahoma",
+    "New Mexico","Arizona","Alaska","Hawaii","DC"
+  ),
+  date_joined = as.Date(c(
+    "1787-12-07","1787-12-12","1787-12-18","1788-01-02","1788-01-09","1788-02-06",
+    "1788-04-28","1788-05-23","1788-06-21","1788-06-25","1788-07-26","1789-11-21",
+    "1790-05-29","1791-03-04","1792-06-01","1796-06-01","1803-03-01","1812-04-30",
+    "1816-12-11","1817-12-10","1818-12-03","1819-12-14","1820-03-15","1821-08-10",
+    "1836-06-15","1837-01-26","1845-03-03","1845-12-29","1846-12-28","1848-05-29",
+    "1850-09-09","1858-05-11","1859-02-14","1861-01-29","1863-06-20","1864-10-31",
+    "1867-03-01","1876-08-01","1889-11-02","1889-11-02","1889-11-08","1889-11-11",
+    "1890-07-03","1890-07-10","1896-01-04","1907-11-16","1912-01-06","1912-02-14",
+    "1959-01-03","1959-08-21","1790-07-16"  # DC last
+  ))
+)
 
+daniel_travel_map_ordered <- daniel_travel_map |>
+  mutate(state = factor(state, levels = state_dates$state[order(state_dates$date_joined, decreasing = TRUE)]))
+
+ggplot(data = daniel_travel_map_ordered, aes(x = start_date, y = state, color = region)) +
+  geom_point() + theme_bw() + 
+  labs(x = "Year",
+       y = "State", 
+       color = "Region",
+       title = "Every Visit ordered by when the state joined the union")
+``` 
 
 4. Word cloud of my travel descriptions
 
-```{r}
+```{r, results = FALSE}
 daniel_travel_map |> dplyr::select(desc)
 ```
 
 5. Descriptive statistics: how many redeyes, how many business vs leisure trips, distribution of days I stayed (faceted by something), average length of trip by days, number of day trips, average distance of trips (MAYBE) etc.
 
 ```{r}
-
+ggplot(data = daniel_travel_map, aes(x = travel_length)) +
+  geom_histogram() + theme_bw()
 ```
 
 6. Capital city list: Have I been to the state capital?
