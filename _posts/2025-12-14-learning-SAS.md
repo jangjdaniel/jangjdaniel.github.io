@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Learning SAS: The Basics
-date: 2025-12-14
+title: Learning the basics of SAS
+date: 2025-12-14 14:24:00
 description: Incomplete!
 tags: coding
 categories: programming

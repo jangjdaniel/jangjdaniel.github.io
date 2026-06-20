@@ -1,15 +1,10 @@
 ---
 layout: post
 title: Unsupervised Learning in Python
-date: 2025-12-07 14:24:00
+date: 2025-12-20 14:24:00
 description: Incomplete!
 tags: machine-learning
 categories: Statistics
-
-title: ""
-date: 2025-12-26
-layout: single
-mathjax: true
 ---
 
 My friend asked me to help on his thesis work, so I thought this was the perfect opportunity to get familiar with actually using Python to run my machine learning things (aka do a clustering analysis) and understand the math behind this method.
