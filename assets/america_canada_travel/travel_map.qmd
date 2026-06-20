@@ -18,6 +18,7 @@ editor: source
 library(tidyverse)
 library(tidyselect)
 library(tibble)
+library(lubridate)
 library(sf)
 library(tigris)
 library(lubridate)
@@ -30,12 +31,15 @@ library(readxl)
 ```
 
 THIS IS STILL A MAJOR WORK IN PROGRESS. I JUST HAVE THE RAW FORMAT HERE.
+> I need to add Canadian trips to my dataset and exclude them in the United States portion (or maybe incorporate? I don't know at the moment)
 
 # The United States
 
 ```{r, output = FALSE}
 # data that I type in manually
-daniel_travel_map <- readxl::read_xlsx("trip_data.xlsx") # I can also add coordinate information here... maybe play around with that?
+daniel_travel_map <- readxl::read_xlsx("trip_data.xlsx") |> # I can also add coordinate information here... maybe play around with that?
+  mutate(start_date = as_date(start_date),
+         end_date   = as_date(end_date))
 
 # US states shapefile
 us <- states(cb = TRUE) |>
@@ -71,14 +75,62 @@ ggplot(map_data) +
 
 2. Timeline on unique states I have been to (manually add states I lived in like California), and on the X axis, show the state name.
 
+> Still a couple of fixes I want here since it's not 100% accurate but it's fine
+
+```{r}
+# first, count unique states from the earliest I've been there
+first_travel <- daniel_travel_map |>
+  group_by(state) |>
+  filter(start_date == min(start_date)) |> # somehow this worked lol
+  rename(first_visit_date = start_date) |> 
+  ungroup(state) |> 
+  mutate(states_visited_order = nrow(first_travel) - row_number() + 1) #again, stupid fix but it works
+
+# now we can plot it
+ggplot(data = first_travel, aes(x = first_visit_date, y = states_visited_order)) +
+  geom_step() + 
+  geom_text(aes(label = state), nudge_x = -225, size = 3) + 
+  theme_bw() +
+  labs(x = "Date of Travel",
+       y = "Number of States",
+       title = "States visited for the first time")
+```
 
 3. Small multiples visualization of states I have visited each year + lived in (e.g. 2025 will have MA and NY as "lived" and RI, TX as travelled)
+> I think this is more interesting in my head
+
+```{r}
+
+```
+
+3.5. Similar version but with a lineplot ordered by when the state joined the union (this wouldn't be the exact thing)
+> This will allow me to see when I visited each state ANd how many times
+
+```{r}
+ggplot(data = daniel_travel_map, aes(x = start_date, y = state)) +
+  geom_line()
+```
 
 
 4. Word cloud of my travel descriptions
 
+```{r}
+daniel_travel_map |> dplyr::select(desc)
+```
 
 5. Descriptive statistics: how many redeyes, how many business vs leisure trips, distribution of days I stayed (faceted by something), average length of trip by days, number of day trips, average distance of trips (MAYBE) etc.
 
+```{r}
+
+```
 
 6. Capital city list: Have I been to the state capital?
+
+```{r}
+
+```
+
+7. Lines of travel (How have I travelled between each state?): May not work if I don't have proper coordinates. Maybe I can do it based on thickness?
+
+8. A county map? Includes places I've just passed by (do this manually): something approximate.
+
