@@ -28,6 +28,9 @@ library(gt)
 library(gtsummary) # nice count visualizations
 library(forcats) # a specific data wrangling issue
 library(readxl)
+
+library(wordcloud)
+library(rstatix)
 ```
 
 THIS IS STILL A MAJOR WORK IN PROGRESS. I JUST HAVE THE RAW FORMAT HERE.
@@ -64,10 +67,15 @@ daniel_travel_map <- readxl::read_xlsx("trip_data.xlsx") |> # I can also add coo
     state %in% west ~ "West"
     )) |>
   mutate(travel_length = as.integer(end_date - start_date) + 1) |>
+  mutate(travel_year = year(start_date)) |>
   drop_na() #any NA is removed
 
+# these are places I don't want included
+us_territories <- c("VI", "GU", "MP", "AS")
+
 # US states shapefile
-us <- states(cb = TRUE) |>
+us <- states(cb = TRUE, resolution = "5m") |>
+  filter(!(STUSPS %in% us_territories)) |>
   shift_geometry() #for alaska and hawaii (and PR)
 ```
 
@@ -79,7 +87,7 @@ visit_counts <- daniel_travel_map |>
   count(state, name = "visits")
 
 # Join counts to map
-map_data <- us |>
+travel_count_map <- us |>
   left_join(
     visit_counts,
     by = c("NAME" = "state")
@@ -87,15 +95,19 @@ map_data <- us |>
   mutate(
     visits = ifelse(is.na(visits), 0, visits)
   )
+```
 
+```{r}
 # Plot
-ggplot(map_data) +
+ggplot(data = travel_count_map) +
   geom_sf(aes(fill = visits)) +
-  coord_sf(xlim = c(-3500000, 3500000), ylim = c(-2500000, 2500000), expand = FALSE) + #stupid fix by playing around with numbers
   scale_fill_viridis_c(name = "Trips") +
   scale_fill_gradient(low = "white", high = "blue") + 
-  theme_minimal() +
-  labs(title = "How many times have I made significant travel to this state?")
+  theme_bw() + theme(axis.text = element_blank(), 
+                     panel.grid = element_blank(),
+                     legend.position = "bottom") +
+  labs(title = "How many times have I made significant travel to this state?",
+       fill = "Number of Visits")
 ```
 
 2. Timeline on unique states I have been to (manually add states I lived in like California), and on the X axis, show the state name.
@@ -124,11 +136,26 @@ ggplot(data = first_travel, aes(x = first_visit_date, y = states_visited_order))
        color = "Region")
 ```
 
-3. Small multiples visualization of states I have visited each year + lived in (e.g. 2025 will have MA and NY as "lived" and RI, TX as travelled)
-> I think this is more interesting in my head
+3. Small multiples visualization of states I have visited each year + lived in (lived in part will be hard to implement + if I didn't travel at all, it won't appear + if I didn't travel to that state, the state won't be there...)
 
 ```{r}
+# i need to make my data longer by the year category lol
 
+thing <- daniel_travel_map |>
+  left_join(us, by = c("state" = "NAME")) |>
+  st_as_sf()
+
+# the plot!
+ggplot(data = thing) +
+  geom_sf(aes(fill = travel_length)) +
+  scale_fill_viridis_c(name = "Trips") +
+  scale_fill_gradient(low = "lightblue", high = "blue") + 
+  facet_wrap(~ travel_year) + 
+  theme_bw() + theme(axis.text = element_blank(), 
+                     panel.grid = element_blank(),
+                     legend.position = "bottom") +
+  labs(title = "Duration of stay in each state per year",
+       fill = "Length of Travel")
 ```
 
 3.5. Approximately when did I visit each state?
@@ -169,10 +196,17 @@ ggplot(data = daniel_travel_map_ordered, aes(x = start_date, y = state, color = 
        title = "Every Visit ordered by when the state joined the union")
 ``` 
 
-4. Word cloud of my travel descriptions
+4. Word cloud of my travel descriptions (this is currently a placeholder)
 
 ```{r, results = FALSE}
 daniel_travel_map |> dplyr::select(desc)
+
+dfm <- c("pear", "apple", "orange")
+d <- freq_table(dfm)[,c(1,3)]
+colnames(d) <- c("word", "freq")
+
+wordcloud (words=d$word, freq=d$freq, min.freq=150, max.words=150, 
+       random.order=FALSE, rot.per=0.3, colors=brewer.pal(8, "Dark2"))
 ```
 
 5. Descriptive statistics: how many redeyes, how many business vs leisure trips, distribution of days I stayed (faceted by something), average length of trip by days, number of day trips, average distance of trips (MAYBE) etc.
