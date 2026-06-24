@@ -34,6 +34,7 @@ library(rstatix)
 ```
 
 THIS IS STILL A MAJOR WORK IN PROGRESS. I JUST HAVE THE RAW FORMAT HERE.
+
 > I need to add Canadian trips to my dataset and exclude them in the United States portion (or maybe incorporate? I don't know at the moment)
 
 # The United States
@@ -81,11 +82,22 @@ us <- states(cb = TRUE, resolution = "5m") |>
 
 These visualizations do not take into account smaller trips within the state I live in (e.g. travelling from Allston to Boston doesn't count, but something like Haverhill to Fall River counts). These are just ones I thought were memorable. Thus, I don't count just passing through a state. I also don't count states I have lived in; that will probably be a separate visualization.
 
-```{r}
-# Count
-visit_counts <- daniel_travel_map |>
-  count(state, name = "visits")
+> I still have yet to add states in which I lived there (perhaps it will be added to the "visit" indicator somehow)
 
+```{r}
+# Counts
+capital_counts <- daniel_travel_map |>
+  filter(capital_indicator == "Yes") |>
+  distinct(state) |> as_vector()
+
+visit_counts <- daniel_travel_map |>
+  count(state, name = "visits") |>
+  mutate(capital_indicator = ifelse(state %in% capital_counts, 1, 0))
+
+# Also gather information from "lived" dataset
+```
+
+```{r}
 # Join counts to map
 travel_count_map <- us |>
   left_join(
@@ -93,21 +105,36 @@ travel_count_map <- us |>
     by = c("NAME" = "state")
   ) |>
   mutate(
-    visits = ifelse(is.na(visits), 0, visits)
+    visits = ifelse(is.na(visits), 0, visits),
+    visit_indicator = ifelse(visits == 0, 0, 1),
+    capital_indicator = ifelse(is.na(capital_indicator), 0, capital_indicator)
   )
 ```
 
-```{r}
+> Currently unconvinced of the dotted and solid lines
+
+```{r, fig.width=18, fig.height=12}
 # Plot
 ggplot(data = travel_count_map) +
-  geom_sf(aes(fill = visits)) +
-  scale_fill_viridis_c(name = "Trips") +
-  scale_fill_gradient(low = "white", high = "blue") + 
-  theme_bw() + theme(axis.text = element_blank(), 
-                     panel.grid = element_blank(),
-                     legend.position = "bottom") +
-  labs(title = "How many times have I made significant travel to this state?",
-       fill = "Number of Visits")
+  geom_sf(aes(fill = factor(visit_indicator), linetype  = factor(capital_indicator)),
+          linewidth = 1) +
+  scale_fill_manual(
+    values = c("0" = "white", "1" = "lightblue"),
+    labels = c("No", "Yes"),
+    name = "Visited State") +
+  scale_linetype_manual(
+    values = c("0" = "dotted", "1" = "solid"),
+    labels = c("No", "Yes"),
+    name = "Visited Capital"
+  ) +
+  theme_bw() +
+  theme(
+    axis.text = element_blank(),
+    panel.grid = element_blank(),
+    legend.position = "bottom") +
+  labs(
+    title = "Have I been to the state?"
+  )
 ```
 
 2. Timeline on unique states I have been to (manually add states I lived in like California), and on the X axis, show the state name.
@@ -130,7 +157,7 @@ ggplot(data = first_travel, aes(x = first_visit_date, y = states_visited_order))
   geom_step() + 
   geom_text(aes(label = state, color = region), nudge_x = -225, size = 3) + 
   theme_bw() +
-  labs(x = "Date of Travel",
+  labs(x = "Date of First Travel (incomplete)",
        y = "Number of States",
        title = "States visited for the first time",
        color = "Region")
@@ -139,23 +166,55 @@ ggplot(data = first_travel, aes(x = first_visit_date, y = states_visited_order))
 3. Small multiples visualization of states I have visited each year + lived in (lived in part will be hard to implement + if I didn't travel at all, it won't appear + if I didn't travel to that state, the state won't be there...)
 
 ```{r}
-# i need to make my data longer by the year category lol
+# first, loop through the minimum and maximum years of my dataset
+year_min <- min(daniel_travel_map$travel_year)
+year_max <- max(daniel_travel_map$travel_year)
 
-thing <- daniel_travel_map |>
-  left_join(us, by = c("state" = "NAME")) |>
-  st_as_sf()
+# I'm going to vectorize this in a minute
+travel_duration_map <- purrr::map_dfr(year_min:year_max, \(yr) {
+  daniel_travel_map |>
+    filter(travel_year == yr) |>
+    right_join(us, by = c("state" = "NAME")) |>
+    mutate(
+      travel_year = yr,
+      travel_length = coalesce(travel_length, 0)
+    )
+})
 
+# some quick selection to make data process cleaner
+travel_duration_map <- travel_duration_map |>
+  dplyr::select(state, travel_length, travel_year, STUSPS, geometry) |> 
+  mutate(lived_indicator = ifelse(state == "Massachusetts", 1, 0)) |> #this is temporary
+  st_as_sf() 
+```
+
+> I have yet to add my lived data. Maps won't look too different
+
+```{r}
+# get range of years
+daniel_lived_data <- readxl::read_xlsx("lived_data.xlsx")
+
+# create a new row for each year and each state I have lived in (another loop from 2008 to 2026 and beyond)
+```
+
+
+```{r, fig.width=18, fig.height=12}
 # the plot!
-ggplot(data = thing) +
-  geom_sf(aes(fill = travel_length)) +
+ggplot(data = travel_duration_map) +
+  geom_sf(aes(fill = travel_length, color = factor(lived_indicator))) +
   scale_fill_viridis_c(name = "Trips") +
-  scale_fill_gradient(low = "lightblue", high = "blue") + 
+  scale_fill_gradient(low = "white", high = "blue") + 
+  scale_color_manual(
+    values = c("0" = "grey40", "1" = "orange"),
+    labels = c("No", "Yes")
+  ) + 
   facet_wrap(~ travel_year) + 
   theme_bw() + theme(axis.text = element_blank(), 
                      panel.grid = element_blank(),
                      legend.position = "bottom") +
   labs(title = "Duration of stay in each state per year",
-       fill = "Length of Travel")
+       fill = "Length of Travel (Days)",
+       color = "Lived here?")
 ```
 
 3.5. Approximately when did I visit each state?
@@ -211,16 +270,13 @@ wordcloud (words=d$word, freq=d$freq, min.freq=150, max.words=150,
 
 5. Descriptive statistics: how many redeyes, how many business vs leisure trips, distribution of days I stayed (faceted by something), average length of trip by days, number of day trips, average distance of trips (MAYBE) etc.
 
+> Also this is where I will put the sheer number of times I have travelled to each state
+
 ```{r}
 ggplot(data = daniel_travel_map, aes(x = travel_length)) +
   geom_histogram() + theme_bw()
 ```
 
-6. Capital city list: Have I been to the state capital?
-
-```{r}
-
-```
 
 7. Lines of travel (How have I travelled between each state?): May not work if I don't have proper coordinates. Maybe I can do it based on thickness?
 
