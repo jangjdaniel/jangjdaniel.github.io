@@ -55,7 +55,6 @@ west <- c("Arizona", "Colorado", "Idaho", "Montana", "Nevada", "New Mexico", "Ut
           "Alaska", "California", "Hawaii", "Oregon", "Washington")
 ```
 
-
 ```{r, output = FALSE}
 # data that I type in manually
 daniel_travel_map <- readxl::read_xlsx("trip_data.xlsx") |> # I can also add coordinate information here... maybe play around with that?
@@ -80,9 +79,7 @@ us <- states(cb = TRUE, resolution = "5m") |>
   shift_geometry() #for alaska and hawaii (and PR)
 ```
 
-These visualizations do not take into account smaller trips within the state I live in (e.g. travelling from Allston to Boston doesn't count, but something like Haverhill to Fall River counts). These are just ones I thought were memorable. Thus, I don't count just passing through a state. I also don't count states I have lived in; that will probably be a separate visualization.
-
-> I still have yet to add states in which I lived there (perhaps it will be added to the "visit" indicator somehow)
+1. Let's start out simple: which states have I been to? As a bonus, I will add states I have visited the capital in and states I have lived in (*this is incomplete*). I do not count passing by a state in some form of transportation, but I do count some destination, even if it was unintentional. For example, I originally had a layover in Phoenix, Arizona, but I ended up staying the night. 
 
 ```{r}
 # Counts
@@ -137,9 +134,7 @@ ggplot(data = travel_count_map) +
   )
 ```
 
-2. Timeline on unique states I have been to (manually add states I lived in like California), and on the X axis, show the state name.
-
-> Still a couple of fixes I want here since it's not 100% accurate but it's fine
+2. Of course I did not visit these states at the same time. This is a step visualization to show when was the first time I landed in a state. This is accurate only from 2018 onwards, since I do not have good data prior to that time. (*Again, I still have yet to add states that I lived in like California and Massachusetts, both of which I first touched in 2008*) 
 
 ```{r}
 # first, count unique states from the earliest I've been there
@@ -163,7 +158,7 @@ ggplot(data = first_travel, aes(x = first_visit_date, y = states_visited_order))
        color = "Region")
 ```
 
-3. Small multiples visualization of states I have visited each year + lived in (lived in part will be hard to implement + if I didn't travel at all, it won't appear + if I didn't travel to that state, the state won't be there...)
+3. As an exercise in small multiple visualizations, I have here a map from each year highlighting how long I stayed in each state I visited each year (by number of days). I also added a border highlight for any state that I lived in. (*Still incomplete with my lived data*)
 
 ```{r}
 # first, loop through the minimum and maximum years of my dataset
@@ -197,7 +192,6 @@ daniel_lived_data <- readxl::read_xlsx("lived_data.xlsx")
 # create a new row for each year and each state I have lived in (another loop from 2008 to 2026 and beyond)
 ```
 
-
 ```{r, fig.width=18, fig.height=12}
 # the plot!
 ggplot(data = travel_duration_map) +
@@ -217,7 +211,7 @@ ggplot(data = travel_duration_map) +
        color = "Lived here?")
 ```
 
-3.5. Approximately when did I visit each state?
+4. When did I visit each state? This is kind of obselete and not that interesting in my opinion, so I may get rid of it.
 
 ```{r}
 state_dates <- data.frame(
@@ -255,30 +249,52 @@ ggplot(data = daniel_travel_map_ordered, aes(x = start_date, y = state, color = 
        title = "Every Visit ordered by when the state joined the union")
 ``` 
 
-4. Word cloud of my travel descriptions (this is currently a placeholder)
-
-```{r, results = FALSE}
-daniel_travel_map |> dplyr::select(desc)
-
-dfm <- c("pear", "apple", "orange")
-d <- freq_table(dfm)[,c(1,3)]
-colnames(d) <- c("word", "freq")
-
-wordcloud (words=d$word, freq=d$freq, min.freq=150, max.words=150, 
-       random.order=FALSE, rot.per=0.3, colors=brewer.pal(8, "Dark2"))
-```
-
-5. Descriptive statistics: how many redeyes, how many business vs leisure trips, distribution of days I stayed (faceted by something), average length of trip by days, number of day trips, average distance of trips (MAYBE) etc.
-
-> Also this is where I will put the sheer number of times I have travelled to each state
+5. I tried writing some description of each trip so I could make a wordcloud. Turns out I am not that creative in my writing. 
 
 ```{r}
+library(tidytext)
+library(stopwords)
+
+my_stopwords <- stopwords("en", source = "stopwords-iso")
+
+travel_wordcloud <- daniel_travel_map |>
+  tidytext::unnest_tokens(word, desc) |> # Breaks text columns into single words
+  count(word, sort = TRUE) |>
+  rename(freq = n) |> #rename for clarity
+  filter(!(word %in% my_stopwords), #remove any stopwords
+         freq > 1) #word should appear more than once 
+
+# the wordcloud!
+wordcloud(words     = travel_wordcloud$word, 
+          freq      = travel_wordcloud$freq, 
+          min.freq  = 150, 
+          max.words = 150, 
+          random.order=FALSE, rot.per=0.3, colors=brewer.pal(8, "Dark2"))
+```
+
+6. Now for a bunch of descriptive statistics: how many redeyes, how many business vs leisure trips, distribution of days I stayed (faceted by something), average length of trip by days, number of day trips, average distance of trips (MAYBE) etc. I also may change the fourth visualization into a chart instead, with states ordered by when they joined the union.
+
+```{r, results = FALSE}
 ggplot(data = daniel_travel_map, aes(x = travel_length)) +
   geom_histogram() + theme_bw()
 ```
 
+7. Lines of travel (How have I travelled between each state?): May not work if I don't have proper coordinates. Maybe I can do it based on thickness? *I am unconvinced of this one*
 
-7. Lines of travel (How have I travelled between each state?): May not work if I don't have proper coordinates. Maybe I can do it based on thickness?
 
-8. A county map? Includes places I've just passed by (do this manually): something approximate.
+8. A county map? Includes places I've just passed by: something approximate, since the map version here is kind of crazy
+
+> I may just do something from mapchart.net
+
+```{r, output = FALSE}
+us_counties <- counties(cb = TRUE, class = "sf") |> 
+  filter(!(STUSPS %in% us_territories)) |>
+  shift_geometry()
+
+ggplot(data = us_counties) +
+  geom_sf(fill = "white", color = "gray60", linewidth = 0.1) +
+  theme_void() +
+  labs(title = "All US Counties")
+```
+
 
