@@ -5,7 +5,10 @@ cv_pdf: /assets/pdf/example_pdf.pdf # path to your CV PDF file
 github_username: username_test
 email: daniel.jang@pennmedicine.upenn.edu # your email address
 scholar_userid: qc6CJjYAAAAJ # your Google Scholar ID
-arxiv_userid: YOUR_ARXIV_AUTHOR_ID # your ArXiV ID (i think)
+custom_social:
+  logo: https://upload.wikimedia.org/wikipedia/commons/b/bc/ArXiv_logo_2022.svg
+  title: arXiv
+  url: https://arxiv.org/a/your_author_id.html
 #pubmed...
 
 #- name: arXiv
