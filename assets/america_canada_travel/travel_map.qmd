@@ -124,10 +124,12 @@ travel_count_map <- us |>
     ) 
 ```
 
+> Figure out a way to put state names here (from r-spatial)
+
 ```{r, fig.width=18, fig.height=12}
 # Plot
 ggplot(data = travel_count_map) +
-  geom_sf(aes(fill = factor(visit_and_lived_indicator), linetype  = factor(capital_indicator)),
+  geom_sf(aes(fill = factor(visit_and_lived_indicator), linetype = factor(capital_indicator)),
           linewidth = 1) +
   scale_fill_manual(
     values = c("No" = "white", "Yes" = "lightblue", "Lived" = "cyan"), 
@@ -140,15 +142,14 @@ ggplot(data = travel_count_map) +
   theme(
     axis.text = element_blank(),
     panel.grid = element_blank(),
-    legend.position = "bottom") +
-  labs(
-    title = "Have I been to the state?"
-  )
+    legend.position = "bottom")
 ```
 
 ## Step Visualization of first visit (since 2018)
 
 Of course I did not visit these states at the same time, so I wanted to see when I visited each state for the first time. From this point on, I only use data after 2018 since I do not have accurate data prior to this time.
+
+> I still have an issue with xlim here.
 
 ```{r}
 # first, count unique states from the earliest I've been there
@@ -159,17 +160,18 @@ first_travel <- daniel_travel_map |>
   ungroup(state)
 
 first_travel <- first_travel |>
-  mutate(states_visited_order = nrow(first_travel) - row_number() + 1) #again, stupid fix but it works
+  mutate(states_visited_order = row_number())
 
 # now we can plot it
 ggplot(data = first_travel, aes(x = first_visit_date, y = states_visited_order)) +
   geom_step() + 
-  geom_text(aes(label = state, color = region), nudge_x = -225, size = 3) + 
+  geom_label(aes(label = state, color = region, alpha = 0.5), size = 3) + 
   theme_bw() +
-  labs(x = "Date of First Travel (incomplete)",
+  labs(x = "Year of First Travel",
        y = "Number of States",
        title = "States visited for the first time",
-       color = "Region")
+       color = "Region") +
+  guides(alpha = "none") #remove alpha thing
 ```
 
 ## Visits (days) and living each year (since 2018)
@@ -224,11 +226,15 @@ ggplot(data = travel_duration_map) +
        color = "Lived here?")
 ```
 
-## When did I visit each state? 
+## When did I visit each state? (UNDER CONSTRUCTION)
 
-This is kind of obselete and not that interesting in my opinion, so I may get rid of it.
+> Some edits
+  y axis should be colored (using ggtext)
+  the color should indicate business trips or leisure trips
 
 ```{r}
+library(ggtext)
+
 state_dates <- data.frame(
   state = c(
     "Delaware","Pennsylvania","New Jersey","Georgia","Connecticut","Massachusetts",
@@ -252,7 +258,9 @@ state_dates <- data.frame(
     "1959-01-03","1959-08-21","1790-07-16"  # DC last
   ))
 )
+```
 
+```{r, output = FALSE}
 daniel_travel_map_ordered <- daniel_travel_map |>
   mutate(state = factor(state, levels = state_dates$state[order(state_dates$date_joined, decreasing = TRUE)]))
 
@@ -266,7 +274,7 @@ ggplot(data = daniel_travel_map_ordered, aes(x = start_date, y = state, color = 
 
 ## Wordcloud of Travel Descriptions!
 
-Turns out I am not that creative in my writing. 
+Turns out I am not that creative in my writing. I think I should also include information after the fact.
 
 ```{r}
 library(tidytext)
@@ -289,29 +297,104 @@ wordcloud(words     = travel_wordcloud$word,
           random.order=FALSE, rot.per=0.3, colors=brewer.pal(8, "Dark2"))
 ```
 
-## Descriptive Statistics
+## Travel Map with city directions + indicators of something in particular
 
-Things that I am planning to include: 
+> Step 1: Extract all the unique cities I have been to in each travel
 
-1. how many redeyes?
-2. how many business vs leisure trips?
-3. distribution of days I stayed (faceted by something)?
-4. average length of trip by days?
-5. number of day trips?
-6. average distance of trips?
-7. I also may change the fourth visualization into a chart instead, with states ordered by when they joined the union.
-8. Also something with cities (geographic coordinates? I wonder if there's a public data set to do this with... I'm confident there is)
+```{r}
+daniel_travel_map <- daniel_travel_map |>
+  mutate(travel_number_indicator = row_number()) #this is just useful to have in general
 
-```{r, results = FALSE}
-ggplot(data = daniel_travel_map, aes(x = travel_length)) +
-  geom_histogram() + theme_bw()
+# First step is creating the directions
+daniel_travel_unique_cities <- daniel_travel_map |> # an indicator for each "trip"
+  separate_longer_delim(cities, delim = ",") |> # separate values to create one row for each city
+  mutate(city_full_name = paste0(cities, ", ", state)) # create full city name 
+
+# for each unique `travel_number_indicator`, add a visit_order, which tells me the order in which I visited in that trip
+daniel_travel_unique_cities <- daniel_travel_unique_cities |> 
+  group_by(travel_number_indicator) |>
+  mutate(visit_order = row_number()) |>
+  ungroup(travel_number_indicator)
+```
+
+> Step 2: Merge this unique city data with an open-source dataset with geographic location (latitude and longitude)
+
+Currently testing if this works properly with a reduced form of the `unique_cities` dataset
+
+```{r}
+# public location dataset
+
+
+# merging time
+daniel_travel_unique_cities |>
+  dplyr::select(city_full_name) #THIS IS TEMPORARY
+```
+
+> Step 3: `pivot_wider` to create a ton more variables to put all data for a trip into one row
+>> I need to see how to make my plot because this step might be useless other than getting information for the arrows for `start_city` and `end_city` correct
+
+```{r, eval = FALSE}
+# pivot_wider with new set of variables: city_"visit_order" with travel_number_indicator
+daniel_travel_unique_cities <- daniel_travel_unique_cities |>
+  pivot_wider(
+    id_cols = travel_number_indicator, #grouping by each vacation
+    names_from = visit_order,
+    values_from = city_full_name,
+    names_prefix = "city_" #creating a new prefix for each city
+      )
+
+# a kind of stupid fix but I don't care: merging back with original travel vis
+daniel_travel_map_line_vis <- daniel_travel_map |>
+  full_join(temp, by = "travel_number_indicator") 
+```
+
+> Step 4: Plot with lines based on geographic location while also coloring in these lines with my `transport_method`
+
+```{r}
+
+```
+
+
+## Distributions (misc... some of these are redundant, most are incomplete...)
+
+Distribution of distance of trips (from wrangling steps)
+
+```{r}
+
+```
+
+
+Distribution of length of trip by days 
+
+```{r}
+ggplot(data = daniel_travel_map, aes(x = travel_length, fill = type)) +
+  geom_bar() + theme_bw() +
+  labs(x = "Travel Length",
+       y = "Number of Trips",
+       fill = "Type of Travel")
+```
+
+Row chart of type of trip it was (regular, day, redeye). *I think there are some issues here*
+
+```{r}
+daniel_travel_map <- daniel_travel_map |>
+  mutate(trip_type = case_when(
+    redeye_indicator == "Yes" ~ "Redeye",
+    start_date == end_date ~ "Day Trip",
+    TRUE ~ "Regular Trip"
+  ))
+
+ggplot(daniel_travel_map, aes(x = type, fill = trip_type)) + 
+  geom_bar(stack = "fill") + theme_bw() + 
+  labs(x = "Type of trip",
+       y = "Count", 
+       fill = "Trip Details") +
+  coord_flip()
 ```
 
 ## The following are visuals I am unsure if I should make.
 
-1. Lines of travel (How have I travelled between each state?): May not work if I don't have proper coordinates. Maybe I can do it based on thickness? *I am unconvinced of this one* `If I can combine this with city data, then that would be really cool, but that sounds like so much effort`.
-
-2. A county map? Includes places I've just passed by: something approximate, since the map version here is kind of crazy
+A county map? Includes places I've just passed by: something approximate, since the map version here is kind of crazy
 
 > I may just do something from mapchart.net
 
