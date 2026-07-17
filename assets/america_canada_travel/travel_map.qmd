@@ -17,6 +17,7 @@ editor: source
 ```{r}
 library(tidyverse)
 library(tidyselect)
+library(ggtext)
 library(tibble)
 library(lubridate)
 library(sf)
@@ -31,6 +32,8 @@ library(readxl)
 
 library(wordcloud)
 library(rstatix)
+
+library(maps)
 ```
 
 This is still a work in progress. As I add new visualizations, some other things may be broken, so please excuse the state of this html file. This also serves as an exercise in data visualization.
@@ -123,8 +126,6 @@ travel_count_map <- us |>
       visit_indicator) #more complete version)
     ) 
 ```
-
-> Figure out a way to put state names here (from r-spatial)
 
 ```{r, fig.width=18, fig.height=12}
 # Plot
@@ -233,8 +234,6 @@ ggplot(data = travel_duration_map) +
   the color should indicate business trips or leisure trips
 
 ```{r}
-library(ggtext)
-
 state_dates <- data.frame(
   state = c(
     "Delaware","Pennsylvania","New Jersey","Georgia","Connecticut","Massachusetts",
@@ -258,18 +257,42 @@ state_dates <- data.frame(
     "1959-01-03","1959-08-21","1790-07-16"  # DC last
   ))
 )
+
+# I don't know what this does (oops)
+region_colors <- c(
+  Northeast = "#1b9e77",
+  Midwest   = "#d95f02",
+  South     = "#7570b3",
+  West      = "#e7298a"
+)
 ```
 
 ```{r, output = FALSE}
 daniel_travel_map_ordered <- daniel_travel_map |>
   mutate(state = factor(state, levels = state_dates$state[order(state_dates$date_joined, decreasing = TRUE)]))
 
-ggplot(data = daniel_travel_map_ordered, aes(x = start_date, y = state, color = region)) +
-  geom_point() + theme_bw() + 
+state_levels <- levels(daniel_travel_map_ordered$state)
+
+regions <- daniel_travel_map_ordered |>
+  distinct(state, region)
+
+labels <- sapply(state_levels, function(s) {
+  reg <- regions$region[match(s, regions$state)]
+  paste0(
+    "<span style='color:",
+    region_colors[reg],
+    "'>", s, "</span>"
+  )
+})
+
+ggplot(daniel_travel_map_ordered, aes(start_date, state)) +
+  geom_point(color = "black") +
+  scale_y_discrete(labels = labels) +
+  theme_bw() +
+  theme(axis.text.y = ggtext::element_markdown()) +
   labs(x = "Year",
-       y = "State", 
-       color = "Region",
-       title = "Every Visit ordered by when the state joined the union")
+       y = "State",
+       title = "When did I travel to each state? (Ordered by when states joined the union)")
 ``` 
 
 ## Wordcloud of Travel Descriptions!
@@ -301,6 +324,8 @@ wordcloud(words     = travel_wordcloud$word,
 
 > Step 1: Extract all the unique cities I have been to in each travel
 
+*I may want to restructure my data in the future, so this code might break as a result...*
+
 ```{r}
 daniel_travel_map <- daniel_travel_map |>
   mutate(travel_number_indicator = row_number()) #this is just useful to have in general
@@ -315,19 +340,37 @@ daniel_travel_unique_cities <- daniel_travel_unique_cities |>
   group_by(travel_number_indicator) |>
   mutate(visit_order = row_number()) |>
   ungroup(travel_number_indicator)
+
+# I NOW NEED TO ADD AN ABBREVIATED CITY NAME WHICH REMOVES COMMAS AND USES STATE ABBREVIATIONS
+daniel_travel_unique_cities <- daniel_travel_unique_cities |>
+  mutate(
+    city = str_trim(str_extract(city_full_name, "^[^,]+")),
+    state = str_trim(str_extract(city_full_name, "(?<=,).*")),
+    state_abbr = case_when(
+      state == "DC" ~ "DC", #create an exception for DC
+      TRUE ~ state.abb[match(state, state.name)]
+    ),
+    city_abbrev = paste(city, state_abbr)
+  ) |>
+  select(-city, -state, -state_abbr)
 ```
 
 > Step 2: Merge this unique city data with an open-source dataset with geographic location (latitude and longitude)
 
 Currently testing if this works properly with a reduced form of the `unique_cities` dataset
 
-```{r}
-# public location dataset
+*This dataset doesn't look at great for my purposes. Doesn't have a lot of cities I listed...*
 
+```{r}
+# public location dataset (I think this will work!): from the `maps` dataset
+data(us.cities)
 
 # merging time
 daniel_travel_unique_cities |>
-  dplyr::select(city_full_name) #THIS IS TEMPORARY
+  dplyr::select(city_abbrev) #THIS IS TEMPORARY TO MAKE SURE I CAN MERGE IT
+
+daniel_travel_unique_cities |> 
+  left_join(us.cities, by = c("city_abbrev" = "name"))
 ```
 
 > Step 3: `pivot_wider` to create a ton more variables to put all data for a trip into one row
