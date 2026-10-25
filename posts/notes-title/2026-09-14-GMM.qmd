@@ -1,0 +1,10 @@
+---
+title: "Generalized Method of Moments"
+description: "System of Equations"
+author: "Daniel Jang"
+date: "2026-09-14"
+categories: [Notes, Methods]
+draft: true
+---
+
+(Current notes I need to upload here)

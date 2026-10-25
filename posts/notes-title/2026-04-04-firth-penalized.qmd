@@ -1,0 +1,10 @@
+---
+title: "Firth's Penalized Logistic Regression"
+description: "Finite Sample Bias"
+author: "Daniel Jang"
+date: "2026-04-04"
+categories: [Notes, Regression]
+draft: true
+---
+
+(Old post I have yet to bring to this website)

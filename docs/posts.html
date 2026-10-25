@@ -85,9 +85,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -167,11 +167,11 @@ window.Quarto = {
 <link rel="stylesheet" href="styles.css">
 <link rel="alternate" type="application/rss+xml" title="Daniel Jang" href="posts.xml" data-external="1"><meta property="og:title" content="Blog Posts – Daniel Jang">
 <meta property="og:description" content="Updates about papers and posts on my understanding of certain topics">
-<meta property="og:image" content="https://drganghe.github.io/quarto-academic-website-template/posts/paper-title/featured.jpg">
+<meta property="og:image" content="https://drganghe.github.io/quarto-academic-website-template/files/images/placeholder3.JPG">
 <meta property="og:site_name" content="Daniel Jang">
 <meta name="twitter:title" content="Blog Posts – Daniel Jang">
 <meta name="twitter:description" content="Updates about papers and posts on my understanding of certain topics">
-<meta name="twitter:image" content="https://drganghe.github.io/quarto-academic-website-template/posts/paper-title/featured.jpg">
+<meta name="twitter:image" content="https://drganghe.github.io/quarto-academic-website-template/files/images/placeholder3.JPG">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -193,21 +193,17 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">About</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-posts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Posts</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-posts">    
         <li>
-    <a class="dropdown-item" href="./posts.html#category=news">
+    <a class="dropdown-item" href="./posts.html#category=Notes">
+ <span class="dropdown-text">Notes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./posts.html#category=News">
  <span class="dropdown-text">News</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./posts.html#category=event">
- <span class="dropdown-text">Events</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./contact.html">
- <span class="dropdown-text">Contact</span></a>
   </li>  
     </ul>
   </li>
@@ -218,41 +214,37 @@ window.Quarto = {
     <ul class="dropdown-menu" aria-labelledby="nav-menu-research">    
         <li>
     <a class="dropdown-item" href="./pub-listing.html">
- <span class="dropdown-text">Publications Listing</span></a>
+ <span class="dropdown-text">Select Publications</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./publications.html">
- <span class="dropdown-text">Publications</span></a>
+ <span class="dropdown-text">Pre-Prints + Recent Publications</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./posts.html#category=paper">
- <span class="dropdown-text">Selected Papers</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./projects.html">
- <span class="dropdown-text">Grants</span></a>
+    <a class="dropdown-item" href="./publications.html">
+ <span class="dropdown-text">Software</span></a>
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="./teaching.html"> 
-<span class="menu-text">Teaching</span></a>
-  </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-outreach" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Outreach</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-myself" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Myself</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-outreach">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-myself">    
         <li>
-    <a class="dropdown-item" href="./posts.html#category=presentation">
- <span class="dropdown-text">Presentations</span></a>
+    <a class="dropdown-item" href="./pub-listing.html">
+ <span class="dropdown-text">America Travel Map</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./publications.html">
+ <span class="dropdown-text">Music Portfolio</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./publications.html">
+ <span class="dropdown-text">Photography Portfolio</span></a>
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="./people.html"> 
-<span class="menu-text">Group</span></a>
-  </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
@@ -287,7 +279,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(4)</span></div><div class="category" data-category="ZXZlbnQ=">event <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bmV3cw==">news <span class="quarto-category-count">(2)</span></div><div class="category" data-category="cGFwZXI=">paper <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cHJlc2VudGF0aW9u">presentation <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(15)</span></div><div class="category" data-category="Q2F1c2FsJTIwSW5mZXJlbmNl">Causal Inference <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TWFjaGluZSUyMExlYXJuaW5n">Machine Learning <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TWF0aA==">Math <span class="quarto-category-count">(5)</span></div><div class="category" data-category="TWV0aG9kcw==">Methods <span class="quarto-category-count">(5)</span></div><div class="category" data-category="TWlzc2luZyUyMERhdGE=">Missing Data <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TmV3cw==">News <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Tm9ucGFyYW1ldHJpY3M=">Nonparametrics <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Tm90ZXM=">Notes <span class="quarto-category-count">(14)</span></div><div class="category" data-category="UmVncmVzc2lvbg==">Regression <span class="quarto-category-count">(3)</span></div><div class="category" data-category="U2VtaXBhcmFtZXRyaWNz">Semiparametrics <span class="quarto-category-count">(3)</span></div></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -345,75 +337,473 @@ window.Quarto = {
     </div>
 </div>
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="bmV3cw==" data-listing-date-sort="1770008400000" data-listing-file-modified-sort="1792899825135" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="43">
-<div class="thumbnail"><a href="./posts/news-title/2026-02-02-mice.html" class="no-external">
+<div class="quarto-post image-right" data-index="0" data-categories="Tm90ZXMlMkNTZW1pcGFyYW1ldHJpY3MlMkNNZXRob2RzJTJDTWFjaGluZSUyMExlYXJuaW5n" data-listing-date-sort="1796360400000" data-listing-file-modified-sort="1792936028722" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="7">
+<div class="thumbnail"><a href="./posts/notes-title/2026-12-04-DML.html" class="no-external">
 
 <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
 
 </a></div>
 <div class="body">
 <h3 class="no-anchor listing-title">
-<a href="./posts/news-title/2026-02-02-mice.html" class="no-external">Multivariate Imputation by Chained Equations</a>
+<a href="./posts/notes-title/2026-12-04-DML.html" class="no-external">Debiased Machine Learning Basics</a>
 </h3>
-<div class="listing-subtitle">
-<a href="./posts/news-title/2026-02-02-mice.html" class="no-external"></a>
-</div>
 <div class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('bmV3cw=='); return false;">news</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('U2VtaXBhcmFtZXRyaWNz'); return false;">Semiparametrics</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWV0aG9kcw=='); return false;">Methods</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWFjaGluZSUyMExlYXJuaW5n'); return false;">Machine Learning</div>
 
 </div>
-<div class="delink listing-description"><a href="./posts/news-title/2026-02-02-mice.html" class="no-external">
-<p>A Flexible Imputation Method for Nonmonotone Missing at Random Data</p>
+<div class="delink listing-description"><a href="./posts/notes-title/2026-12-04-DML.html" class="no-external">
+<p>Target Estimation for Partially Linear Regression</p>
 </a></div>
 </div>
 <div class="metadata">
-<a href="./posts/news-title/2026-02-02-mice.html" class="no-external">
+<a href="./posts/notes-title/2026-12-04-DML.html" class="no-external">
 <div class="listing-date">
-Feb 2, 2026
+Dec 4, 2026
 </div>
 <div class="listing-author">
-News
+Daniel Jang
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="ZXZlbnQlMkNwcmVzZW50YXRpb24=" data-listing-date-sort="1725336000000" data-listing-file-modified-sort="1792895234222" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="7">
-<div class="thumbnail"><a href="./posts/event-title/index.html" class="no-external">
+<div class="quarto-post image-right" data-index="1" data-categories="Tm90ZXMlMkNTZW1pcGFyYW1ldHJpY3MlMkNDYXVzYWwlMjBJbmZlcmVuY2UlMkNNaXNzaW5nJTIwRGF0YSUyQ01ldGhvZHM=" data-listing-date-sort="1794286800000" data-listing-file-modified-sort="1792936310699" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="7">
+<div class="thumbnail"><a href="./posts/notes-title/2026-11-10-AIPW.html" class="no-external">
 
-<img loading="lazy" src="./files/images/placeholder2.JPG" class="thumbnail-image">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
 
 </a></div>
 <div class="body">
 <h3 class="no-anchor listing-title">
-<a href="./posts/event-title/index.html" class="no-external">Event item</a>
+<a href="./posts/notes-title/2026-11-10-AIPW.html" class="no-external">Augmented Inverse Probability Weighted Estimators</a>
 </h3>
-<div class="listing-subtitle">
-<a href="./posts/event-title/index.html" class="no-external"></a>
-</div>
 <div class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('ZXZlbnQ='); return false;">event</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
 
-<div class="listing-category" onclick="window.quartoListingCategory('cHJlc2VudGF0aW9u'); return false;">presentation</div>
+<div class="listing-category" onclick="window.quartoListingCategory('U2VtaXBhcmFtZXRyaWNz'); return false;">Semiparametrics</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Q2F1c2FsJTIwSW5mZXJlbmNl'); return false;">Causal Inference</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWlzc2luZyUyMERhdGE='); return false;">Missing Data</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWV0aG9kcw=='); return false;">Methods</div>
 
 </div>
-<div class="delink listing-description"><a href="./posts/event-title/index.html" class="no-external">
-<p>About Event item.</p>
+<div class="delink listing-description"><a href="./posts/notes-title/2026-11-10-AIPW.html" class="no-external">
+<p>Connection to Causal Inference and Missing Data</p>
 </a></div>
 </div>
 <div class="metadata">
-<a href="./posts/event-title/index.html" class="no-external">
+<a href="./posts/notes-title/2026-11-10-AIPW.html" class="no-external">
 <div class="listing-date">
-Sep 3, 2024
+Nov 10, 2026
 </div>
 <div class="listing-author">
-Event
+Daniel Jang
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="bmV3cw==" data-listing-date-sort="1719201600000" data-listing-file-modified-sort="1792895234222" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="9">
+<div class="quarto-post image-right" data-index="2" data-categories="Tm90ZXMlMkNTZW1pcGFyYW1ldHJpY3MlMkNDYXVzYWwlMjBJbmZlcmVuY2U=" data-listing-date-sort="1793419200000" data-listing-file-modified-sort="1792936060681" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="7">
+<div class="thumbnail"><a href="./posts/notes-title/2026-10-31-EIF.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/notes-title/2026-10-31-EIF.html" class="no-external">Efficient Influence Functions</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('U2VtaXBhcmFtZXRyaWNz'); return false;">Semiparametrics</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Q2F1c2FsJTIwSW5mZXJlbmNl'); return false;">Causal Inference</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/notes-title/2026-10-31-EIF.html" class="no-external">
+<p>Essentially a Summary of Tsiatis Chapter 3 + a potential outcomes example</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/notes-title/2026-10-31-EIF.html" class="no-external">
+<div class="listing-date">
+Oct 31, 2026
+</div>
+<div class="listing-author">
+Daniel Jang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-categories="Tm90ZXMlMkNOb25wYXJhbWV0cmljcyUyQ1JlZ3Jlc3Npb24lMkNNZXRob2Rz" data-listing-date-sort="1791172800000" data-listing-file-modified-sort="1792936316257" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="7">
+<div class="thumbnail"><a href="./posts/notes-title/2026-10-05-sieve-regression.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/notes-title/2026-10-05-sieve-regression.html" class="no-external">Sieve Regression</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Tm9ucGFyYW1ldHJpY3M='); return false;">Nonparametrics</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UmVncmVzc2lvbg=='); return false;">Regression</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWV0aG9kcw=='); return false;">Methods</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/notes-title/2026-10-05-sieve-regression.html" class="no-external">
+<p>Polynomials, B-splines, Highly Adaptive LASSO</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/notes-title/2026-10-05-sieve-regression.html" class="no-external">
+<div class="listing-date">
+Oct 5, 2026
+</div>
+<div class="listing-author">
+Daniel Jang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-categories="Tm90ZXMlMkNNaXNzaW5nJTIwRGF0YSUyQ01ldGhvZHM=" data-listing-date-sort="1790481600000" data-listing-file-modified-sort="1792936321371" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="7">
+<div class="thumbnail"><a href="./posts/notes-title/2026-09-27-MICE.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/notes-title/2026-09-27-MICE.html" class="no-external">Multivariate Imputation by Chained Equations</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWlzc2luZyUyMERhdGE='); return false;">Missing Data</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWV0aG9kcw=='); return false;">Methods</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/notes-title/2026-09-27-MICE.html" class="no-external">
+<p>The Gold Standard for Nonmonotone Missing at Random Data</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/notes-title/2026-09-27-MICE.html" class="no-external">
+<div class="listing-date">
+Sep 27, 2026
+</div>
+<div class="listing-author">
+Daniel Jang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="5" data-categories="Tm90ZXMlMkNNZXRob2Rz" data-listing-date-sort="1789358400000" data-listing-file-modified-sort="1792935977991" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="7">
+<div class="thumbnail"><a href="./posts/notes-title/2026-09-14-GMM.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/notes-title/2026-09-14-GMM.html" class="no-external">Generalized Method of Moments</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWV0aG9kcw=='); return false;">Methods</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/notes-title/2026-09-14-GMM.html" class="no-external">
+<p>System of Equations</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/notes-title/2026-09-14-GMM.html" class="no-external">
+<div class="listing-date">
+Sep 14, 2026
+</div>
+<div class="listing-author">
+Daniel Jang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="6" data-categories="Tm90ZXM=" data-listing-date-sort="1780804800000" data-listing-file-modified-sort="1792935805394" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="10">
+<div class="thumbnail"><a href="./posts/notes-title/2026-06-07-MCMC-examples.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/notes-title/2026-06-07-MCMC-examples.html" class="no-external">Markov Chain Monte Carlo Examples</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/notes-title/2026-06-07-MCMC-examples.html" class="no-external">
+<p>Empircal Posterior Distribution</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/notes-title/2026-06-07-MCMC-examples.html" class="no-external">
+<div class="listing-date">
+Jun 7, 2026
+</div>
+<div class="listing-author">
+Daniel Jang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="7" data-categories="Tm90ZXMlMkNNYXRo" data-listing-date-sort="1779249600000" data-listing-file-modified-sort="1792936200377" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="10">
+<div class="thumbnail"><a href="./posts/notes-title/2026-05-20-frechet-gateaux.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/notes-title/2026-05-20-frechet-gateaux.html" class="no-external">Frechet and Gateaux Derivatives</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWF0aA=='); return false;">Math</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/notes-title/2026-05-20-frechet-gateaux.html" class="no-external">
+<p>Functional Analysis Post 3</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/notes-title/2026-05-20-frechet-gateaux.html" class="no-external">
+<div class="listing-date">
+May 20, 2026
+</div>
+<div class="listing-author">
+Daniel Jang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="8" data-categories="Tm90ZXMlMkNNYXRo" data-listing-date-sort="1777435200000" data-listing-file-modified-sort="1792936195515" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="10">
+<div class="thumbnail"><a href="./posts/notes-title/2026-04-29-banach-hilbert-spaces.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/notes-title/2026-04-29-banach-hilbert-spaces.html" class="no-external">Banach and Hilbert Spaces</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWF0aA=='); return false;">Math</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/notes-title/2026-04-29-banach-hilbert-spaces.html" class="no-external">
+<p>Functional Analysis Post 2</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/notes-title/2026-04-29-banach-hilbert-spaces.html" class="no-external">
+<div class="listing-date">
+Apr 29, 2026
+</div>
+<div class="listing-author">
+Daniel Jang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="9" data-categories="Tm90ZXMlMkNNYXRo" data-listing-date-sort="1777348800000" data-listing-file-modified-sort="1792936190142" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="10">
+<div class="thumbnail"><a href="./posts/notes-title/2026-04-28-functionals.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/notes-title/2026-04-28-functionals.html" class="no-external">Functionals</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWF0aA=='); return false;">Math</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/notes-title/2026-04-28-functionals.html" class="no-external">
+<p>Functional Analysis Post 1</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/notes-title/2026-04-28-functionals.html" class="no-external">
+<div class="listing-date">
+Apr 28, 2026
+</div>
+<div class="listing-author">
+Daniel Jang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="10" data-categories="Tm90ZXMlMkNSZWdyZXNzaW9u" data-listing-date-sort="1775275200000" data-listing-file-modified-sort="1792936214327" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="10">
+<div class="thumbnail"><a href="./posts/notes-title/2026-04-04-firth-penalized.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/notes-title/2026-04-04-firth-penalized.html" class="no-external">Firth’s Penalized Logistic Regression</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UmVncmVzc2lvbg=='); return false;">Regression</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/notes-title/2026-04-04-firth-penalized.html" class="no-external">
+<p>Finite Sample Bias</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/notes-title/2026-04-04-firth-penalized.html" class="no-external">
+<div class="listing-date">
+Apr 4, 2026
+</div>
+<div class="listing-author">
+Daniel Jang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="11" data-categories="Tm90ZXMlMkNNYXRo" data-listing-date-sort="1774756800000" data-listing-file-modified-sort="1792936207759" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="10">
+<div class="thumbnail"><a href="./posts/notes-title/2026-03-29-optimal-transport.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/notes-title/2026-03-29-optimal-transport.html" class="no-external">Optimal Transport</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWF0aA=='); return false;">Math</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/notes-title/2026-03-29-optimal-transport.html" class="no-external">
+<p>Moving Dirt and Rubble</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/notes-title/2026-03-29-optimal-transport.html" class="no-external">
+<div class="listing-date">
+Mar 29, 2026
+</div>
+<div class="listing-author">
+Daniel Jang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="12" data-categories="Tm90ZXMlMkNSZWdyZXNzaW9uJTJDTWFjaGluZSUyMExlYXJuaW5n" data-listing-date-sort="1766206800000" data-listing-file-modified-sort="1792936253719" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2209">
+<div class="thumbnail"><a href="./posts/notes-title/2025-12-20-ridge-LASSO.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/notes-title/2025-12-20-ridge-LASSO.html" class="no-external">Ridge and LASSO Regression</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UmVncmVzc2lvbg=='); return false;">Regression</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWFjaGluZSUyMExlYXJuaW5n'); return false;">Machine Learning</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/notes-title/2025-12-20-ridge-LASSO.html" class="no-external">
+<p>First time thinking about High-Dimensional Statistics</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/notes-title/2025-12-20-ridge-LASSO.html" class="no-external">
+<div class="listing-date">
+Dec 20, 2025
+</div>
+<div class="listing-author">
+Daniel Jang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="13" data-categories="Tm90ZXMlMkNNYXRo" data-listing-date-sort="1765083600000" data-listing-file-modified-sort="1792936182498" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="814">
+<div class="thumbnail"><a href="./posts/notes-title/2025-12-07-radon-nikodym.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/notes-title/2025-12-07-radon-nikodym.html" class="no-external">The Radon-Nikodym Derivative</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Tm90ZXM='); return false;">Notes</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWF0aA=='); return false;">Math</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/notes-title/2025-12-07-radon-nikodym.html" class="no-external">
+<p>How does this connect to derivatives in calculus?</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/notes-title/2025-12-07-radon-nikodym.html" class="no-external">
+<div class="listing-date">
+Dec 7, 2025
+</div>
+<div class="listing-author">
+Daniel Jang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="14" data-categories="TmV3cw==" data-listing-date-sort="1719201600000" data-listing-file-modified-sort="1792936583405" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="9">
 <div class="thumbnail"><a href="./posts/news-title/index.html" class="no-external">
 
 <img loading="lazy" src="./files/images/placeholder3.JPG" class="thumbnail-image">
@@ -423,12 +813,9 @@ Event
 <h3 class="no-anchor listing-title">
 <a href="./posts/news-title/index.html" class="no-external">News item</a>
 </h3>
-<div class="listing-subtitle">
-<a href="./posts/news-title/index.html" class="no-external"></a>
-</div>
 <div class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('bmV3cw=='); return false;">news</div>
+<div class="listing-category" onclick="window.quartoListingCategory('TmV3cw=='); return false;">News</div>
 
 </div>
 <div class="delink listing-description"><a href="./posts/news-title/index.html" class="no-external">
@@ -442,39 +829,6 @@ Jun 24, 2024
 </div>
 <div class="listing-author">
 News
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="cGFwZXI=" data-listing-date-sort="-1092945600000" data-listing-file-modified-sort="1792895234224" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="168">
-<div class="thumbnail"><a href="./posts/paper-title/index.html" class="no-external">
-
-<img loading="lazy" src="./posts/paper-title/featured.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/paper-title/index.html" class="no-external">Can quantum-mechanical description of physical reality be considered complete?</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/paper-title/index.html" class="no-external"><em>Physical Review</em></a>
-</div>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cGFwZXI='); return false;">paper</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/paper-title/index.html" class="no-external">
-<p>One is thus led to conclude that the description of reality as given by a wave function is not complete.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/paper-title/index.html" class="no-external">
-<div class="listing-date">
-May 15, 1935
-</div>
-<div class="listing-author">
-Albert Einstein, Boris Podolsky, Nathan Rosen
 </div>
 </a>
 </div>

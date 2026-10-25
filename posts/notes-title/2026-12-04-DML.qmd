@@ -1,0 +1,10 @@
+---
+title: "Debiased Machine Learning Basics"
+description: "Target Estimation for Partially Linear Regression"
+author: "Daniel Jang"
+date: "2026-12-04"
+categories: [Notes, Semiparametrics, Methods, Machine Learning]
+draft: true
+---
+
+(Current notes I need to upload here)

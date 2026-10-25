@@ -1,0 +1,10 @@
+---
+title: "Frechet and Gateaux Derivatives"
+description: "Functional Analysis Post 3"
+author: "Daniel Jang"
+date: "2026-05-20"
+categories: [Notes, Math]
+draft: true
+---
+
+(Old post I have yet to bring to this website)

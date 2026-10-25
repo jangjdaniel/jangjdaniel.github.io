@@ -1,0 +1,10 @@
+---
+title: "Multivariate Imputation by Chained Equations"
+description: "The Gold Standard for Nonmonotone Missing at Random Data"
+author: "Daniel Jang"
+date: "2026-09-27"
+categories: [Notes, Missing Data, Methods]
+draft: true
+---
+
+(Current notes I need to upload here)

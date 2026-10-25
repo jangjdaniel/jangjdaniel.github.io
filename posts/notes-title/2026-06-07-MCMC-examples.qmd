@@ -1,0 +1,10 @@
+---
+title: "Markov Chain Monte Carlo Examples"
+description: "Empircal Posterior Distribution"
+author: "Daniel Jang"
+date: "2026-06-07"
+categories: [Notes]
+draft: true
+---
+
+(Old post I have yet to bring to this website)

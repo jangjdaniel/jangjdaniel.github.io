@@ -1,0 +1,10 @@
+---
+title: "Optimal Transport"
+description: "Moving Dirt and Rubble"
+author: "Daniel Jang"
+date: "2026-03-29"
+categories: [Notes, Math]
+draft: true
+---
+
+(Old post I have yet to bring to this website)

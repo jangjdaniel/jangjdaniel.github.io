@@ -1,0 +1,10 @@
+---
+title: "Functionals"
+description: "Functional Analysis Post 1"
+author: "Daniel Jang"
+date: "2026-04-28"
+categories: [Notes, Math]
+draft: true
+---
+
+(Old post I have yet to bring to this website)

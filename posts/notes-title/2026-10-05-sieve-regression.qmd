@@ -1,0 +1,10 @@
+---
+title: "Sieve Regression"
+description: "Polynomials, B-splines, Highly Adaptive LASSO"
+author: "Daniel Jang"
+date: "2026-10-05"
+categories: [Notes, Nonparametrics, Regression, Methods]
+draft: true
+---
+
+(Current notes I need to upload here)

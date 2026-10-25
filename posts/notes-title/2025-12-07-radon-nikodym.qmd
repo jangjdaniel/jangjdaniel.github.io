@@ -1,0 +1,83 @@
+---
+title: "The Radon-Nikodym Derivative"
+description: "How does this connect to derivatives in calculus?"
+author: "Daniel Jang"
+date: "2025-12-07"
+categories: [Notes, Math]
+#css: /custom.css
+#draft: true
+---
+
+## Motivation
+
+In calculus, derivatives are initially motivated as the tangent line of a function, and Real Analysis makes us work with the formal definition all the time: $\lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$. This concept extends to the gradient in $\nabla f$ in multivariable calculus. All of these made sense to me. Then the Radon-Nikodym derivative came out of nowhere: 
+
+**Definition**: Let $(X, \mathcal{M})$ be a measurable space. Let $\mu: \mathcal{M} \to \mathbb{R}$ be a signed finite measure and $m: \mathcal{M} \to [0, +\infty)$ be an unsigned $\sigma$-finite measure such that $\mu$ is absolutely continuous with respect to $m$ (i.e., $\mu << m$). The **Radon–Nikodym derivative** of $\mu$ w.r.t $m$ is a measurable function $f: X \to \mathbb{R}$ s.t.
+
+$$
+\mu(A) = \int_A f \, dm \quad \forall A \in \mathcal{M}.
+$$
+
+How on earth does this generalize the classical (univariate) derivative? I feel like I should attempt to develop my intuition here and have the masses correct me if I got some details wrong.
+
+## The Connection
+
+Consider the measurable space $(\mathbb{R}, \mathcal{M})$ and the function $F: \mathbb{R} \rightarrow \mathbb{R}$. The radon-nikodym derivative on an interval $A = [a,b] \in \mathcal{M}$ (where $m$ is the lebesuge measure on $\mathbb{R}$) is given as:
+
+$$
+\mu([a, b]) = \int_{[a,b]} f(x) \, dm(x) = \int_{[a,b]} f(x) \, dx
+$$
+
+Notice that by the fundamental theorem of calculus, this integral is simply $F(b) - F(a)$. Thus, $\mu([a, b]) := F(b) - F(a)$.[^kosher] This measure is absolutely continuous w.r.t. the lebesgue measure $m$.[^signed] 
+
+[^kosher]: This would not be the formal definition of the $\mu$ measure, since elementary measures are not measures. However, I think it is okay to work with pre-measures in this case because everything is behaved nicely, i.e. we have continuity (almost) everywhere.
+
+[^signed]: $\mu$ is a signed measure. This is consistent with classical calculus where integrals can be negative.
+
+We can consider what the classical derivative looks like for each $x \in [a,b]$ by looking at 
+
+$$
+\mu([x, x+h]) = \int_{[x,x+h]} f(x) \, dm(x)
+$$
+
+Taking $h\to 0$ gives us:
+
+$$ 
+\boxed{\lim_{h \to 0} \frac{\mu([x, x+h])}{m([x, x+h])} 
+= \lim_{h \to 0} \frac{F(x+h) - F(x)}{h} 
+= F'(x)}
+$$
+
+In fact, by the **Lebesgue Differentiation Theorem*, if this integral function is absolutely continuous, its Radon-Nikodym Derivative equals the classical derivative almost everywhere.
+
+---
+
+## Example
+
+In general, the "rise-over-run" intuition breaks down with the Radon-Nikodym derivative. Instead it describes a ratio of densities. This might be fully incorrect, but I think of it as "how much mass of $\mu$ is there in one unit of $m$". One advantage is that removing null sets from $A$ does not affect the ratio of densities. We can see that something is  derivatives shine where the classic derivative fails (although the applications in probability are slightly different and more broad). 
+
+<strong>Example: </strong> Consider $f(x) = 2x \, \chi_{\mathbb{R} \setminus \mathbb{Q}}(x)$, where $\chi$ is the characteristic/indicator function. Let $A \subset \mathbb{R}$ be arbitrary in the same measurable space as the first example: $(\mathbb{R}, \mathcal{M})$. Thanks to the tools we developed in measure theory, we can easily decompose this integral by integration properties since the intersection between the rationals and irrationals is empty:
+
+$$
+\int_A 2x \, dm(x) 
+= \int_{A \cap (\mathbb{R} \setminus \mathbb{Q})} 2x \, dm(x) 
++ \int_{A \cap \mathbb{Q}} 2x \, dm(x)
+$$
+
+The FoTC result is unavailable here so we must actually evaluate the integral if we want to know the "antiderivative". Recall that $A \cap \mathbb{Q}$ forms a null set w.r.t Lebesgue measure. Thus, the second integral is just zero. We are left with:
+
+$$
+\mu(A) = \int_{A \cap (\mathbb{R} \setminus \mathbb{Q})} 2x \, dm(x) = x^2 \, \text{ m-a.e.}
+$$ 
+
+For example, with $A = [0,2]$, $\mu(A) = 4$ and $m(A) = 2$. With the derivative being simply $\frac{d\mu}{dm}(x) = f(x)$, we have that ratio/density captured.[^improper] 
+
+[^improper] I know that this is improper notation. Please cut me some slack.
+
+The derivative of $x^2$ is unique up to a null set. That is, the derivative of $x^2$ can be the function $2x$ without the rationals, or just $2x$, or $2x$ minus some point. Now if we were to do the same thing with $g(x) = 2x \, \chi_{\mathbb{Q}}(x)$, the RN derivative would be 0, since the part with $2x$ mass is on a null set. Again, this goes back to how we do integration! The classical derivative could not do this.
+
+These derivatives have applications in probability theory, specifically when defining the PMF (integrate w.r.t the counting measure), doing changes in measure (not sure when this would become necessary), and some things in conditional expectation. Unlike with integration and learning some of the most important theorems (Monotone Convergence Theorem, Fatou's Lemma, Dominated Convergence Theorem), I don't know how these derivatives are useful (beyond taking out a null set) until I take a probability course. However, hopefully I understand it a bit better now.
+
+---
+
+P.S. I almost surely (haha) left out details about integrability of these functions (something about the function being in $L^1$ norm), but my examples don't necessarily break down. I should be more careful next time, however. 

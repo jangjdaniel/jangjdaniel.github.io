@@ -1,0 +1,10 @@
+---
+title: "Efficient Influence Functions"
+description: "Essentially a Summary of Tsiatis Chapter 3 + a potential outcomes example"
+author: "Daniel Jang"
+date: "2026-10-31"
+categories: [Notes, Semiparametrics, Causal Inference]
+draft: true
+---
+
+(Current notes I need to upload here)
