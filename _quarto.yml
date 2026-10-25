@@ -6,15 +6,17 @@ project:
     
 # Meta
 description-meta: "Quarto Academic Website Template adapted by Dr. Gang He"
-author-meta: "Dr. Gang He"
+author-meta: "Daniel Jang"
 
 website:
-  title: "Quarto Academic"
+  title: "Daniel Jang"
   image: "https://quarto.org/quarto.png"
-  description: "Quarto Academic Website Template adapted by Dr. Gang He"
+  description: "Personal Website"
  
-  navbar:
-    background: light  # You can change the background color here
+ .navbar {
+  background-color: #f8f9fa;
+  color: #212529;
+}
 
     left:   # You can comment out all navigation items here if you just like to keep the index page only
 #      - text: Home
@@ -50,11 +52,8 @@ website:
       - text: CV
         href: files/nsf-biosketch.pdf
       - icon: github
-        href: https://github.com/drganghe/quarto-academic-website-template
-        target: _blank
-      - text: "{{< fa brands bluesky >}}"
-        href: https://bsky.app
-        target: _blank      
+        href: https://github.com/jangjdaniel
+        target: _blank    
       - icon: rss
         href: posts.xml
         target: _blank
@@ -62,7 +61,7 @@ website:
   page-navigation: true
   
   page-footer: 
-    left: "[Your Name](http://www.github.com) &copy; <script>document.write(new Date().getFullYear())</script>" 
+    left: "[Daniel Jang](http://www.github.com) &copy; <script>document.write(new Date().getFullYear())</script>" 
     center: "Build on [Quarto Academic Website Template](https://github.com/drganghe/quarto-academic-website-template) adapted by [Dr. Gang He](http://drganghe.github.io)"
     right:  
       - icon: github
