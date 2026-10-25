@@ -1,5 +1,5 @@
 ---
-title: "Quarto Academic, PhD"
+title: "Daniel Jang's Website"
 description-meta: "Quarto Academic Website Template adapted by Dr. Gang He"
 image: "files/images/placeholder4.JPG"
 page-navigation: false
@@ -66,6 +66,8 @@ listing:   # Comment the listing section and delete corresponding lines in the i
 ---
 
 :::{#hero-heading}
+
+I am a PhD student in Biostatistics at the University of Pennsylvania, with research interests in causal inference and semiparametric theory.
 
 I'm a [Quarto Academeic Website Template](https://github.com/drganghe/quarto-academic-website-template) adapted by [Dr. Gang He](http://drganghe.github.io).
 
