@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://drganghe.github.io/quarto-academic-website-template/posts.html</loc>
-    <lastmod>2025-06-06T22:28:53.960Z</lastmod>
+    <lastmod>2026-10-25T03:36:33.409Z</lastmod>
   </url>
   <url>
     <loc>https://drganghe.github.io/quarto-academic-website-template/publications.html</loc>
@@ -34,7 +34,7 @@
   </url>
   <url>
     <loc>https://drganghe.github.io/quarto-academic-website-template/index.html</loc>
-    <lastmod>2026-05-29T10:25:05.848Z</lastmod>
+    <lastmod>2026-10-25T03:42:43.173Z</lastmod>
   </url>
   <url>
     <loc>https://drganghe.github.io/quarto-academic-website-template/people.html</loc>
@@ -43,5 +43,9 @@
   <url>
     <loc>https://drganghe.github.io/quarto-academic-website-template/pub-listing.html</loc>
     <lastmod>2026-04-09T12:35:28.091Z</lastmod>
+  </url>
+  <url>
+    <loc>https://drganghe.github.io/quarto-academic-website-template/posts/news-title/2026-02-02-mice.html</loc>
+    <lastmod>2026-10-25T03:43:45.135Z</lastmod>
   </url>
 </urlset>

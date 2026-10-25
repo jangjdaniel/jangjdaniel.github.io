@@ -2,9 +2,9 @@
   {
     "objectID": "posts.html",
     "href": "posts.html",
-    "title": "What’s New & Updated",
+    "title": "Blog Posts",
     "section": "",
-    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Author\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nQuarto Academic Website Examples and Tips\n\n\n\n\n\n\nnews\n\n\n\nExamples and tips for Quarto Academic Website\n\n\n\n\n\nOct 15, 2024\n\n\nDr. Gang He\n\n\n\n\n\n\n\n\n\n\n\n\nEvent item\n\n\n\n\n\n\nevent\n\npresentation\n\n\n\nAbout Event item.\n\n\n\n\n\nSep 3, 2024\n\n\nEvent\n\n\n\n\n\n\n\n\n\n\n\n\nNews item\n\n\n\n\n\n\nnews\n\n\n\nAbout new item\n\n\n\n\n\nJun 24, 2024\n\n\nNews\n\n\n\n\n\n\n\n\n\n\n\n\nCan quantum-mechanical description of physical reality be considered complete?\n\n\nPhysical Review\n\n\n\npaper\n\n\n\nOne is thus led to conclude that the description of reality as given by a wave function is not complete.\n\n\n\n\n\nMay 15, 1935\n\n\nAlbert Einstein, Boris Podolsky, Nathan Rosen\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Author\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nMultivariate Imputation by Chained Equations\n\n\n\n\n\n\nnews\n\n\n\nA Flexible Imputation Method for Nonmonotone Missing at Random Data\n\n\n\n\n\nFeb 2, 2026\n\n\nNews\n\n\n\n\n\n\n\n\n\n\n\n\nEvent item\n\n\n\n\n\n\nevent\n\npresentation\n\n\n\nAbout Event item.\n\n\n\n\n\nSep 3, 2024\n\n\nEvent\n\n\n\n\n\n\n\n\n\n\n\n\nNews item\n\n\n\n\n\n\nnews\n\n\n\nAbout new item\n\n\n\n\n\nJun 24, 2024\n\n\nNews\n\n\n\n\n\n\n\n\n\n\n\n\nCan quantum-mechanical description of physical reality be considered complete?\n\n\nPhysical Review\n\n\n\npaper\n\n\n\nOne is thus led to conclude that the description of reality as given by a wave function is not complete.\n\n\n\n\n\nMay 15, 1935\n\n\nAlbert Einstein, Boris Podolsky, Nathan Rosen\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "publications.html",
@@ -93,30 +93,30 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Quarto Academic, PhD",
+    "title": "Daniel Jang’s Website",
     "section": "",
-    "text": "Lab\n  \n  \n    \n     Uprofile\n  \n  \n    \n     E-mail\n  \n  \n    \n     LinkedIn\n  \n  \n    \n     YouTube\n  \n  \n      ORCID\n  \n  \n      Web of Science\n  \n  \n      Scopus\n  \n  \n      Google Scholar\n  \n\n  \n  \nI’m a Quarto Academeic Website Template adapted by Dr. Gang He.\nI’m a template that you can fork to build your own website with easy adaptation and deployment.\nI can automatically generate a neat publication list from an Excel file and enabling categories and filters.\nCheck Quarto Academic Website Examples and Tips and README.md for more detailed instructions.\n\n\n\nResearcher, Univerisity\nConsultant, Company\nIntern, Institute\n\n\n\n\n\nPhD, Univerisity\nMaster, Univerisity\nBachelor, Univerisity"
+    "text": "Lab\n  \n  \n    \n     Uprofile\n  \n  \n    \n     E-mail\n  \n  \n    \n     LinkedIn\n  \n  \n    \n     YouTube\n  \n  \n      ORCID\n  \n  \n      Web of Science\n  \n  \n      Scopus\n  \n  \n      Google Scholar\n  \n\n  \n  \nHello! :)\nI am currently a Ph.D. student in Biostatistics at the University of Pennsylvania (Perelman School of Medicine: Graduate Group in Epidemiology and Biostatistics in Biomedical Graduate Studies) with research interests in causal inference, missing data, and semiparametric theory. I hope to use my expertise to develop robust methods for the analysis of observational studies that can be used in collaborative projects across the biomedical and education fields. I also hope to grow as an educator in statistics.\nBelow is a non-exhaustive list of my experiences in research and collaboration.\n\n\n\nCausal Inference: Augmented IPW estimators, Debiased Machine Learning\nMissing Data: Nonmonotone Missing at Random Data, Conditional Quantile Imputation\nModeling: Non-collapsibility and measurement error, Penalized IPW for GEEs\nApplication Areas: Postoperative Pain, Opioids, Anesthesiology, Tuberculosis, Quantitative skill gaps among college students\n\n\n\n\n\nBiostatistics Student Analysis Core: University of Pennsylvania (2026-Present)\nQSURE Intern: Memorial Sloan Kettering Cancer Center (2025)\nStatistics and Data Science Fellow: Amherst College (2024-2026)\n\n\n\n\n\nDoctor of Philosophy (Ph.D.) in Biostatistics: University of Pennsylvania (Exp. 2031)\nBachelor of Arts (B.A.) in Mathematics and Music: Amherst College (2026)"
   },
   {
     "objectID": "index.html#experience",
     "href": "index.html#experience",
-    "title": "Quarto Academic, PhD",
+    "title": "Daniel Jang’s Website",
     "section": "",
-    "text": "Researcher, Univerisity\nConsultant, Company\nIntern, Institute"
+    "text": "Biostatistics Student Analysis Core: University of Pennsylvania (2026-Present)\nQSURE Intern: Memorial Sloan Kettering Cancer Center (2025)\nStatistics and Data Science Fellow: Amherst College (2024-2026)"
   },
   {
     "objectID": "index.html#education",
     "href": "index.html#education",
-    "title": "Quarto Academic, PhD",
+    "title": "Daniel Jang’s Website",
     "section": "",
-    "text": "PhD, Univerisity\nMaster, Univerisity\nBachelor, Univerisity"
+    "text": "Doctor of Philosophy (Ph.D.) in Biostatistics: University of Pennsylvania (Exp. 2031)\nBachelor of Arts (B.A.) in Mathematics and Music: Amherst College (2026)"
   },
   {
     "objectID": "index.html#recent-posts",
     "href": "index.html#recent-posts",
-    "title": "Quarto Academic, PhD",
+    "title": "Daniel Jang’s Website",
     "section": "Recent Posts",
-    "text": "Recent Posts\nCheck out the latest  Papers ,  News ,  Events , and  More »\n\n\n\n\n\n\n\n\n\n\nQuarto Academic Website Examples and Tips\n\n\n\nOct 15, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\nEvent item\n\n\n\nSep 3, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\nNews item\n\n\n\nJun 24, 2024\n\n\n\n\n\n\nNo matching items\n\n\nAll Posts »"
+    "text": "Recent Posts\nCheck out the latest  Papers ,  News ,  Events , and  More »\n\n\n\n\n\n\n\n\nMultivariate Imputation by Chained Equations\n\n\n\nFeb 2, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nEvent item\n\n\n\nSep 3, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\nNews item\n\n\n\nJun 24, 2024\n\n\n\n\n\n\nNo matching items\n\n\nAll Posts »"
   },
   {
     "objectID": "people.html",
@@ -166,5 +166,47 @@
     "title": "Publications",
     "section": "Peer-reviewed Journal Papers",
     "text": "Peer-reviewed Journal Papers\n\n\n\nRapid Cost Decrease of Renewables and Storage Accelerates the Decarbonization of China's Power System He, Gang*, Jiang Lin*, Froylan Sifuentes, Xu Liu, Nikit Abhyankar, and Amol Phadke* May 15, 2020\n\n&lt;span class=\"listing-category\"\n      onclick=\"window.quartoListingCategory('MjAyMA=='); return false;\"&gt;2020&lt;/span&gt;\n\n&lt;span class=\"listing-category\"\n      onclick=\"window.quartoListingCategory('c2VsZWN0ZWQ='); return false;\"&gt;selected&lt;/span&gt;\n\n&lt;span class=\"listing-category\"\n      onclick=\"window.quartoListingCategory('cGVlci1yZXZpZXdlZA=='); return false;\"&gt;peer-reviewed&lt;/span&gt;\n\n&lt;span class=\"listing-category\"\n      onclick=\"window.quartoListingCategory('aGlnaGx5LWNpdGVk'); return false;\"&gt;highly-cited&lt;/span&gt;\n\n&lt;span class=\"listing-category\"\n      onclick=\"window.quartoListingCategory('bmF0dXJlLXNlcmllcw=='); return false;\"&gt;nature-series&lt;/span&gt;\n\n&lt;span class=\"listing-category\"\n      onclick=\"window.quartoListingCategory('cG93ZXItc3lzdGVt'); return false;\"&gt;power-system&lt;/span&gt;\n\n&lt;span class=\"listing-category\"\n      onclick=\"window.quartoListingCategory('c3dpdGNoLWNoaW5h'); return false;\"&gt;switch-china&lt;/span&gt;\n\n&lt;span class=\"listing-category\"\n      onclick=\"window.quartoListingCategory('c29sYXI='); return false;\"&gt;solar&lt;/span&gt;\n\n&lt;span class=\"listing-category\"\n      onclick=\"window.quartoListingCategory('d2luZA=='); return false;\"&gt;wind&lt;/span&gt;\n\n&lt;span class=\"listing-category\"\n      onclick=\"window.quartoListingCategory('c3RvcmFnZQ=='); return false;\"&gt;storage&lt;/span&gt;\n\n\nHe, Gang*, Jiang Lin*, Froylan Sifuentes, Xu Liu, Nikit Abhyankar, and Amol Phadke*. 2020. Rapid Cost Decrease of Renewables and Storage Accelerates the Decarbonization of China's Power System. Nature Communications 11(1): 2486. doi: 10.1038/s41467-020-16184-x. \n\n\n PDF  GitHub  Supplemental  \n\n\nCoverage: SBU News | LBL News | Carbon Brief Headline | InsideClimateNews | E&E News/ClimateWire | Forbes | Nature News\n\n\nInvited presentation: Asia Pacific Energy Research Centre (APERC) Annual Conference 2020 | Beijing Institute of Technology | Dartmouth College | Harvard Kennedy School Growth Lab\n\n\n\n\nNo matching items\n\nPublications – Quarto Academic Publications – Quarto Academic Publications – Quarto Academic Quarto Academic Quarto Academic Website Template adapted by Dr. Gang He Quarto Academic Website Template adapted by Dr. Gang He Quarto Academic Website Template adapted by Dr. Gang He"
+  },
+  {
+    "objectID": "index.html#research-areas-explored",
+    "href": "index.html#research-areas-explored",
+    "title": "Daniel Jang’s Website",
+    "section": "",
+    "text": "Causal Inference: Augmented IPW estimators, Debiased Machine Learning\nMissing Data: Nonmonotone Missing at Random Data, Conditional Quantile Imputation\nModeling: Non-collapsibility and measurement error, Penalized IPW for GEEs\nApplication Areas: Postoperative Pain, Opioids, Anesthesiology, Tuberculosis, Quantitative skill gaps among college students"
+  },
+  {
+    "objectID": "index.html#collaboration-experience",
+    "href": "index.html#collaboration-experience",
+    "title": "Daniel Jang’s Website",
+    "section": "",
+    "text": "Biostatistics Student Analysis Core: University of Pennsylvania (2026-Present)\nQSURE Intern: Memorial Sloan Kettering Cancer Center (2025)\nStatistics and Data Science Fellow: Amherst College (2024-2026)"
+  },
+  {
+    "objectID": "posts/news-title/2026-02-02-mice.html",
+    "href": "posts/news-title/2026-02-02-mice.html",
+    "title": "Multivariate Imputation by Chained Equations",
+    "section": "",
+    "text": "Some changes I need to make: change category and add categories (e.g. math, missing data, tutorial, etc.)"
+  },
+  {
+    "objectID": "posts/news-title/2026-02-02-mice.html#summary",
+    "href": "posts/news-title/2026-02-02-mice.html#summary",
+    "title": "Multivariate Imputation by Chained Equations",
+    "section": "Summary",
+    "text": "Summary\nAbout the news"
+  },
+  {
+    "objectID": "posts/news-title/2026-02-02-mice.html#organization",
+    "href": "posts/news-title/2026-02-02-mice.html#organization",
+    "title": "Multivariate Imputation by Chained Equations",
+    "section": "Organization",
+    "text": "Organization\nLet \\(O_i = (Y_i, A_i, X_i)\\) be our observed data such that\n\\[\n\\mathbb{E}[Y \\mid A, X] = \\beta_0 + \\beta_A A + X^\\top \\beta\n\\]"
+  },
+  {
+    "objectID": "posts/news-title/2026-02-02-mice.html#purpose-and-history",
+    "href": "posts/news-title/2026-02-02-mice.html#purpose-and-history",
+    "title": "Multivariate Imputation by Chained Equations",
+    "section": "",
+    "text": "Some changes I need to make: change category and add categories (e.g. math, missing data, tutorial, etc.)"
   }
 ]

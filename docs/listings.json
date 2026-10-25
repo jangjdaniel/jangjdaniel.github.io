@@ -2,6 +2,7 @@
   {
     "listing": "/posts.html",
     "items": [
+      "/posts/news-title/2026-02-02-mice.html",
       "/posts/event-title/index.html",
       "/posts/news-title/index.html",
       "/posts/paper-title/index.html"
@@ -14,6 +15,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/news-title/2026-02-02-mice.html",
       "/posts/event-title/index.html",
       "/posts/news-title/index.html",
       "/posts/paper-title/index.html"

@@ -5,25 +5,42 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/" 
       version="2.0">
 <channel>
-<title>Quarto Academic</title>
+<title>Daniel Jang</title>
 <link>https://drganghe.github.io/quarto-academic-website-template/posts.html</link>
 <atom:link href="https://drganghe.github.io/quarto-academic-website-template/posts.xml" rel="self" type="application/rss+xml"/>
-<description>Quarto Academic Website Template adapted by Dr. Gang He</description>
+<description>Personal Website</description>
 <image>
 <url>https://quarto.org/quarto.png</url>
-<title>Quarto Academic</title>
+<title>Daniel Jang</title>
 <link>https://drganghe.github.io/quarto-academic-website-template/posts.html</link>
 </image>
-<generator>quarto-1.9.36</generator>
-<lastBuildDate>Tue, 15 Oct 2024 04:00:00 GMT</lastBuildDate>
+<generator>quarto-1.9.38</generator>
+<lastBuildDate>Mon, 02 Feb 2026 05:00:00 GMT</lastBuildDate>
 <item>
-  <title>Quarto Academic Website Examples and Tips</title>
-  <link>https://drganghe.github.io/quarto-academic-website-template/</link>
-  <description>Examples and tips for Quarto Academic Website</description>
+  <title>Multivariate Imputation by Chained Equations</title>
+  <dc:creator>News </dc:creator>
+  <link>https://drganghe.github.io/quarto-academic-website-template/posts/news-title/2026-02-02-mice.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="purpose-and-history" class="level2">
+<h2 class="anchored" data-anchor-id="purpose-and-history">Purpose and History</h2>
+<p><span style="color: red;">Some changes I need to make: change category and add categories (e.g.&nbsp;math, missing data, tutorial, etc.)</span></p>
+</section>
+<section id="organization" class="level2">
+<h2 class="anchored" data-anchor-id="organization">Organization</h2>
+<p>Let <img src="https://latex.codecogs.com/png.latex?O_i%20=%20(Y_i,%20A_i,%20X_i)"> be our observed data such that</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cmathbb%7BE%7D%5BY%20%5Cmid%20A,%20X%5D%20=%20%5Cbeta_0%20+%20%5Cbeta_A%20A%20+%20X%5E%5Ctop%20%5Cbeta%0A"></p>
+
+
+</section>
+
+ ]]></description>
   <category>news</category>
-  <guid>https://drganghe.github.io/quarto-academic-website-template/</guid>
-  <pubDate>Tue, 15 Oct 2024 04:00:00 GMT</pubDate>
-  <media:content url="https://drganghe.github.io/quarto-academic-website-template/files/images/placeholder1.jpg" medium="image" type="image/jpeg"/>
+  <guid>https://drganghe.github.io/quarto-academic-website-template/posts/news-title/2026-02-02-mice.html</guid>
+  <pubDate>Mon, 02 Feb 2026 05:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Event item</title>

@@ -67,28 +67,29 @@ listing:   # Comment the listing section and delete corresponding lines in the i
 
 :::{#hero-heading}
 
-I am a PhD student in Biostatistics at the University of Pennsylvania, with research interests in causal inference and semiparametric theory.
+Hello! :)
 
-I'm a [Quarto Academeic Website Template](https://github.com/drganghe/quarto-academic-website-template) adapted by [Dr. Gang He](http://drganghe.github.io).
+I am currently a Ph.D. student in Biostatistics at the University of Pennsylvania (Perelman School of Medicine: Graduate Group in Epidemiology and Biostatistics in Biomedical Graduate Studies) with research interests in **causal inference**, **missing data**, and **semiparametric theory**. I hope to use my expertise to develop robust methods for the analysis of observational studies that can be used in collaborative projects across the biomedical and education fields. I also hope to grow as an educator in statistics. 
 
-I'm a template that you can fork to build your own website with easy adaptation and deployment.
+Below is a *non-exhaustive* list of my experiences in research and collaboration.
 
-I can automatically generate a neat publication list from an Excel file and enabling categories and filters.
+## Research Areas Explored
 
-Check [Quarto Academic Website Examples and Tips](https://drganghe.github.io/quarto-academic-site-examples.html) and [README.md](https://github.com/drganghe/quarto-academic-website-template/blob/main/README.md) for more detailed instructions.
+- **Causal Inference**: Augmented IPW estimators, Debiased Machine Learning
+- **Missing Data**: Nonmonotone Missing at Random Data, Conditional Quantile Imputation
+- **Modeling**: Non-collapsibility and measurement error, Penalized IPW for GEEs
+- **Application Areas**: Postoperative Pain, Opioids, Anesthesiology, Tuberculosis, Quantitative skill gaps among college students
 
-## Experience
+## Collaboration Experience
 
-- Researcher, Univerisity
-- Consultant, Company
-- Intern, Institute
+- Biostatistics Student Analysis Core: University of Pennsylvania (2026-Present)
+- [QSURE Intern](https://www.mskcc.org/departments/epidemiology-biostatistics/educational-opportunities/quantitative-sciences-summer-undergraduate-research-experience-qsure): Memorial Sloan Kettering Cancer Center (2025)
+- [Statistics and Data Science Fellow](https://www.amherst.edu/academiclife/departments/statistics/major-in-statistics/statistics-fellows): Amherst College (2024-2026)
 
 ## Education
 
-- PhD, Univerisity
-- Master, Univerisity
-- Bachelor, Univerisity
-
+- Doctor of Philosophy (Ph.D.) in **Biostatistics**: University of Pennsylvania (Exp. 2031)
+- Bachelor of Arts (B.A.) in **Mathematics and Music**: Amherst College (2026)
 :::
 
 
