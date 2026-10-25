@@ -564,7 +564,7 @@
     "href": "america-travel-map.html#which-states-have-i-been-to-in-my-lifetime-both-lived-and-travelled",
     "title": "My United States Travel Map",
     "section": "Which states have I been to in my lifetime (both lived and travelled)?",
-    "text": "Which states have I been to in my lifetime (both lived and travelled)?\nMy definition of “lived in a state” is if I spent at least 31 consecutive days in the same semi-permanent lodging, enough to develop a routine. For travelling, I do not count passing by a state in some form of transportation, but I do count some destination, even if it was unintentional. For example, I originally had a layover in Phoenix, Arizona, but I ended up staying the night.\n\nAs a bonus, I will denote states whose capital city I have visited with a solid line."
+    "text": "Which states have I been to in my lifetime (both lived and travelled)?\nMy definition of “lived in a state” is if I spent at least 31 consecutive days in the same semi-permanent lodging, enough to develop a routine. For travelling, I do not count passing by a state in some form of transportation, but I do count some destination, even if it was unintentional. For example, I originally had a layover in Phoenix, Arizona, but I ended up staying the night.\n\nAs a bonus, I will denote states whose capital city I have visited with a solid line.\n\nInstead of a solid line, maybe use another package to put coordinates on all capitals. I can highlight the ones I’ve been to in orange"
   },
   {
     "objectID": "america-travel-map.html#step-visualization-of-first-visit-since-2018",

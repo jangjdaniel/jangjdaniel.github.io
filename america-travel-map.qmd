@@ -88,6 +88,8 @@ My definition of "lived in a state" is if I spent at least 31 consecutive days i
 
 > As a bonus, I will denote states whose capital city I have visited with a solid line. 
 
+*Instead of a solid line, maybe use another package to put coordinates on all capitals. I can highlight the ones I've been to in orange*
+
 ```{r}
 # Counts
 capital_counts <- daniel_travel_and_lived_map |>
