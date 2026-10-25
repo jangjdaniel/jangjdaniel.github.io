@@ -40,7 +40,7 @@ website:
       - text: Myself
         menu:
           - text: America Travel Map
-            href: pub-listing.qmd
+            href: america-travel-map.qmd
           - text: Music Portfolio
             href: publications.qmd
           - text: Photography Portfolio
