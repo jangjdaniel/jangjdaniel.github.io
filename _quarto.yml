@@ -25,6 +25,8 @@ website:
             href: posts.qmd#category=Notes
           - text: News
             href: posts.qmd#category=News
+          - text: Projects
+            href: posts.qmd#category=Projects
       - text: Research
         menu:
           - text: Select Publications  # Automatically generated from publications.xlsx

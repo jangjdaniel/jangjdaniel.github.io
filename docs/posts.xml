@@ -553,5 +553,23 @@ https://quarto.org/docs/authoring/includes.html
   <pubDate>Mon, 24 Jun 2024 04:00:00 GMT</pubDate>
   <media:content url="https://drganghe.github.io/quarto-academic-website-template/files/images/placeholder3.JPG" medium="image"/>
 </item>
+<item>
+  <title>Difference in Tuberculosis Survival Rates between Urban and Rural Ukraine, 2015-2018</title>
+  <dc:creator>Daniel Jang</dc:creator>
+  <link>https://drganghe.github.io/quarto-academic-website-template/posts/projects-title/2023-SIBS.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I should still put all the projects I did in one place, even if I didn’t get them published?</p>
+
+
+
+ ]]></description>
+  <category>Project</category>
+  <guid>https://drganghe.github.io/quarto-academic-website-template/posts/projects-title/2023-SIBS.html</guid>
+  <pubDate>Tue, 15 Aug 2023 04:00:00 GMT</pubDate>
+</item>
 </channel>
 </rss>

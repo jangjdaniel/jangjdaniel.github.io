@@ -1,0 +1,11 @@
+---
+title: "Difference in Tuberculosis Survival Rates between Urban and Rural Ukraine, 2015-2018"
+description: "How does this connect to derivatives in calculus?"
+author: "Daniel Jang"
+date: "2023-08-15"
+categories: [Projects]
+#css: /custom.css
+#draft: true
+---
+
+I should put all my non-published projects here so that there is some record of it out there (of course, stuff that is polished and able to be shared)

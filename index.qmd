@@ -67,18 +67,11 @@ listing:   # Comment the listing section and delete corresponding lines in the i
 
 :::{#hero-heading}
 
+*This website is under construction: there are many placeholders left from the template I used*
+
 Hello! :)
 
 I am currently a Ph.D. student in Biostatistics at the University of Pennsylvania (Perelman School of Medicine: Graduate Group in Epidemiology and Biostatistics in Biomedical Graduate Studies) with research interests in **causal inference**, **missing data**, and **semiparametric theory**. I hope to use my expertise to develop robust methods for the analysis of observational studies that can be used in collaborative projects across the biomedical and education fields. I also hope to grow as an educator in statistics. 
-
-Below is a *non-exhaustive* list of my experiences in research and collaboration.
-
-## Research Areas Explored
-
-- **Causal Inference**: Augmented IPW estimators, Debiased Machine Learning
-- **Missing Data**: Nonmonotone Missing at Random Data, Conditional Quantile Imputation
-- **Modeling**: Non-collapsibility and measurement error, Penalized IPW for GEEs
-- **Application Areas**: Postoperative Pain, Opioids, Anesthesiology, Tuberculosis, Quantitative skill gaps among college students
 
 ## Collaboration Experience
 
