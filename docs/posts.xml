@@ -85,13 +85,21 @@
   <link>https://drganghe.github.io/quarto-academic-website-template/posts/notes-title/2026-10-25-FDR.html</link>
   <description><![CDATA[ <section id="motivation" class="level2"><h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
 <p>When we have do perform multiple hypothesis tests on the same data, we must correct for the family wise error rate (FWER). This comes from the definition of Type I Error and <em>independence</em> among <img src="https://latex.codecogs.com/png.latex?n"> hypothesis tests.</p>
-<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cmathbb%7BP%7D%5B%5Ctext%7BAt%20least%20one%20Hypothesis%20%7D%20H_0%20%5Ctext%7B%20incorrectly%20rejected%7D%20%5Cmid%20H_0%20%5Ctext%7B%20is%20the%20truth%7D%5D%20=%20%5C%5C%0A1%20-%20%5Cmathbb%7BP%7D%5B%5Ctext%7BNone%20of%20the%20Hypotheses%20%7D%20H_0%20%5Ctext%7B%20were%20incorrectly%20rejected%7D%20%5Cmid%20H_0%20%5Ctext%7B%20is%20the%20truth%7D%5D%20=%20%5C%5C%0A1%20-%20(1-%5Calpha)%5En%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Balign*%7D%0A%5Cmathbb%7BP%7D%5B%5Ctext%7BAt%20least%20one%20Hypothesis%20%7D%20H_0%20%5Ctext%7B%20incorrectly%20rejected%7D%20%5Cmid%20H_0%20%5Ctext%7B%20is%20the%20truth%7D%5D%20=%20%5C%5C%0A1%20-%20%5Cmathbb%7BP%7D%5B%5Ctext%7BNone%20of%20the%20Hypotheses%20%7D%20H_0%20%5Ctext%7B%20were%20incorrectly%20rejected%7D%20%5Cmid%20H_0%20%5Ctext%7B%20is%20the%20truth%7D%5D%20=%20%5C%5C%0A1%20-%20(1-%5Calpha)%5En%0A%5Cend%7Balign*%7D%0A"></p>
 <p>What this means is that the more hypothesis tests we perform, the more likely we made at least one Type I error. In the past, some corrections have been proposed to correct the FWER. The most popular is the bonferonni adjustment to the <img src="https://latex.codecogs.com/png.latex?%5Calpha"> value (given as <img src="https://latex.codecogs.com/png.latex?%5Calpha_b%20=%20%5Cfrac%7B%5Calpha%7D%7Bn%7D">). This works best with a small number of comparisons and independent hypothesis tests. This is often the most conservative adjustment possible. Other methods have been developed for dependent hypothesis tests and those that are slightly less conservative. However, for fields like genomics where they perform 1000s upon 1000s of hypothesis tests, this type of correction is way too conservative, decreasing statistical power, i.e.&nbsp;<img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BP%7D%5B%5Ctext%7BHypothesis%20%7D%20H_0%20%5Ctext%7B%20was%20rejected%7D%20%5Cmid%20H_1%20%5Ctext%7B%20is%20the%20truth%7D%5D">.</p>
 </section><section id="the-false-discovery-rate" class="level2"><h2 class="anchored" data-anchor-id="the-false-discovery-rate">The False Discovery Rate</h2>
-<p>The False Discovery Rate (FDR) was introduced by Benjamini and Hochberg [I need to learn how to do citations here]. Instead of correcting for the FWER, FDR accepts a small proportion of false positives in exchange for a much less conservative adjustment. For example, if the FDR is set to 0.05 and we have 20 significant hypothesis test results, we expect 1 to be a false positive on average.</p>
-<p>The original method for FDR (<strong>Benjamini-Hochberg Procedure</strong>) focused on independent or positively correlated hypothesis tests. Their procedure used an adjusted p-value, called the q-value.</p>
-<p><strong>DESCRIBE THE IDEA HERE</strong></p>
-<p>Here is some R code, with the main function coming from the <code>stats</code> package.</p>
+<p>The False Discovery Rate (FDR) was introduced by Benjamini and Hochberg <sup>1</sup>. Instead of correcting for the FWER, FDR accepts a small proportion of false positives in exchange for a much less conservative adjustment. In more formal terms, FDR “controls the expected proportion of falsely rejected hypotheses”. For example, if the FDR is set to 0.05 and we have 20 significant hypothesis test results, we expect 1 to be a false positive on average.</p>
+<p>The original method for FDR (<strong>Benjamini-Hochberg Procedure</strong>) focused on independent or positively correlated (Positive Regression Dependency on a Subset: PRDS) hypothesis tests. Their procedure used an adjusted p-value, called the q-value.</p>
+<p>Let <img src="https://latex.codecogs.com/png.latex?H_%7B(i)%7D"> indicate the <img src="https://latex.codecogs.com/png.latex?i%5E%7Bth%7D"> hypothesis test and let <img src="https://latex.codecogs.com/png.latex?p_%7B(i)%7D"> be its corresponding p-value. Fix <img src="https://latex.codecogs.com/png.latex?q%20=%200.05"> as our False Discovery Rate:</p>
+<ol type="1">
+<li>Order the hypotheses based on their p-values such that <img src="https://latex.codecogs.com/png.latex?p_%7B(1)%7D%20%5Cleq%20p_%7B(2)%7D%20%5Cleq%20%5Cdots%20%5Cleq%20p_%7B(m)%7D">. The order of the p-value will be its so-called <strong>rank</strong>.</li>
+<li>Determine the <strong>largest significant rank</strong>, i.e.&nbsp;the <img src="https://latex.codecogs.com/png.latex?k%5E%7Bth%7D"> p-value that satisfies <img src="https://latex.codecogs.com/png.latex?p_%7B(k)%7D%20%5Cleq%20%5Cfrac%7Bk%7D%7Bm%7D%20q">, i.e.&nbsp;<img src="https://latex.codecogs.com/png.latex?k%20=%20%5Cmax%20%5Cbig%5C%7B%20i%20%5Cmid%20p_%7B(i)%7D%20%5Cleq%20%5Cfrac%7Bi%7D%7Bm%7D%20q%20%5Cbig%5C%7D">
+</li>
+<li>Reject all null hypotheses from rank <img src="https://latex.codecogs.com/png.latex?1"> to rank <img src="https://latex.codecogs.com/png.latex?k">
+</li>
+</ol>
+<p>Note that just like adjusting for FWER, we can adjust the global rejection region or the p-values themselves to reflect the multiple comparisons. Just implementing this procedure does not calculate a q-value. We can calculate q-values: $q_{(i)} = p_{(i)} $ and use the <img src="https://latex.codecogs.com/png.latex?Q%20=%200.05"> threshold as a rejection region.</p>
+<p>Here is some R code, with the main function coming from the <code>stats</code> package <sup>2</sup>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -139,7 +147,9 @@ font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">65</span><span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">)</span></span>
+font-style: inherit;">)</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># better to actually do hypothesis tests, but this works </span></span>
 <span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op" style="color: #5E5E5E;
@@ -158,10 +168,7 @@ font-style: inherit;">)</span></span></code></pre></div></div>
 </div>
 <p>The adjusted p-value for BH gives us the q-values. We can see how many hypothesis tests are below our <img src="https://latex.codecogs.com/png.latex?%5Calpha"> threshold for the Benjamini-Hochberg Procedure v.s. the Bonferroni Correction for FWER.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># </span></span>
-<span><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -216,48 +223,269 @@ font-style: inherit;">)</span></span></code></pre></div></div>
 </div>
 <p>As we can see, Bonferroni rejects no hypothesis test based on the <img src="https://latex.codecogs.com/png.latex?%5Calpha"> threshold. BH on the other hand gives 72 q-values below the <img src="https://latex.codecogs.com/png.latex?%5Calpha"> threshold. We should expect that around 4 of these hypothesis tests are incorrectly rejected.</p>
 </section><section id="procedure-for-unknown-dependencies-in-hypothesis-tests" class="level2"><h2 class="anchored" data-anchor-id="procedure-for-unknown-dependencies-in-hypothesis-tests">Procedure for Unknown Dependencies in Hypothesis Tests</h2>
-<p>In practice, we may not be confident what the dependencies in the hypothesis tests are. In the case where they are not independent or positively correlated, the <strong>Benjamini-Yekutieli</strong> procedure can be used. It is a more conservative version of the Benjamini-Hochberg Procedure.</p>
-<p>To demonstrate, I will draw dependent draws from a multivariate normal distribution and apply</p>
+<p>In practice, we may not be confident what the dependencies in the hypothesis tests are. In the case where they are not independent or positively correlated, the <strong>Benjamini-Yekutieli</strong> procedure can be used <sup>3</sup>. It is a more conservative version of the Benjamini-Hochberg Procedure.</p>
+<p>To demonstrate, I will draw dependent draws from a multivariate normal distribution (<code>MASS</code> package in R)<sup>4</sup>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw" style="color: #003B4F;
 background-color: null;
-font-style: inherit;"># Simulated negative-dependent hypothesis tests</span></span>
+font-weight: bold;
+font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">rho</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.0017</span></span>
 <span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Number of tests and means</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">m</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">500</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">m1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">m</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 100 tests are different</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">mu_vec</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">m1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">m</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">m1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># A negative correlation matrix</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">sigma</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">rho</span>, nrow <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">m</span>, ncol <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">m</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">sigma</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#diagonals should be 1</span></span>
+<span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Generate data from MVN for all </span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">test_stats</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">MASS</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/pkg/MASS/man/mvrnorm.html">mvrnorm</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>n <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, mu <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">mu_vec</span>, Sigma <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">sigma</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Convert these test statistics into p-values using standardized normal (two sided)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">p_values_PRDS_viol</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">test_stats</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
 <span></span>
 <span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">p_values_PRDS_viol</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="https://drganghe.github.io/quarto-academic-website-template/posts/notes-title/2026-10-25-FDR_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>BY is more conservative than BH, but since we know we are under negative dependence, BY is the valid approach. One should choose a procedure before implementing.</p>
+<p>Of course if I wanted to see expectation of the FDR, I would have to do many iterations. I omitted this since I just wanted to see how BY and BH can be different.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;"><a href="https://rdrr.io/r/stats/p.adjust.html">p.adjust</a></span><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">(</span><span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">p_values</span>, method <span class="op" style="color: #5E5E5E;
+font-style: inherit;">p_values_PRDS_viol</span>, method <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"BY"</span><span class="op" style="color: #5E5E5E;
 background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">alpha</span><span class="op" style="color: #5E5E5E;
+background-color: null;
 font-style: inherit;">)</span></span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  [1] 0.2400962 0.2555381 0.2696430 0.2400962 0.2400962 0.2400962 0.2400962
-  [8] 0.2400962 0.2400962 0.2400962 0.2400962 0.3762654 0.2923683 0.2613705
- [15] 0.2400962 0.4481844 0.2719601 0.2457904 0.2400962 0.2400962 0.2633902
- [22] 0.2555381 0.2400962 0.2642155 0.2462246 0.2443232 0.2669380 0.2400962
- [29] 0.2400962 0.3983124 0.2400962 0.2400962 0.2400962 0.2400962 0.2400962
- [36] 0.3086182 0.2400962 0.2555381 0.3265589 0.2400962 0.2400962 0.2400962
- [43] 0.4710776 0.4370645 0.2555381 0.2400962 0.2400962 0.2555381 0.2400962
- [50] 0.2400962 0.2400962 0.2555381 0.2555381 0.2642155 0.2555381 0.2400962
- [57] 0.2669380 0.2400962 0.2719601 0.3394953 0.2555381 0.2400962 0.2400962
- [64] 0.2400962 0.2400962 0.3486986 0.2400962 0.2400962 0.2400962 0.2400962
- [71] 0.2400962 0.2400962 0.2400962 0.2400962 0.2457904 0.2400962 0.2669380
- [78] 0.2400962 0.2555381 0.5204487 0.2400962 0.2555381 0.3438906 0.2400962
- [85] 0.2462246 0.2400962 0.2400962 0.2555381 0.2669380 0.2443232 0.3086182
- [92] 0.2642155 0.2400962 0.2777157 0.2400962 0.3222545 0.2555381 0.2642155
- [99] 0.2462246 0.2400962</code></pre>
+<pre><code>[1] 83</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/stats/p.adjust.html">p.adjust</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">p_values_PRDS_viol</span>, method <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"BH"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">alpha</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 96</code></pre>
 </div>
 </div>
 <p>Just like many flexible methods in statistics, the Benjamini-Yekutieli procedure performs worse than the Benjamini-Hochberg procedure under independent / positively correlated only hypothesis tests. This can be seen with the original <code>p_values</code> data:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -283,7 +511,7 @@ font-style: inherit;">)</span></span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 72</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -310,9 +538,16 @@ font-style: inherit;">)</span></span></code></pre></div></div>
 <pre><code>[1] 0</code></pre>
 </div>
 </div>
+<p>In my application, I think I will just assume an unknown dependency structure and use the BY procedure. Independence is a strong assumption, especially on the same data, and just having positive correlation also seems like a strong assumption.</p>
 
 
-</section> ]]></description>
+</section><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<ol>
+<li id="fn1"><p>Benjamini, Yoav, and Yosef Hochberg. “Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing.” Journal of the Royal Statistical Society. Series B (Methodological) 57, no. 1 (1995): 289–300. http://www.jstor.org/stable/2346101.↩︎</p></li>
+<li id="fn2"><p>There is some detail about the distribution of p-values being uniform? I wasn’t really sure what this was, but I would have to assume it works for something like this.↩︎</p></li>
+<li id="fn3"><p>Benjamini, Yoav, and Daniel Yekutieli. “The Control of the False Discovery Rate in Multiple Testing under Dependency.” The Annals of Statistics 29, no. 4 (2001): 1165–88. http://www.jstor.org/stable/2674075.↩︎</p></li>
+<li id="fn4"><p>As a side note, <img src="https://latex.codecogs.com/png.latex?-%5Cfrac%7B1%7D%7Bm-1%7D%20%5Cleq%20%5Crho%20%5Cleq%201"> for the correlation matrix to be postive-definite (i.e.&nbsp;non-negative variance)↩︎</p></li>
+</ol></section></div> ]]></description>
   <category>Notes</category>
   <guid>https://drganghe.github.io/quarto-academic-website-template/posts/notes-title/2026-10-25-FDR.html</guid>
   <pubDate>Sun, 25 Oct 2026 04:00:00 GMT</pubDate>
