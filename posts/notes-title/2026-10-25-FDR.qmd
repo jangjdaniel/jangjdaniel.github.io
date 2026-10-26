@@ -1,0 +1,9 @@
+---
+title: "False Discovery Rates"
+description: "An alternative to p-value corrections in Multiple Testing"
+author: "Daniel Jang"
+date: "2026-10-25"
+categories: [Notes, Semiparametrics, Causal Inference]
+draft: true
+---
+

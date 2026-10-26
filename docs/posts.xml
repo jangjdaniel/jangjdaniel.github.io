@@ -80,6 +80,25 @@
   <pubDate>Sat, 31 Oct 2026 04:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>False Discovery Rates</title>
+  <dc:creator>Daniel Jang</dc:creator>
+  <link>https://drganghe.github.io/quarto-academic-website-template/posts/notes-title/2026-10-25-FDR.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+
+
+ ]]></description>
+  <category>Notes</category>
+  <category>Semiparametrics</category>
+  <category>Causal Inference</category>
+  <guid>https://drganghe.github.io/quarto-academic-website-template/posts/notes-title/2026-10-25-FDR.html</guid>
+  <pubDate>Sun, 25 Oct 2026 04:00:00 GMT</pubDate>
+</item>
+<item>
   <title>Sieve Regression</title>
   <dc:creator>Daniel Jang</dc:creator>
   <link>https://drganghe.github.io/quarto-academic-website-template/posts/notes-title/2026-10-05-sieve-regression.html</link>
