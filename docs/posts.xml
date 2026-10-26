@@ -143,16 +143,647 @@
   <title>Markov Chain Monte Carlo Examples</title>
   <dc:creator>Daniel Jang</dc:creator>
   <link>https://drganghe.github.io/quarto-academic-website-template/posts/notes-title/2026-06-07-MCMC-examples.html</link>
-  <description><![CDATA[ 
+  <description><![CDATA[ <p>These are my old notes about the Metropolis-Hastings algorithm. I am also planning to write about the gibbs sampler. I just want to get an intuition behind some of the algorithms I take for granted in monte-carlo simulations.</p>
+<section id="metropolis-hastings-algorithm" class="level1"><h1>Metropolis Hastings Algorithm</h1>
+<p>The posterior can be simulated with the metropolis-hastings algorithm, which is a markov-chain (<img src="https://latex.codecogs.com/png.latex?j%5E%7Bth%7D"> term only depends on the <img src="https://latex.codecogs.com/png.latex?j-1%5E%7Bth%7D"> term) monte-carlo (random) method. Thankfully I did a project where I had to recreate that algorithm in R, so if I needed to do it by hand, I could. I’m just going to copy down what I wrote back then here for ease of finding it in the future, which will be unedited, out of context, and riddled with mistakes.</p>
+<hr>
+<p>In our example, we have a beta prior and multinomial data. This is not a conjugate prior result we are familiar with, so how do we get our posterior so we can do our bayesian analysis? Well we can use one of the most popular Markov Chain Monte Carlo (MCMC) Algorithms: The Metropolis Hastings Algorithm. Let’s do a toy example related to the aspirin data. Consider a beta prior with alpha = 3 and beta = 4, and data with a binomial distribution with p = 0.4 and n = 50. Let’s multiply these terms (without coefficients) for the target function. However, we will go through this algorithm without assuming we know the beta/binomial conjugate prior result, and show that the algorithm gives us a histogram that closely approximates the posterior we expect.</p>
+<p>Monte Carlo is similar to the simulations we have done before. We take a distribution, specify a parameter, and take many random samples to build a new distribution. Markov Chain is like Monte Carlo, but it is kind of like recursion, where the next sample taken is dependent on the parameter previously chosen. A combination of both Markov Chains and Monte Carlo gives us MCMC algorithms that have wide applications, especially in statistics.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">target</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">x</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#creating our target distribution</span></span>
+<span>  <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">x</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">x</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">x</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">x</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span></code></pre></div></div>
+</div>
+<p>The bulk of the algorithm happens in the following function. We propose an uninformative distribution (flat) because we are assuming we know nothing about the posterior distribution.</p>
+<p>We draw one value of x from both the target and proposal (proposed_x) distribution. Then, comparing the ratios, if it is greater than 1, we automatically keep the new value of x. If our proposal distribution has a much higher value than our target, we might reject the value of x being in our distribution, depending on how much bigger the proposal was from the target. If a randomly drawn number from a uniform(0,1) distribution is less than the ratio, then we accept the new value. Otherwise, we reject the value and use our old parameter value for the next iteration. The proposal distribution doesn’t move in that case. There is a proof behind why this works, but it is omitted.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">metropolis_step</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">x</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">sigma</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span>  <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">proposed_x</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/stats/Beta.html">rbeta</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, shape1 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, shape2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#uninformative! equivalent to a uniform(0,1)</span></span>
+<span>  <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">accept_prob</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">target</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">proposed_x</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">target</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">x</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span>  <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">u</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span>  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">u</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">accept_prob</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span>    <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">value</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">proposed_x</span></span>
+<span>    <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">accepted</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span></span>
+<span>  <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span>    <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">value</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">x</span></span>
+<span>    <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">accepted</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span></span>
+<span>  <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span>
+<span>  <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">out</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>value <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">value</span>, accepted <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">accepted</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#only accepted values allowed</span></span>
+<span>  <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">out</span></span>
+<span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span></code></pre></div></div>
+</div>
+<p>There are other important considerations that mitigate common issues with the algorithm. Mainly, I was concerned with the initial sample being too autocorrelated, which is a common issue for Metropolis-Hastings. To solve this issue, the below code removes the first 500 observations. We still sample 2500, as to prevent a sample size issue.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#does certain conditions such as burnin, lag, and the variance</span></span>
+<span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">metropolis_sampler</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">initial_value</span>, </span>
+<span>                               <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">n</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2500</span>, </span>
+<span>                               <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">sigma</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, </span>
+<span>                               <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">burnin</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">500</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#burn in deletes the first n samples: helps with issue</span></span>
+<span>                               <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">lag</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span> </span>
+<span>  </span>
+<span>  <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">results</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span>  <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">current_state</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">initial_value</span></span>
+<span>  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">i</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">burnin</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span>    <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">out</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">metropolis_step</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">current_state</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">sigma</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span>    <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">current_state</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">out</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">value</span></span>
+<span>  <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span>
+<span>  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">i</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">n</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span>    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">j</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">lag</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span>      <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">out</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">metropolis_step</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">current_state</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">sigma</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span>      <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">current_state</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">out</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">value</span></span>
+<span>    <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span>
+<span>    <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">results</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">[[</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">i</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">]</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">]</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">out</span></span>
+<span>  <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span>
+<span>  <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">results</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">rbind</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">results</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span>  <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">results</span></span>
+<span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span></code></pre></div></div>
+</div>
+<p>Lastly, we can overlay the conjugate prior result (which is a beta(23,34) distribution) to verify that the metropolis-hastings algorithm really did approximate the correct distribution. As we can see, the metropolis-hastings algorithm works! This can be extended to posteriors that are not conjugate priors, like the aspirin example!</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1234</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">out</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">metropolis_sampler</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>initial_value <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#building pdf beta</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">x</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, length.out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10000</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">pdf</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/stats/Beta.html">dbeta</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">x</span>, shape1 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">23</span>, shape2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">34</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#plot histogram of sampled values</span></span>
+<span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">out</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">value</span>, freq <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>, main <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Histogram with Overlay"</span>,</span>
+<span>     xlab <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Sampled Values"</span>, ylab <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Density"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#overlay Beta distribution PDF</span></span>
+<span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">x</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">pdf</span>, col <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"blue"</span>, lwd <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="https://drganghe.github.io/quarto-academic-website-template/posts/notes-title/2026-06-07-MCMC-examples_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="gibbs-sampler" class="level1"><h1>Gibbs Sampler</h1>
 
 
-
-
-<p>(Old post I have yet to bring to this website)</p>
-
-
-
- ]]></description>
+</section> ]]></description>
   <category>Notes</category>
   <guid>https://drganghe.github.io/quarto-academic-website-template/posts/notes-title/2026-06-07-MCMC-examples.html</guid>
   <pubDate>Sun, 07 Jun 2026 04:00:00 GMT</pubDate>
@@ -166,9 +797,49 @@
 
 
 
-<p>(Old post I have yet to bring to this website)</p>
+<section id="in-calculus-of-variations" class="level1">
+<h1>In Calculus of Variations</h1>
+<p>We first need to define what we mean by a “small change in a function <img src="https://latex.codecogs.com/png.latex?f">”, which leads us to the concept of a variation.</p>
+<p>A pertubation of a function <img src="https://latex.codecogs.com/png.latex?f(x)"> is defined as <img src="https://latex.codecogs.com/png.latex?f(x)%20%5Crightarrow%20f(x)%20+%20%5Cepsilon%20h(x)">, where <img src="https://latex.codecogs.com/png.latex?h(x)"> is an arbitrary function and <img src="https://latex.codecogs.com/png.latex?%5Cepsilon%20%3E%200"> is some real parameter.</p>
+<p>A variation of a function <img src="https://latex.codecogs.com/png.latex?f(x)">, denoted <img src="https://latex.codecogs.com/png.latex?%5Cdelta%20f"> is… (why do we take the derivative with respect to epsilon?)</p>
+</section>
+<section id="big-o-and-little-o-notation" class="level1">
+<h1>Big O and Little o-notation</h1>
+<p>Apparently this is common notation in math and stats when it comes to asymptotics (makes sense since we want to see the growth behavior when we approach infinity and see when that kicks in), so I might as well clear out any confusion, especially if I want to look at data structures in the future.</p>
+<p><img src="https://latex.codecogs.com/png.latex?O(g)"> refers to a set of functions such that for some <img src="https://latex.codecogs.com/png.latex?f%20%5Cin%20O(g)">, <img src="https://latex.codecogs.com/png.latex?f(x)%20%5Cleq%20kg(x)"> (where <img src="https://latex.codecogs.com/png.latex?k%20%5Cin%20%5Cmathbb%7BR%7D%5E%7B+%7D"> is a constant) for all <img src="https://latex.codecogs.com/png.latex?x%20%3E%20a">. This basically means that the growth of <img src="https://latex.codecogs.com/png.latex?f"> to infinity is no faster than the growth of <img src="https://latex.codecogs.com/png.latex?g">. Little o is similar, but with <img src="https://latex.codecogs.com/png.latex?f(x)%20%3C%20kg(x)">, (and with an extra condition that I am not sure about)</p>
+<p>In terms of a limit definition, big O is <img src="https://latex.codecogs.com/png.latex?%5Climsup_%7Bx%20%5Cto%20%5Cinfty%7D%20%5Cfrac%7Bf(x)%7D%7Bg(x)%7D%20%3C%20%5Cinfty"> and little O is <img src="https://latex.codecogs.com/png.latex?%5Climsup_%7Bx%20%5Cto%20%5Cinfty%7D%20%5Cfrac%7Bf(x)%7D%7Bg(x)%7D%20=%200">.</p>
+<p>Why the limit supremum? Because there are some functions where the limit does not exist (but recall from analysis that the <img src="https://latex.codecogs.com/png.latex?%5Climsup"> of a sequence always exists in the extended real number line).</p>
+<p>Here are some examples:</p>
+<p><img src="https://latex.codecogs.com/png.latex?400x%5E2%20%5Cin%20O(x%5E2)"></p>
+<p><img src="https://latex.codecogs.com/png.latex?3%20+%20(n%20%5Cmod%202)%20%5Cin%20O(1)"></p>
+<p><img src="https://latex.codecogs.com/png.latex?3x%20%5Cnotin%20o(x)%20%5Ctext%7B,%20but%20%7D%203x%20%5Cin%20O(x)"></p>
+</section>
+<section id="multivariable-calculus-and-differentials" class="level1">
+<h1>Multivariable Calculus and Differentials</h1>
+<p>The gradient as the “total derivative”, we write that in terms of a vector. That is the linear map that is induced (which I know from differential geometry). We can extend that to vector fields by adding another dimension. In one dimension, the total derivative is literally just the derivative, so that’s where I was initially confused.</p>
+<p>Definition of a directional derivative in limit form: include because I don’t think I learned this</p>
+</section>
+<section id="the-derivatives" class="level1">
+<h1>The Derivatives</h1>
+<p>Let <img src="https://latex.codecogs.com/png.latex?B"> be a banach space (remember this can be a set of functions, but it doesn’t have to be), and let <img src="https://latex.codecogs.com/png.latex?F:%20B%20%5Crightarrow%20%5Cmathbb%7BR%7D"> be some functional. The differential of <img src="https://latex.codecogs.com/png.latex?F"> at a point <img src="https://latex.codecogs.com/png.latex?%5Crho%20%5Cin%20B"> is a linear functional <img src="https://latex.codecogs.com/png.latex?%5Cdelta%20F_%7B%5Crho%7D%5B%5Ccdot%5D"> such that for all <img src="https://latex.codecogs.com/png.latex?%5Cphi%20%5Cin%20B">,</p>
+<p><img src="https://latex.codecogs.com/png.latex?F%5B%5Crho%20+%20%5Cphi%5D%20-%20F%5B%5Crho%5D%20=%20%5Cdelta%20F_%7B%5Crho%7D%5B%5Cphi%5D%20+%20%5Cepsilon%20%5C%7C%20%5Cphi%20%5C%7C"></p>
+<p>With the property that as <img src="https://latex.codecogs.com/png.latex?%5C%7C%20%5Cphi%20%5C%7C%20%5Crightarrow%200">, then <img src="https://latex.codecogs.com/png.latex?%5Cepsilon%20%5Crightarrow%200">. In fact, the Frechet derivative of <img src="https://latex.codecogs.com/png.latex?F"> at <img src="https://latex.codecogs.com/png.latex?%5Crho"> is given by this differential as the “total derivative”.</p>
+<p>(There is the limit form of this equation), we shrink the norm of an arbitrary <img src="https://latex.codecogs.com/png.latex?%5Cphi">, so it can approach zero from any direction.</p>
+<p>What if we fix an arbitrary direction <img src="https://latex.codecogs.com/png.latex?%5Cphi">? We shrink everything based on one direction, analogous to the directional derivative.</p>
+<p>In fact, if a Frechet derivative exists, it is equal to the gateaux derivative. One terminology thing: Frechet = Strong, Gateaux = Weak, Pathwise.</p>
+<p>Functional derivatives don’t need to be defined with a banach space, but that makes things a bit too complicated for my purposes.</p>
+</section>
+<section id="example-of-a-frechet-gateaux-derivative" class="level1">
+<h1>Example of a Frechet / Gateaux Derivative</h1>
+<p>Let <img src="https://latex.codecogs.com/png.latex?J%5Bf%5D%20=%20%5Cint%20(f(x))%5E2%20dx"> be a functional. We want to compute its frechet derivative.</p>
+<p>Now a case where the Frechet derivative doesn’t exist but the Gateaux derivative does:</p>
+</section>
+<section id="application-influence-functions" class="level1">
+<h1>Application: Influence Functions</h1>
+<p>We are not trying to optimize some quantity, so we don’t need the tools from calculus of variations (although I would still like to cover Euler-Lagrange Equations). Instead, we want to see how much of a pertubation changes a statistical quantity (usually a target estimate) we are interested in, such as the mean or a treatment effect.</p>
 
 
+</section>
 
  ]]></description>
   <category>Notes</category>
@@ -185,9 +856,64 @@
 
 
 
-<p>(Old post I have yet to bring to this website)</p>
+<p>Unfortunately, I am unsure how to motivate a lot of these results from Banach and Hilbert spaces. I think one day I should try out the proofs myself (especially of the representation theorem), but I think this is sufficient for right now.</p>
+<section id="completeness-and-definitions" class="level1">
+<h1>Completeness and Definitions</h1>
+<p>There were specific types of metric spaces we disucssed: complete metric spaces (all cauchy sequences converge to an element in the set) and compact metric spaces (every open cover has a finite subcover). There’s also connected metric space (cannot be partitioned into two nonempty disjoint open subsets, i.e.&nbsp;the only open and closed sets are the empty set and the set itself).</p>
+<p>In terms of normed vector spaces, they are always connected (something about a vector space being a convex set) and never compact (infinite-dimension issues). However, they need not be complete. Completeness is a mathematically nice property because it allows us to discuss convergence within the same set. This is why complete normed vector spaces get their own special name… you guessed it!</p>
+<p>Banach spaces are normed vector spaces that are complete w.r.t the norm, and Hilbert spaces are inner product spaces that are complete w.r.t the inner product. In statistics, hilbert spaces are more important since we want a notion of an angle along with a notion of distance with elements that follow the axioms of vector spaces. I think we can think about correlation between two random variables via an inner product, and besides, we can induce a norm if needed.</p>
+<p>I am not going to prove much about these spaces. Rather, I want to understand at a high level why they are so important and some examples in statistics that I may need in the future.</p>
+</section>
+<section id="examples-of-banach-and-hilbert-spaces" class="level1">
+<h1>Examples of Banach and Hilbert Spaces</h1>
+<p><img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BR%7D%5En"> with euclidean norm is a finite-dimensional banach space. With the dot product we know from multivariable calculus (discrete version), it’s a hilbert space, so it is also a banach space. However, this is not that interesting.</p>
+<p>In general, the lebesgue space <img src="https://latex.codecogs.com/png.latex?L_p"> is the set of all measurable functions (depends on the measure space we are in…) with a finite <img src="https://latex.codecogs.com/png.latex?p">-th moment (using probability terms), i.e.&nbsp;$| f |^p , d&lt; $. This is a set of functions (infinite-dimensional)!</p>
+<p><img src="https://latex.codecogs.com/png.latex?L_2"> is a space of square-integrable functions (which means it has a finite second moment in probability terms… variance!). We use the definition of the <img src="https://latex.codecogs.com/png.latex?l_p"> norm on this function space to create a banach space (and also the idea of convergence in <img src="https://latex.codecogs.com/png.latex?l_2"> norm). Specifically for <img src="https://latex.codecogs.com/png.latex?L_2">, this is also a hilbert space. The inner product is defined as <img src="https://latex.codecogs.com/png.latex?%5Clangle%20f,g%20%5Crangle%20=%20%5Cint%20f(x)g(x)%20%5C,%20dx"> (a continuous analog of the discrete dot product).</p>
+<section id="parallelogram-law-why-l_p-spaces-are-not-hilbert-spaces-except-when-p-2" class="level2">
+<h2 class="anchored" data-anchor-id="parallelogram-law-why-l_p-spaces-are-not-hilbert-spaces-except-when-p-2">Parallelogram Law: Why L_p spaces are not Hilbert Spaces except when p = 2</h2>
+<p>The parallelogram law (like in multivariable calc) is: $| x+y | ^2 + | x-y | ^2 = 2 |x|^2 + 2 |y|^2 $. By the Jordan-von Neumann theorem, an inner product exists if and only if the norm satisfies the parallelogram law. To keep things at a high level, I won’t prove this here.</p>
+<p>Any norms in <img src="https://latex.codecogs.com/png.latex?L_p"> where <img src="https://latex.codecogs.com/png.latex?p%20%5Cneq%202"> will not satisfy this law for all functions. For example, take <img src="https://latex.codecogs.com/png.latex?f%20=%20%5Cchi%20_%7B%5B0,%201%5D%7D"> and <img src="https://latex.codecogs.com/png.latex?g%20=%20%5Cchi%20_%7B(1,%202%5D%7D">. <img src="https://latex.codecogs.com/png.latex?%5C%7Cf%5C%7C_p%20=%20(%5Cint_%7B%5Cmathbb%7BR%7D%7D%20f%5Ep%20%5C,%20dm)%5E%7B%5Cfrac%7B1%7D%7Bp%7D%7D%20=%20(1)%5E%7B%5Cfrac%7B1%7D%7Bp%7D%7D">, and similarly, <img src="https://latex.codecogs.com/png.latex?%5C%7Cg%5C%7C_p%20=%20(1)%5E%7B%5Cfrac%7B1%7D%7Bp%7D%7D">. Notice that <img src="https://latex.codecogs.com/png.latex?%5C%7Cf%20+%20g%20%5C%7C_p%20=%20%5C%7Cf%20-%20g%20%5C%7C_p%20=%202">, so the only case where the parallelogram law holds is when <img src="https://latex.codecogs.com/png.latex?p%20=%202">.</p>
+</section>
+</section>
+<section id="why-are-norms-in-finite-dimensional-spaces-equivalent" class="level1">
+<h1>Why are norms in finite-dimensional spaces equivalent?</h1>
+<p>For any two norms in a finite-dimensional space <img src="https://latex.codecogs.com/png.latex?%5C%7C%20%5Ccdot%20%5C%7C_a"> and <img src="https://latex.codecogs.com/png.latex?%5C%7C%20%5Ccdot%20%5C%7C_b">, there exists constants <img src="https://latex.codecogs.com/png.latex?C,%20K"> such that <img src="https://latex.codecogs.com/png.latex?C%20%5C%7C%20%5Ccdot%20%5C%7C_a%20%5Cleq%20%5C%7C%20%5Ccdot%20%5C%7C_b%20%20%5Cleq%20D%20%5C%7C%20%5Ccdot%20%5C%7C_a">. Norms that are equivalent induce the same topology (I don’t really care about topology, but you can define a topology using metrics (somehow), just like you can define a metric with norms). I’m just going to take the math god’s word for it.</p>
+</section>
+<section id="linear-operators-operator-norm-and-dual-spaces" class="level1">
+<h1>Linear Operators, Operator Norm, and Dual Spaces</h1>
+<p>We need to be careful thinking about linear transformations (which we are calling linear operators. Some places make a distincition where linear operators have the same domain and codomain) for vector spaces of infinite dimension. The reason we didn’t talk about “boundedness” in linear algebra are two-fold. Firstly, we only really worked with finite-dimension vector spaces, and there is a theorem that states any linear transformation between finite-dimension vector spaces are bounded. Second, we didn’t even have a notion of norm (aka length of vector). So we never worried about <img src="https://latex.codecogs.com/png.latex?%5C%7C%20T(v)%20%5C%7C%20=%20%5Cinfty"> for all <img src="https://latex.codecogs.com/png.latex?v%20%5Cin%20V">.</p>
+<p>However, this is not necessarily true for infinite-dimensional vector spaces. Consider the following linear transformation between two normed vector spaces <img src="https://latex.codecogs.com/png.latex?X,%20Y">:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AT:%20X%20%5Crightarrow%20Y%0A"></p>
+<p>We use the classic idea of boundedness, i.e.&nbsp;there exists some number <img src="https://latex.codecogs.com/png.latex?M%20%3E%200"> such that <img src="https://latex.codecogs.com/png.latex?%5C%7C%20T(v)%20%5C%7C%20%5Cleq%20M%20%5C%7C%20v%20%5C%7C"> for all <img src="https://latex.codecogs.com/png.latex?v%20%5Cin%20V">. The smallest such <img src="https://latex.codecogs.com/png.latex?M"> is called the operator norm of <img src="https://latex.codecogs.com/png.latex?T">, and is denoted as <img src="https://latex.codecogs.com/png.latex?%5C%7C%20T%20%5C%7C">.</p>
+<p>A good way to verify if a linear operator is bounded is iff it is continuous (the epsilon delta definition but with metrics… learned this briefly in measure theory for some reason).</p>
+<p>Operator theory studies these linear operators between function spaces, which is a bit more general than what we need (since we are in the realm of Banach and Hilbert spaces)</p>
+<p>The dual space is the set of linear functionals on a vector space <img src="https://latex.codecogs.com/png.latex?V">. We denote this as <img src="https://latex.codecogs.com/png.latex?V'">, so this is just a set of functionals. Furthermore, it’s useful to talk about the continuous dual space (only continuous functionals) for this bounded property.</p>
+</section>
+<section id="weak-convergence" class="level1">
+<h1>Weak Convergence</h1>
+<p>The idea behind the large numbers of convergences is to have a notion of a sequence of values (maybe numbers or functions) approaching some value. This can differ with how we define the “distance” between two values. This is why convergence in measure exists for measure spaces, convergence in metric space exists for metric spaces, and what I am doing to focus on: convergence in norm (strong convergence) and convergence in inner product (weak convergence). Notice that this will apply to hilbert spaces.</p>
+<p>A sequence of vectors <img src="https://latex.codecogs.com/png.latex?v_n"> in an inner product space <img src="https://latex.codecogs.com/png.latex?H"> converges strongly to a vector <img src="https://latex.codecogs.com/png.latex?v"> if the norm between <img src="https://latex.codecogs.com/png.latex?v_n"> and <img src="https://latex.codecogs.com/png.latex?v"> is zero as <img src="https://latex.codecogs.com/png.latex?n%20%5Cto%20%5Cinfty">, i.e.&nbsp;<img src="https://latex.codecogs.com/png.latex?%5Clim_%7Bn%20%5Cto%20%5Cinfty%7D%20%5C%7C%20v_n%20-%20v%20%5C%7C%20=%200">. Similarly, that sequence converges weakly if for all <img src="https://latex.codecogs.com/png.latex?y%20%5Cin%20H">, <img src="https://latex.codecogs.com/png.latex?%5Clim_%7Bn%20%5Cto%20%5Cinfty%7D%20%3Cx_n%20,%20y%3E%20=%20%3Cx,%20y%3E">.</p>
+<p>Strong convergence implies weak convergence. The proof requires using the triangle inequality a bunch and is probably a good exercise for me to do when I read this again.</p>
+</section>
+<section id="riesz-representation-for-hilbert-spaces" class="level1">
+<h1>Riesz Representation for Hilbert Spaces</h1>
+<p>Every continuous linear functional on a Hilbert space is an inner product with a unique element</p>
+<p>Which then implies that a hilbert space is isomorphic to its dual space? Why exactly is that important?</p>
+</section>
+<section id="orthogonal-projections" class="level1">
+<h1>Orthogonal Projections</h1>
+</section>
+<section id="tangent-spaces" class="level1">
+<h1>Tangent Spaces</h1>
+</section>
+<section id="examples-in-statistics" class="level1">
+<h1>Examples in Statistics</h1>
+<p>I can think of two ways hilbert spaces play into topics I am interested in: functional data analysis (FDA) and semiparametric theory.</p>
+<p>For FDA, each observation (which is a function) lives in a function space. For all the math to work out really nicely, we usually think of a subset of a general function space, such as only square-integrable functions equipped with an inner product so we can discuss angles and norms between different functions. This fits nicely with hilbert spaces. There is also something called the reproducing kernel hilbert space (RKHS).</p>
+<p>There are also machine learning applications, but I don’t really care about that right now. Maybe I will in the future?</p>
 
 
+</section>
 
  ]]></description>
   <category>Notes</category>
@@ -204,9 +930,39 @@
 
 
 
-<p>(Old post I have yet to bring to this website)</p>
+<p>This is the beginning of numerous blog posts where I learn the basics of functionals, both in an abstract lens (functional analysis) and an applied lens (calculus of variations and statistics). My goal is to understand the intuition behind the Gateaux derivative, which is what an influence function is. I will be channeling my knowledge from real analysis and differential geometry (just being comfortable with differentials). There is a chance these concepts come up in my future, but I want to be prepared, as well as understand the concepts at a deeper level.</p>
+<p>I am following notes from MIT and UW. I will be doing everything in <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BR%7D"> because I do not see myself working in <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BC%7D">.</p>
+<section id="vector-spaces" class="level1">
+<h1>Vector Spaces</h1>
+<p>A very loose definition of a function space is a set of functions between two fixed sets (domain to codomain, with the codomain being either <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BR%7D"> or <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BC%7D">). It is useful to give a function space some sort of structure, such as the linearity property (ring any bells? a vector space!), or maybe all functions must be continuous and bounded. I have encountered function spaces in my undergrad, namely the set of all continuous functions <img src="https://latex.codecogs.com/png.latex?C%5E%7B%5Cinfty%7D">, but mostly just as an example of an infinite-dimensional vector space (since a lot of infinite-dimensional vector spaces are function spaces). Unlike finite-dimensional vector spaces, which have really nice properties, infinite-dimensional vector spaces require some extra structure to study them.</p>
+<p>Just like how we might want to define what distances are for some set <img src="https://latex.codecogs.com/png.latex?X"> to measure closeness of two arbitrary elements, i.e.&nbsp;a metric space <img src="https://latex.codecogs.com/png.latex?(X,%20d)">, we want to create a notion of distance for a vector space <img src="https://latex.codecogs.com/png.latex?V">, which is called a normed vector space. It is defined as a function <img src="https://latex.codecogs.com/png.latex?%5C%7C%20%5Ccdot%20%5C%7C:%20V%20%5Crightarrow%20%5B0,%20%5Cinfty)"> that satisfies definiteness, absolute homogeneity, and triangle inequality. The first and third property are similar to properties found in a metric, but absolute homogeneity is just pulling out constants!</p>
+<p>We can induce a metric from a norm as <img src="https://latex.codecogs.com/png.latex?d(x,y)%20=%20%5C%7C%20x%20-%20y%20%5C%7C">. It should be clear why normed vector spaces are a subset of metric spaces.</p>
+<p>Now we might want to think about the angle between vectors. We cannot accomplish this with just a norm, we need an inner product (a generalizaion of the dot product). Channeling my differential geometry knowledge, we can induce a norm from an inner product: <img src="https://latex.codecogs.com/png.latex?%5C%7C%20v%20%5C%7C%20=%20%5Csqrt%7B%5Clangle%20v,v%20%5Crangle%7D">. I am unsure how important this is for my purposes, but I am putting it here just in case.</p>
+</section>
+<section id="functionals-from-functional-analysis" class="level1">
+<h1>Functionals from Functional Analysis</h1>
+<p>A functional is a map <img src="https://latex.codecogs.com/png.latex?J:%20V%20%5Crightarrow%20%5Cmathbb%7BR%7D">, where <img src="https://latex.codecogs.com/png.latex?V"> is a vector space equipped with some extra structure (e.g.&nbsp;a norm), and the codomain is its field of scalars (since I am working with <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BR%7D">, I am just keeping it as <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BR%7D">). A linear functional satisfies the linearity property, i.e.&nbsp;$J[f+ g] = J[f] + J[g] $ for some <img src="https://latex.codecogs.com/png.latex?%5Calpha,%20%5Cbeta%20%5Cin%20%5Cmathbb%7BR%7D"> and <img src="https://latex.codecogs.com/png.latex?f,%20g%20%5Cin%20V">. This is important to make everything well-behaved, but I am unsure if I need to generalize later.</p>
+<p>Notice that <img src="https://latex.codecogs.com/png.latex?X"> doesn’t have to be a space of functions. I think historically, functionals were defined as functions of functions, but this is a more general form that includes this loose definition. There are some more things I need to develop in my understanding before moving on.</p>
+<p>In practice (i.e.&nbsp;calculus of variations), a functional is a map <img src="https://latex.codecogs.com/png.latex?J:%20%5Cmathcal%7BF%7D%20%5Crightarrow%20%5Cmathbb%7BR%7D">, where <img src="https://latex.codecogs.com/png.latex?%5Cmathcal%7BF%7D"> is a collection of functions. The most standard form is</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AJ%5Bf%5D%20=%20%5Cint_a%5Eb%20L(x,%20f(x),%20f'(x))%20dx%0A"></p>
+<p>A caveat is that <img src="https://latex.codecogs.com/png.latex?%5Cmathcal%7BF%7D"> is not just all possible functions. For example, we might only want to look at continuous functions. Furthermore, we want a notion of how close one function is from another. For example, how different are <img src="https://latex.codecogs.com/png.latex?f(x)%20=%201%20+%20x"> and <img src="https://latex.codecogs.com/png.latex?g(x)%20=%205"> from the interval <img src="https://latex.codecogs.com/png.latex?x%20%5Cin%20%5B0,1%5D"> from one another? We might choose the <img src="https://latex.codecogs.com/png.latex?L_2"> norm to define that. This is why we need a notion of a normed vector space. In fact, we need something a bit stronger, but I will discuss that in the next blog post about functional analysis. I’m tired right now.</p>
+</section>
+<section id="examples-in-statistics" class="level1">
+<h1>Examples in Statistics</h1>
+<p>We can think of a lot of objects from basic statistics in terms of functionals. A reason to do this is to unify all these concepts of describing features of a population into one mathematical idea. For the following examples, consider a functional <img src="https://latex.codecogs.com/png.latex?T"> that inputs a probability distribution (its CDF, call it <img src="https://latex.codecogs.com/png.latex?P">) and outputs a number.</p>
+<p>The mean: <img src="https://latex.codecogs.com/png.latex?T%5BP%5D%20=%20%5Cint%20x%20%5C,%20dP(x)"></p>
+<p>The variance: <img src="https://latex.codecogs.com/png.latex?T%5BP%5D%20=%20%5Cint%20x%5E2%20%5C,%20dP(x)%20-%20%5CBig%5B%5Cint%20x%20%5C,%20dP(x)%5CBig%5D%20%5E2"></p>
+<p>These are both in integral form (with respect to probability measure) to unite discrete and continuous probability distributions into one framework. In either case, it will be the expectation formula we expect from basic probability theory. Furthermore, if we input an empirical distribution function (i.e.&nbsp;a CDF with observed data), the expectation integral reduces to the sample mean. This is currently beyond the scope of what I was trying to do here, so I won’t write it in notation.</p>
+<p>The median (non-linear): <img src="https://latex.codecogs.com/png.latex?T%5BP%5D%20=%20P%5E%7B-1%7D(0.5)"></p>
+<p>Nonparameteric statistics is connected to infinite dimensional spaces, because we say that the distribution is some unknown distribution in the set of all distributions, which is infinite dimensional. Just thought that was an importnat note to say.</p>
+<p>Furthermore, being non-linear makes the existence of derivatives a bit more difficult. I don’t know how much detail to go into here, but it seems like the median and IQR are well-behaved enough. This can be an issue with influence functions on these features of a population.</p>
+</section>
+<section id="what-i-will-cover-later" class="level1">
+<h1>What I will cover later</h1>
+<p>In a future blog post, I will cover Banach and Hilbert spaces, as well as some other definitions like bounded linear operators, pertubations, the riesz representation etc. Hopefully this will get us to a slightly more rigorous formulation of functional derivatives than what might be covered in calculus of variations, but is still in the realm of reality to not make me go completely insane.</p>
 
 
+</section>
 
  ]]></description>
   <category>Notes</category>
@@ -215,7 +971,7 @@
   <pubDate>Tue, 28 Apr 2026 04:00:00 GMT</pubDate>
 </item>
 <item>
-  <title>Firth’s Penalized Logistic Regression</title>
+  <title>Firth’s Penalized Logistic Regression + Other Corrections</title>
   <dc:creator>Daniel Jang</dc:creator>
   <link>https://drganghe.github.io/quarto-academic-website-template/posts/notes-title/2026-04-04-firth-penalized.html</link>
   <description><![CDATA[ 
@@ -223,9 +979,24 @@
 
 
 
-<p>(Old post I have yet to bring to this website)</p>
+<p>The motivation for why I’m learning about Firth’s Penalized Logistic Regression is because it’s deals with rare events better than classic logistic regression (it also deals with complete or quasi-separation where one variable perfectly or nearly perfectly explains or is related to another). This is in context of censoring weighting over time, where the number of patients who are censored at each time point is proportionally pretty small (between 10 to 100 out of 1,400). I want to make sure our models have unbiased estimations at these sample sizes so we can do some proper prediction</p>
+<section id="penalization-in-the-context-of-logistic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="penalization-in-the-context-of-logistic-regression">Penalization in the Context of Logistic Regression</h2>
+<p>The usual log-likelihood for the parameters in logistic regression looks like:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cell(%5Cbeta)%20=%20%5Csum_%7Bi=1%7D%5En%20%5Cleft%5B%20y_i%20%5Clog(p_i)%20+%20(1%20-%20y_i)%5Clog(1%20-%20p_i)%20%5Cright%5D%0A"></p>
+<p>where</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Ap_i%20=%20%5Cfrac%7B1%7D%7B1%20+%20%5Cexp(-x_i%5E%5Ctop%20%5Cbeta)%7D%0A"></p>
+<p>But we add a penalty term (apparently some people don’t like calling this a penalty term?) based on the fisher information.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cell%5E*(%5Cbeta)%20=%20%5Cell(%5Cbeta)%20+%20%5Cfrac%7B1%7D%7B2%7D%20%5Clog%20%5Cleft%7C%20I(%5Cbeta)%20%5Cright%7C%0A"></p>
+<p>When we have lower fisher information, we have less precision in our estimate (think about how Fisher information is connected to the Cramer-Rao Lower Bound). This means the penalty term increases.</p>
+<p>I don’t know all the details on why this works mathematically because it requires asymptotic theory. My understanding is that the bias of the MLE has a <img src="https://latex.codecogs.com/png.latex?o(n%5E%7B-1%7D)"> term in it, i.e.&nbsp;we have <strong>finite sample bias</strong>. This term vanishes asymptotically. This penalization removes the <img src="https://latex.codecogs.com/png.latex?o(n%5E%7B-1%7D)"> term in the MLE so that there is less finite-sample bias. I don’t really know how this means the model deals with complete or quasi-separation, but that’s a thought for 2-3 years in the future, if at all.</p>
+</section>
+<section id="firths-penalization-with-intercept-correction" class="level2">
+<h2 class="anchored" data-anchor-id="firths-penalization-with-intercept-correction">Firth’s Penalization with Intercept Correction</h2>
+<p>(Need to add my notes on this as well)</p>
 
 
+</section>
 
  ]]></description>
   <category>Notes</category>
@@ -242,9 +1013,61 @@
 
 
 
-<p>(Old post I have yet to bring to this website)</p>
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<p>These are my personal notes adapted from my final project in differential geometry. I want to motivate the Monge and Kantorovich problems in notation that I understand so that I have a reference for myself if I ever need these tools (although I doubt I will need it)</p>
+</section>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">Background</h2>
+<p>One needs to know the concept of abstract measures, what a measurable space is, abstract integration, and absolute continuity (radon-nikodym derivatives). I don’t have a background in calculus of variations, functional analysis, or optimization (I will ignore why being convex makes it easier to solve), so hopefully I will be able to get through this without those tools.</p>
+<p>I will introduce some definitions beyond this, like the pushforward measure, product spaces, and couplings, since these are less familiar definitions.</p>
+</section>
+<section id="the-monge-problem" class="level2">
+<h2 class="anchored" data-anchor-id="the-monge-problem">The Monge Problem</h2>
+<p>Gaspard Monge asked the following problem in 1781: If I have a pile of dirt and want to move it into a mound, what’s the most optimal way to bring each little bit of dirt into the mound, i.e.&nbsp;what’s the minimal amount of work I need to do? I will define this problem in the realm of probability spaces.</p>
+<p>Let <img src="https://latex.codecogs.com/png.latex?(X,%20%5Cmathscr%7BB%7D)"> be a measurable space and denote <img src="https://latex.codecogs.com/png.latex?%5Cmathcal%7BP%7D(X)"> the set of all probability measures defined on <img src="https://latex.codecogs.com/png.latex?(X,%20%5Cmathscr%7BB%7D)">. For a probability measure <img src="https://latex.codecogs.com/png.latex?%5Cmu%20%5Cin%20%5Cmathcal%7BP%7D(X)"> and for an element of the <img src="https://latex.codecogs.com/png.latex?%5Csigma">-algebra <img src="https://latex.codecogs.com/png.latex?B%20%5Cin%20%5Cmathscr%7BB%7D">, <img src="https://latex.codecogs.com/png.latex?%5Cmu(B)"> represents the amount of mass (or dirt) is in the set <img src="https://latex.codecogs.com/png.latex?B">. The total mass of a probability distribution is <img src="https://latex.codecogs.com/png.latex?1"> by definition, so <img src="https://latex.codecogs.com/png.latex?%5Cforall%20%5C,%20%5Cmu%20%5Cin%20%5Cmathcal%7BP%7D(X)">, <img src="https://latex.codecogs.com/png.latex?%5Cmu(X)%20=%201">.</p>
+<p><strong>Question 1:</strong> What does it mean to transport some mass from the pile of dirt to the mound?. We need a (measurable) (bijective) function <img src="https://latex.codecogs.com/png.latex?T:%20X%20%5Crightarrow%20X"> that moves the dirt pile <img src="https://latex.codecogs.com/png.latex?x%20%5Cin%20X"> to the pile in location <img src="https://latex.codecogs.com/png.latex?T(x)%20%5Cin%20X">. However, since we are moving from one distribution to another, we need a new measure to properly count the mass in the mound. How do we do that?</p>
+<p>We define the <strong>pushforward measure</strong>: <img src="https://latex.codecogs.com/png.latex?%5Cforall%20B%20%5Cin%20%5Cmathscr%7BB%7D">, the pushforward measure $ T_{#} (B) = (T^{-1}(B))$. This preserves the mass of <img src="https://latex.codecogs.com/png.latex?B"> relative to the measure <img src="https://latex.codecogs.com/png.latex?%5Cmu"> even after transforming <img src="https://latex.codecogs.com/png.latex?B">. The reason it is defined with <img src="https://latex.codecogs.com/png.latex?T%5E%7B-1%7D"> is to guarantee the existence of an inverse function. We define <img src="https://latex.codecogs.com/png.latex?%5Cnu%20%5Cin%20%5Cmathcal%7BP%7D(X)"> to be the pushforward measure. Furthermore, this means that <img src="https://latex.codecogs.com/png.latex?T"> is called the <strong>transport map</strong> from <img src="https://latex.codecogs.com/png.latex?%5Cmu"> to <img src="https://latex.codecogs.com/png.latex?%5Cnu">.</p>
+<p><strong>Question 2</strong>: What is the amount of work that is done in transporting the amount of mass from the dirt to the mound? We define the cost function to do exactly this. Let <img src="https://latex.codecogs.com/png.latex?c:%20X%20%5Ctimes%20X%20%5Crightarrow%20%5B0,%20+%20%5Cinfty%5D"> be the cost function, where <img src="https://latex.codecogs.com/png.latex?c(x,%20T(x))"> measures the cost from moving one element in <img src="https://latex.codecogs.com/png.latex?x"> to <img src="https://latex.codecogs.com/png.latex?T(x)">. Common cost functions are the <img src="https://latex.codecogs.com/png.latex?L_1"> and <img src="https://latex.codecogs.com/png.latex?L_2"> norm, although <img src="https://latex.codecogs.com/png.latex?L_2"> norm is more often used because it’s easier to solve. However, we want to get the cost of moving all elements of <img src="https://latex.codecogs.com/png.latex?X">. This means we want integration with respect to our measure <img src="https://latex.codecogs.com/png.latex?%5Cmu">, since that is the way we are measuring our masses. Thus, we are curious about the total cost, which we define as a functional (a map with a function as an input and a scalar as an output, in our case, the transport map is the input).</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cmathbb%7BM%7D(T)%20=%20%5Cint_%7BX%7D%20c(x,%20T(x))%5C,%20d%5Cmu(x)%0A"></p>
+<p>Now we can finally define the Monge problem as finding the infimum of the functional, which gives you the lowest cost out of all possible transport maps.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cinf_%7BT:%20X%20%5Crightarrow%20X%7D%20%20%5C%7B%20%5Cmathbb%7BM%7D(T)%20%5Cmid%20T_%7B%5C#%7D%20%5Cmu%20=%20%5Cnu%20%5C%7D%0A"></p>
+<p>Now we can generalize this a bit more by going from one space <img src="https://latex.codecogs.com/png.latex?X"> to another space <img src="https://latex.codecogs.com/png.latex?Y">. The idea is still the same: we require the transport map with <img src="https://latex.codecogs.com/png.latex?T_%7B%5C#%7D%5Cmu%20%5Cin%20%5Cmathcal%7BP%7D(Y)">, but we can define each <img src="https://latex.codecogs.com/png.latex?y%20=%20T(x)"> and the functional <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BM%7D(T)%20=%20%5Cint_%7BX%20%5Ctimes%20Y%7D%20c(x,%20y)%5C,%20d%5Cmu(x)">, since we need to integrate over two different spaces (not sure if the details here are correct…)</p>
+<p>This problem of the optimal transportation problem is good for a number of applications, but there are two key limitations:</p>
+<ol type="1">
+<li>We are not able to split up a mass into two since the pushforward measure requires <img src="https://latex.codecogs.com/png.latex?T"> to be injective</li>
+<li>Solutions may be not unique</li>
+</ol>
+<p>There are plenty of canonical examples here which I won’t really explain here. We will move to how these issues were addressed by Kantorovich.</p>
+</section>
+<section id="the-kantorovich-problem" class="level2">
+<h2 class="anchored" data-anchor-id="the-kantorovich-problem">The Kantorovich Problem</h2>
+<p>One motivation for Kantorovich’s problem is to address the splitting limitation in Monge’s problem. This will introduce some flexibility in optimally transporting all the mass from one region to another. Before we can do that, there is one important definition that a lot of notes seem to not touch on.</p>
+<p><strong>Definition, Coupling</strong>: For a measurable space <img src="https://latex.codecogs.com/png.latex?(X,%20%5Cmathscr%7BB%7D)">, let <img src="https://latex.codecogs.com/png.latex?%5Cmu,%20%5Cnu%20%5Cin%20%5Cmathcal%7BP%7D(X)"> be two measures, where <img src="https://latex.codecogs.com/png.latex?%5Cnu%20=%20T_%7B%5C#%7D%20%5Cmu">. The coupling of <img src="https://latex.codecogs.com/png.latex?%5Cmu"> and <img src="https://latex.codecogs.com/png.latex?%5Cnu"> is a (probability) measure <img src="https://latex.codecogs.com/png.latex?%5Cgamma%20%5Cin%20%5Cmathcal%7BP%7D(X%20%5Ctimes%20X)"> on the product space <img src="https://latex.codecogs.com/png.latex?(X%20%5Ctimes%20X,%20%5Cmathscr%7BB%7D%20%5Ctimes%20%5Cmathscr%7BB%7D)"> such that the marginals of <img src="https://latex.codecogs.com/png.latex?%5Cgamma"> coincide with <img src="https://latex.codecogs.com/png.latex?%5Cmu"> and <img src="https://latex.codecogs.com/png.latex?%5Cnu">. What I mean by that is: <img src="https://latex.codecogs.com/png.latex?%5Cgamma(A%20%5Ctimes%20X)%20=%20%5Cmu(A)"> and <img src="https://latex.codecogs.com/png.latex?%5Cgamma(X%20%5Ctimes%20A)%20=%20%5Cnu(A)">.</p>
+<p>You can surmise that <img src="https://latex.codecogs.com/png.latex?%5Cforall%20B%20%5Cin%20%5Cmathscr%7BB%7D,%20%5C,%20%5Cgamma(A%20%5Ctimes%20B)%20%5Cleq%20%5Cgamma(A%20%5Ctimes%20X)%20=%20%5Cmu(A)">. The proof really is trivial, since <img src="https://latex.codecogs.com/png.latex?B%20%5Csubseteq%20X">. Now we can define the analogue to the transport map:</p>
+<p><strong>Definition, Transport Plan</strong> A transport plan is a coupling <img src="https://latex.codecogs.com/png.latex?%5Cgamma%20%5Cin%20%5Cmathcal%7BP%7D(X%20%5Ctimes%20X)"> of <img src="https://latex.codecogs.com/png.latex?%5Cmu"> and <img src="https://latex.codecogs.com/png.latex?%5Cnu"> such that for a map <img src="https://latex.codecogs.com/png.latex?%5Cpi_i:%20X%20%5Ctimes%20X%20%5Crightarrow%20X">, where <img src="https://latex.codecogs.com/png.latex?%5Cpi_i(x_1,%20x_2)%20=%20x_i">, the pushforward measures:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%5Cpi_%7B1%5C#%7D%20%5Cgamma%20=%20%5Cmu"> and <img src="https://latex.codecogs.com/png.latex?%5Cpi_%7B2%5C#%7D%20%5Cgamma%20=%20%5Cnu">, i.e.&nbsp;<img src="https://latex.codecogs.com/png.latex?%5Cgamma(%5Cpi_1%5E%7B-1%7D(B))%20=%20%5Cgamma(B%20%5Ctimes%20X)%20=%20%5Cmu%20(B)"> and <img src="https://latex.codecogs.com/png.latex?%5Cgamma(%5Cpi_2%5E%7B-1%7D(B))%20=%20%5Cgamma(X%20%5Ctimes%20B)%20=%20%5Cnu%20(B)">.</p>
+<p>The set of all transport plans from <img src="https://latex.codecogs.com/png.latex?%5Cmu"> to <img src="https://latex.codecogs.com/png.latex?%5Cnu"> is <img src="https://latex.codecogs.com/png.latex?%5CGamma(%5Cmu,%20%5Cnu)">, and <img src="https://latex.codecogs.com/png.latex?%5Cmu"> and <img src="https://latex.codecogs.com/png.latex?%5Cnu"> are marginals of <img src="https://latex.codecogs.com/png.latex?%5Cgamma">.</p>
+<p>We can interpret <img src="https://latex.codecogs.com/png.latex?%5Cgamma(A%20%5Ctimes%20B)"> as the amount of mass sent from <img src="https://latex.codecogs.com/png.latex?A"> to <img src="https://latex.codecogs.com/png.latex?B">, but a single mass from <img src="https://latex.codecogs.com/png.latex?A"> can be sent to many places in the mound. This is analogus to why we are allowed to split up the mass, since not all the mass is brought over (since <img src="https://latex.codecogs.com/png.latex?%5Cgamma(A%20%5Ctimes%20B)%20%5Cleq%20%5Cmu(A)">)</p>
+<p>Now we finally define the Kantorovich problem: define the following functional of the total cost of transport given some transport plan <img src="https://latex.codecogs.com/png.latex?%5Cgamma">:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cmathbb%7BK%7D(%5Cgamma)%20=%20%5Cint_%7BX%20%5Ctimes%20X%7D%20c(x_1,%20x_2)%5C,%20d%5Cgamma(x_1,%20x_2)%0A"></p>
+<p>and “minimize” (take the infimum) it once more to get the minimal cost of transport over all transport plans:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cinf_%7B%5Cgamma%20%5Cin%20%5CGamma(%5Cmu,%20%5Cnu)%7D%20%20%5C%7B%20%5Cmathbb%7BK%7D(%5Cgamma)%20%5Cmid%20T_%7B%5C#%7D%20%5Cmu%20=%20%5Cnu%20%5C%7D%0A"></p>
+<p>The idea for two different sets <img src="https://latex.codecogs.com/png.latex?X"> and <img src="https://latex.codecogs.com/png.latex?Y"> is the exact same idea, but the cost function itself is something that needs to be thought of more. Having just one space allows us to use some sort of distance metric like <img src="https://latex.codecogs.com/png.latex?l_1"> or more commonly, <img src="https://latex.codecogs.com/png.latex?l_2">.</p>
+</section>
+<section id="transport-map-and-transport-plan-relationship" class="level2">
+<h2 class="anchored" data-anchor-id="transport-map-and-transport-plan-relationship">Transport Map and Transport Plan Relationship</h2>
+<p>Given a transport map <img src="https://latex.codecogs.com/png.latex?T:%20X%20%5Ctimes%20X"> with <img src="https://latex.codecogs.com/png.latex?T_%7B%5C#%7D%20%5Cmu%20=%20%5Cnu">, then the corresponding transport plan is <img src="https://latex.codecogs.com/png.latex?(%5Ctext%7Bid%7D%20%5Ctimes%20T)_%7B%5C#%7D%20%5Cmu%20%5Cin%20%5CGamma(%5Cmu,%20%5Cnu)">.</p>
+<p>However, this need not be the most optimal transport plan. In fact, there is a theorem that states:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cinf_%7B%5Cgamma%20%5Cin%20%5CGamma(%5Cmu,%20%5Cnu)%7D%20%20%5C%7B%20%5Cmathbb%7BK%7D(%5Cgamma)%20%5Cmid%20T_%7B%5C#%7D%20%5Cmu%20=%20%5Cnu%20%5C%7D%20%5Cleq%20%5Cinf_%7BT:%20X%20%5Crightarrow%20X%7D%20%20%5C%7B%20%5Cmathbb%7BM%7D(T)%20%5Cmid%20T_%7B%5C#%7D%20%5Cmu%20=%20%5Cnu%20%5C%7D%0A"></p>
+<p>I will not be proving this. You cannot make me.</p>
+</section>
+<section id="wasserstein-metric-earth-mover-distance" class="level2">
+<h2 class="anchored" data-anchor-id="wasserstein-metric-earth-mover-distance">Wasserstein Metric / Earth Mover Distance</h2>
+<p>I need to fill this detail in from the project I did on Optimal Transport</p>
 
 
+</section>
 
  ]]></description>
   <category>Notes</category>
@@ -520,15 +1343,6 @@ font-style: inherit;">"glmnet"</span>)</span></code></pre></div></div>
   <category>Math</category>
   <guid>https://drganghe.github.io/quarto-academic-website-template/posts/notes-title/2025-12-07-radon-nikodym.html</guid>
   <pubDate>Sun, 07 Dec 2025 05:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Quarto Academic Website Examples and Tips</title>
-  <link>https://drganghe.github.io/quarto-academic-website-template/</link>
-  <description>Examples and tips for Quarto Academic Website</description>
-  <category>news</category>
-  <guid>https://drganghe.github.io/quarto-academic-website-template/</guid>
-  <pubDate>Tue, 15 Oct 2024 04:00:00 GMT</pubDate>
-  <media:content url="https://drganghe.github.io/quarto-academic-website-template/files/images/placeholder1.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>News item</title>

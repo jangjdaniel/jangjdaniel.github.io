@@ -105,6 +105,35 @@ https://badge.dimensions.ai/
 <script type="text/javascript" src="//cdn.plu.mx/widget-popup.js"></script>
 <meta name="quarto:status" content="draft">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="Banach and Hilbert Spaces – Daniel Jang">
@@ -135,21 +164,21 @@ https://badge.dimensions.ai/
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">About</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-posts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Posts</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-posts">    
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=news">
+    <a class="dropdown-item" href="../../posts.html#category=Notes">
+ <span class="dropdown-text">Notes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts.html#category=News">
  <span class="dropdown-text">News</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=event">
- <span class="dropdown-text">Events</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../contact.html">
- <span class="dropdown-text">Contact</span></a>
+    <a class="dropdown-item" href="../../posts.html#category=Projects">
+ <span class="dropdown-text">Projects</span></a>
   </li>  
     </ul>
   </li>
@@ -160,41 +189,37 @@ https://badge.dimensions.ai/
     <ul class="dropdown-menu" aria-labelledby="nav-menu-research">    
         <li>
     <a class="dropdown-item" href="../../pub-listing.html">
- <span class="dropdown-text">Publications Listing</span></a>
+ <span class="dropdown-text">Select Publications</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../publications.html">
- <span class="dropdown-text">Publications</span></a>
+ <span class="dropdown-text">Pre-Prints + Recent Publications</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=paper">
- <span class="dropdown-text">Selected Papers</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../projects.html">
- <span class="dropdown-text">Grants</span></a>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Software</span></a>
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="../../teaching.html"> 
-<span class="menu-text">Teaching</span></a>
-  </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-outreach" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Outreach</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-myself" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Myself</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-outreach">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-myself">    
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=presentation">
- <span class="dropdown-text">Presentations</span></a>
+    <a class="dropdown-item" href="../../america-travel-map.html">
+ <span class="dropdown-text">America Travel Map</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Music Portfolio</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Photography Portfolio</span></a>
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="../../people.html"> 
-<span class="menu-text">Group</span></a>
-  </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
@@ -227,8 +252,25 @@ https://badge.dimensions.ai/
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#completeness-and-definitions" id="toc-completeness-and-definitions" class="nav-link active" data-scroll-target="#completeness-and-definitions">Completeness and Definitions</a></li>
+  <li><a href="#examples-of-banach-and-hilbert-spaces" id="toc-examples-of-banach-and-hilbert-spaces" class="nav-link" data-scroll-target="#examples-of-banach-and-hilbert-spaces">Examples of Banach and Hilbert Spaces</a>
+  <ul class="collapse">
+  <li><a href="#parallelogram-law-why-l_p-spaces-are-not-hilbert-spaces-except-when-p-2" id="toc-parallelogram-law-why-l_p-spaces-are-not-hilbert-spaces-except-when-p-2" class="nav-link" data-scroll-target="#parallelogram-law-why-l_p-spaces-are-not-hilbert-spaces-except-when-p-2">Parallelogram Law: Why L_p spaces are not Hilbert Spaces except when p = 2</a></li>
+  </ul></li>
+  <li><a href="#why-are-norms-in-finite-dimensional-spaces-equivalent" id="toc-why-are-norms-in-finite-dimensional-spaces-equivalent" class="nav-link" data-scroll-target="#why-are-norms-in-finite-dimensional-spaces-equivalent">Why are norms in finite-dimensional spaces equivalent?</a></li>
+  <li><a href="#linear-operators-operator-norm-and-dual-spaces" id="toc-linear-operators-operator-norm-and-dual-spaces" class="nav-link" data-scroll-target="#linear-operators-operator-norm-and-dual-spaces">Linear Operators, Operator Norm, and Dual Spaces</a></li>
+  <li><a href="#weak-convergence" id="toc-weak-convergence" class="nav-link" data-scroll-target="#weak-convergence">Weak Convergence</a></li>
+  <li><a href="#riesz-representation-for-hilbert-spaces" id="toc-riesz-representation-for-hilbert-spaces" class="nav-link" data-scroll-target="#riesz-representation-for-hilbert-spaces">Riesz Representation for Hilbert Spaces</a></li>
+  <li><a href="#orthogonal-projections" id="toc-orthogonal-projections" class="nav-link" data-scroll-target="#orthogonal-projections">Orthogonal Projections</a></li>
+  <li><a href="#tangent-spaces" id="toc-tangent-spaces" class="nav-link" data-scroll-target="#tangent-spaces">Tangent Spaces</a></li>
+  <li><a href="#examples-in-statistics" id="toc-examples-in-statistics" class="nav-link" data-scroll-target="#examples-in-statistics">Examples in Statistics</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -273,9 +315,66 @@ https://badge.dimensions.ai/
 </header>
 
 
-<p>(Old post I have yet to bring to this website)</p>
+<p>Unfortunately, I am unsure how to motivate a lot of these results from Banach and Hilbert spaces. I think one day I should try out the proofs myself (especially of the representation theorem), but I think this is sufficient for right now.</p>
+<section id="completeness-and-definitions" class="level1">
+<h1>Completeness and Definitions</h1>
+<p>There were specific types of metric spaces we disucssed: complete metric spaces (all cauchy sequences converge to an element in the set) and compact metric spaces (every open cover has a finite subcover). There’s also connected metric space (cannot be partitioned into two nonempty disjoint open subsets, i.e.&nbsp;the only open and closed sets are the empty set and the set itself).</p>
+<p>In terms of normed vector spaces, they are always connected (something about a vector space being a convex set) and never compact (infinite-dimension issues). However, they need not be complete. Completeness is a mathematically nice property because it allows us to discuss convergence within the same set. This is why complete normed vector spaces get their own special name… you guessed it!</p>
+<p>Banach spaces are normed vector spaces that are complete w.r.t the norm, and Hilbert spaces are inner product spaces that are complete w.r.t the inner product. In statistics, hilbert spaces are more important since we want a notion of an angle along with a notion of distance with elements that follow the axioms of vector spaces. I think we can think about correlation between two random variables via an inner product, and besides, we can induce a norm if needed.</p>
+<p>I am not going to prove much about these spaces. Rather, I want to understand at a high level why they are so important and some examples in statistics that I may need in the future.</p>
+</section>
+<section id="examples-of-banach-and-hilbert-spaces" class="level1">
+<h1>Examples of Banach and Hilbert Spaces</h1>
+<p><span class="math inline">\(\mathbb{R}^n\)</span> with euclidean norm is a finite-dimensional banach space. With the dot product we know from multivariable calculus (discrete version), it’s a hilbert space, so it is also a banach space. However, this is not that interesting.</p>
+<p>In general, the lebesgue space <span class="math inline">\(L_p\)</span> is the set of all measurable functions (depends on the measure space we are in…) with a finite <span class="math inline">\(p\)</span>-th moment (using probability terms), i.e.&nbsp;$| f |^p , d&lt; $. This is a set of functions (infinite-dimensional)!</p>
+<p><span class="math inline">\(L_2\)</span> is a space of square-integrable functions (which means it has a finite second moment in probability terms… variance!). We use the definition of the <span class="math inline">\(l_p\)</span> norm on this function space to create a banach space (and also the idea of convergence in <span class="math inline">\(l_2\)</span> norm). Specifically for <span class="math inline">\(L_2\)</span>, this is also a hilbert space. The inner product is defined as <span class="math inline">\(\langle f,g \rangle = \int f(x)g(x) \, dx\)</span> (a continuous analog of the discrete dot product).</p>
+<section id="parallelogram-law-why-l_p-spaces-are-not-hilbert-spaces-except-when-p-2" class="level2">
+<h2 class="anchored" data-anchor-id="parallelogram-law-why-l_p-spaces-are-not-hilbert-spaces-except-when-p-2">Parallelogram Law: Why L_p spaces are not Hilbert Spaces except when p = 2</h2>
+<p>The parallelogram law (like in multivariable calc) is: $| x+y | ^2 + | x-y | ^2 = 2 |x|^2 + 2 |y|^2 $. By the Jordan-von Neumann theorem, an inner product exists if and only if the norm satisfies the parallelogram law. To keep things at a high level, I won’t prove this here.</p>
+<p>Any norms in <span class="math inline">\(L_p\)</span> where <span class="math inline">\(p \neq 2\)</span> will not satisfy this law for all functions. For example, take <span class="math inline">\(f = \chi _{[0, 1]}\)</span> and <span class="math inline">\(g = \chi _{(1, 2]}\)</span>. <span class="math inline">\(\|f\|_p = (\int_{\mathbb{R}} f^p \, dm)^{\frac{1}{p}} = (1)^{\frac{1}{p}}\)</span>, and similarly, <span class="math inline">\(\|g\|_p = (1)^{\frac{1}{p}}\)</span>. Notice that <span class="math inline">\(\|f + g \|_p = \|f - g \|_p = 2\)</span>, so the only case where the parallelogram law holds is when <span class="math inline">\(p = 2\)</span>.</p>
+</section>
+</section>
+<section id="why-are-norms-in-finite-dimensional-spaces-equivalent" class="level1">
+<h1>Why are norms in finite-dimensional spaces equivalent?</h1>
+<p>For any two norms in a finite-dimensional space <span class="math inline">\(\| \cdot \|_a\)</span> and <span class="math inline">\(\| \cdot \|_b\)</span>, there exists constants <span class="math inline">\(C, K\)</span> such that <span class="math inline">\(C \| \cdot \|_a \leq \| \cdot \|_b  \leq D \| \cdot \|_a\)</span>. Norms that are equivalent induce the same topology (I don’t really care about topology, but you can define a topology using metrics (somehow), just like you can define a metric with norms). I’m just going to take the math god’s word for it.</p>
+</section>
+<section id="linear-operators-operator-norm-and-dual-spaces" class="level1">
+<h1>Linear Operators, Operator Norm, and Dual Spaces</h1>
+<p>We need to be careful thinking about linear transformations (which we are calling linear operators. Some places make a distincition where linear operators have the same domain and codomain) for vector spaces of infinite dimension. The reason we didn’t talk about “boundedness” in linear algebra are two-fold. Firstly, we only really worked with finite-dimension vector spaces, and there is a theorem that states any linear transformation between finite-dimension vector spaces are bounded. Second, we didn’t even have a notion of norm (aka length of vector). So we never worried about <span class="math inline">\(\| T(v) \| = \infty\)</span> for all <span class="math inline">\(v \in V\)</span>.</p>
+<p>However, this is not necessarily true for infinite-dimensional vector spaces. Consider the following linear transformation between two normed vector spaces <span class="math inline">\(X, Y\)</span>:</p>
+<p><span class="math display">\[
+T: X \rightarrow Y
+\]</span></p>
+<p>We use the classic idea of boundedness, i.e.&nbsp;there exists some number <span class="math inline">\(M &gt; 0\)</span> such that <span class="math inline">\(\| T(v) \| \leq M \| v \|\)</span> for all <span class="math inline">\(v \in V\)</span>. The smallest such <span class="math inline">\(M\)</span> is called the operator norm of <span class="math inline">\(T\)</span>, and is denoted as <span class="math inline">\(\| T \|\)</span>.</p>
+<p>A good way to verify if a linear operator is bounded is iff it is continuous (the epsilon delta definition but with metrics… learned this briefly in measure theory for some reason).</p>
+<p>Operator theory studies these linear operators between function spaces, which is a bit more general than what we need (since we are in the realm of Banach and Hilbert spaces)</p>
+<p>The dual space is the set of linear functionals on a vector space <span class="math inline">\(V\)</span>. We denote this as <span class="math inline">\(V'\)</span>, so this is just a set of functionals. Furthermore, it’s useful to talk about the continuous dual space (only continuous functionals) for this bounded property.</p>
+</section>
+<section id="weak-convergence" class="level1">
+<h1>Weak Convergence</h1>
+<p>The idea behind the large numbers of convergences is to have a notion of a sequence of values (maybe numbers or functions) approaching some value. This can differ with how we define the “distance” between two values. This is why convergence in measure exists for measure spaces, convergence in metric space exists for metric spaces, and what I am doing to focus on: convergence in norm (strong convergence) and convergence in inner product (weak convergence). Notice that this will apply to hilbert spaces.</p>
+<p>A sequence of vectors <span class="math inline">\(v_n\)</span> in an inner product space <span class="math inline">\(H\)</span> converges strongly to a vector <span class="math inline">\(v\)</span> if the norm between <span class="math inline">\(v_n\)</span> and <span class="math inline">\(v\)</span> is zero as <span class="math inline">\(n \to \infty\)</span>, i.e.&nbsp;<span class="math inline">\(\lim_{n \to \infty} \| v_n - v \| = 0\)</span>. Similarly, that sequence converges weakly if for all <span class="math inline">\(y \in H\)</span>, <span class="math inline">\(\lim_{n \to \infty} &lt;x_n , y&gt; = &lt;x, y&gt;\)</span>.</p>
+<p>Strong convergence implies weak convergence. The proof requires using the triangle inequality a bunch and is probably a good exercise for me to do when I read this again.</p>
+</section>
+<section id="riesz-representation-for-hilbert-spaces" class="level1">
+<h1>Riesz Representation for Hilbert Spaces</h1>
+<p>Every continuous linear functional on a Hilbert space is an inner product with a unique element</p>
+<p>Which then implies that a hilbert space is isomorphic to its dual space? Why exactly is that important?</p>
+</section>
+<section id="orthogonal-projections" class="level1">
+<h1>Orthogonal Projections</h1>
+</section>
+<section id="tangent-spaces" class="level1">
+<h1>Tangent Spaces</h1>
+</section>
+<section id="examples-in-statistics" class="level1">
+<h1>Examples in Statistics</h1>
+<p>I can think of two ways hilbert spaces play into topics I am interested in: functional data analysis (FDA) and semiparametric theory.</p>
+<p>For FDA, each observation (which is a function) lives in a function space. For all the math to work out really nicely, we usually think of a subset of a general function space, such as only square-integrable functions equipped with an inner product so we can discuss angles and norms between different functions. This fits nicely with hilbert spaces. There is also something called the reproducing kernel hilbert space (RKHS).</p>
+<p>There are also machine learning applications, but I don’t really care about that right now. Maybe I will in the future?</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

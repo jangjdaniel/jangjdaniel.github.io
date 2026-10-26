@@ -105,6 +105,35 @@ https://badge.dimensions.ai/
 <script type="text/javascript" src="//cdn.plu.mx/widget-popup.js"></script>
 <meta name="quarto:status" content="draft">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="Functionals – Daniel Jang">
@@ -135,21 +164,21 @@ https://badge.dimensions.ai/
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">About</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-posts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Posts</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-posts">    
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=news">
+    <a class="dropdown-item" href="../../posts.html#category=Notes">
+ <span class="dropdown-text">Notes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts.html#category=News">
  <span class="dropdown-text">News</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=event">
- <span class="dropdown-text">Events</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../contact.html">
- <span class="dropdown-text">Contact</span></a>
+    <a class="dropdown-item" href="../../posts.html#category=Projects">
+ <span class="dropdown-text">Projects</span></a>
   </li>  
     </ul>
   </li>
@@ -160,41 +189,37 @@ https://badge.dimensions.ai/
     <ul class="dropdown-menu" aria-labelledby="nav-menu-research">    
         <li>
     <a class="dropdown-item" href="../../pub-listing.html">
- <span class="dropdown-text">Publications Listing</span></a>
+ <span class="dropdown-text">Select Publications</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../publications.html">
- <span class="dropdown-text">Publications</span></a>
+ <span class="dropdown-text">Pre-Prints + Recent Publications</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=paper">
- <span class="dropdown-text">Selected Papers</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../projects.html">
- <span class="dropdown-text">Grants</span></a>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Software</span></a>
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="../../teaching.html"> 
-<span class="menu-text">Teaching</span></a>
-  </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-outreach" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Outreach</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-myself" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Myself</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-outreach">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-myself">    
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=presentation">
- <span class="dropdown-text">Presentations</span></a>
+    <a class="dropdown-item" href="../../america-travel-map.html">
+ <span class="dropdown-text">America Travel Map</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Music Portfolio</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Photography Portfolio</span></a>
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="../../people.html"> 
-<span class="menu-text">Group</span></a>
-  </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
@@ -227,8 +252,17 @@ https://badge.dimensions.ai/
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#vector-spaces" id="toc-vector-spaces" class="nav-link active" data-scroll-target="#vector-spaces">Vector Spaces</a></li>
+  <li><a href="#functionals-from-functional-analysis" id="toc-functionals-from-functional-analysis" class="nav-link" data-scroll-target="#functionals-from-functional-analysis">Functionals from Functional Analysis</a></li>
+  <li><a href="#examples-in-statistics" id="toc-examples-in-statistics" class="nav-link" data-scroll-target="#examples-in-statistics">Examples in Statistics</a></li>
+  <li><a href="#what-i-will-cover-later" id="toc-what-i-will-cover-later" class="nav-link" data-scroll-target="#what-i-will-cover-later">What I will cover later</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -273,9 +307,41 @@ https://badge.dimensions.ai/
 </header>
 
 
-<p>(Old post I have yet to bring to this website)</p>
+<p>This is the beginning of numerous blog posts where I learn the basics of functionals, both in an abstract lens (functional analysis) and an applied lens (calculus of variations and statistics). My goal is to understand the intuition behind the Gateaux derivative, which is what an influence function is. I will be channeling my knowledge from real analysis and differential geometry (just being comfortable with differentials). There is a chance these concepts come up in my future, but I want to be prepared, as well as understand the concepts at a deeper level.</p>
+<p>I am following notes from MIT and UW. I will be doing everything in <span class="math inline">\(\mathbb{R}\)</span> because I do not see myself working in <span class="math inline">\(\mathbb{C}\)</span>.</p>
+<section id="vector-spaces" class="level1">
+<h1>Vector Spaces</h1>
+<p>A very loose definition of a function space is a set of functions between two fixed sets (domain to codomain, with the codomain being either <span class="math inline">\(\mathbb{R}\)</span> or <span class="math inline">\(\mathbb{C}\)</span>). It is useful to give a function space some sort of structure, such as the linearity property (ring any bells? a vector space!), or maybe all functions must be continuous and bounded. I have encountered function spaces in my undergrad, namely the set of all continuous functions <span class="math inline">\(C^{\infty}\)</span>, but mostly just as an example of an infinite-dimensional vector space (since a lot of infinite-dimensional vector spaces are function spaces). Unlike finite-dimensional vector spaces, which have really nice properties, infinite-dimensional vector spaces require some extra structure to study them.</p>
+<p>Just like how we might want to define what distances are for some set <span class="math inline">\(X\)</span> to measure closeness of two arbitrary elements, i.e.&nbsp;a metric space <span class="math inline">\((X, d)\)</span>, we want to create a notion of distance for a vector space <span class="math inline">\(V\)</span>, which is called a normed vector space. It is defined as a function <span class="math inline">\(\| \cdot \|: V \rightarrow [0, \infty)\)</span> that satisfies definiteness, absolute homogeneity, and triangle inequality. The first and third property are similar to properties found in a metric, but absolute homogeneity is just pulling out constants!</p>
+<p>We can induce a metric from a norm as <span class="math inline">\(d(x,y) = \| x - y \|\)</span>. It should be clear why normed vector spaces are a subset of metric spaces.</p>
+<p>Now we might want to think about the angle between vectors. We cannot accomplish this with just a norm, we need an inner product (a generalizaion of the dot product). Channeling my differential geometry knowledge, we can induce a norm from an inner product: <span class="math inline">\(\| v \| = \sqrt{\langle v,v \rangle}\)</span>. I am unsure how important this is for my purposes, but I am putting it here just in case.</p>
+</section>
+<section id="functionals-from-functional-analysis" class="level1">
+<h1>Functionals from Functional Analysis</h1>
+<p>A functional is a map <span class="math inline">\(J: V \rightarrow \mathbb{R}\)</span>, where <span class="math inline">\(V\)</span> is a vector space equipped with some extra structure (e.g.&nbsp;a norm), and the codomain is its field of scalars (since I am working with <span class="math inline">\(\mathbb{R}\)</span>, I am just keeping it as <span class="math inline">\(\mathbb{R}\)</span>). A linear functional satisfies the linearity property, i.e.&nbsp;$J[f+ g] = J[f] + J[g] $ for some <span class="math inline">\(\alpha, \beta \in \mathbb{R}\)</span> and <span class="math inline">\(f, g \in V\)</span>. This is important to make everything well-behaved, but I am unsure if I need to generalize later.</p>
+<p>Notice that <span class="math inline">\(X\)</span> doesn’t have to be a space of functions. I think historically, functionals were defined as functions of functions, but this is a more general form that includes this loose definition. There are some more things I need to develop in my understanding before moving on.</p>
+<p>In practice (i.e.&nbsp;calculus of variations), a functional is a map <span class="math inline">\(J: \mathcal{F} \rightarrow \mathbb{R}\)</span>, where <span class="math inline">\(\mathcal{F}\)</span> is a collection of functions. The most standard form is</p>
+<p><span class="math display">\[
+J[f] = \int_a^b L(x, f(x), f'(x)) dx
+\]</span></p>
+<p>A caveat is that <span class="math inline">\(\mathcal{F}\)</span> is not just all possible functions. For example, we might only want to look at continuous functions. Furthermore, we want a notion of how close one function is from another. For example, how different are <span class="math inline">\(f(x) = 1 + x\)</span> and <span class="math inline">\(g(x) = 5\)</span> from the interval <span class="math inline">\(x \in [0,1]\)</span> from one another? We might choose the <span class="math inline">\(L_2\)</span> norm to define that. This is why we need a notion of a normed vector space. In fact, we need something a bit stronger, but I will discuss that in the next blog post about functional analysis. I’m tired right now.</p>
+</section>
+<section id="examples-in-statistics" class="level1">
+<h1>Examples in Statistics</h1>
+<p>We can think of a lot of objects from basic statistics in terms of functionals. A reason to do this is to unify all these concepts of describing features of a population into one mathematical idea. For the following examples, consider a functional <span class="math inline">\(T\)</span> that inputs a probability distribution (its CDF, call it <span class="math inline">\(P\)</span>) and outputs a number.</p>
+<p>The mean: <span class="math display">\[T[P] = \int x \, dP(x)\]</span></p>
+<p>The variance: <span class="math display">\[T[P] = \int x^2 \, dP(x) - \Big[\int x \, dP(x)\Big] ^2\]</span></p>
+<p>These are both in integral form (with respect to probability measure) to unite discrete and continuous probability distributions into one framework. In either case, it will be the expectation formula we expect from basic probability theory. Furthermore, if we input an empirical distribution function (i.e.&nbsp;a CDF with observed data), the expectation integral reduces to the sample mean. This is currently beyond the scope of what I was trying to do here, so I won’t write it in notation.</p>
+<p>The median (non-linear): <span class="math inline">\(T[P] = P^{-1}(0.5)\)</span></p>
+<p>Nonparameteric statistics is connected to infinite dimensional spaces, because we say that the distribution is some unknown distribution in the set of all distributions, which is infinite dimensional. Just thought that was an importnat note to say.</p>
+<p>Furthermore, being non-linear makes the existence of derivatives a bit more difficult. I don’t know how much detail to go into here, but it seems like the median and IQR are well-behaved enough. This can be an issue with influence functions on these features of a population.</p>
+</section>
+<section id="what-i-will-cover-later" class="level1">
+<h1>What I will cover later</h1>
+<p>In a future blog post, I will cover Banach and Hilbert spaces, as well as some other definitions like bounded linear operators, pertubations, the riesz representation etc. Hopefully this will get us to a slightly more rigorous formulation of functional derivatives than what might be covered in calculus of variations, but is still in the realm of reality to not make me go completely insane.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

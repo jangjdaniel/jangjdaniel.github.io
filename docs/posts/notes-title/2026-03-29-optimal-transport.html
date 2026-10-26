@@ -105,6 +105,35 @@ https://badge.dimensions.ai/
 <script type="text/javascript" src="//cdn.plu.mx/widget-popup.js"></script>
 <meta name="quarto:status" content="draft">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="Optimal Transport – Daniel Jang">
@@ -135,21 +164,21 @@ https://badge.dimensions.ai/
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">About</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-posts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Posts</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-posts">    
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=news">
+    <a class="dropdown-item" href="../../posts.html#category=Notes">
+ <span class="dropdown-text">Notes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts.html#category=News">
  <span class="dropdown-text">News</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=event">
- <span class="dropdown-text">Events</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../contact.html">
- <span class="dropdown-text">Contact</span></a>
+    <a class="dropdown-item" href="../../posts.html#category=Projects">
+ <span class="dropdown-text">Projects</span></a>
   </li>  
     </ul>
   </li>
@@ -160,41 +189,37 @@ https://badge.dimensions.ai/
     <ul class="dropdown-menu" aria-labelledby="nav-menu-research">    
         <li>
     <a class="dropdown-item" href="../../pub-listing.html">
- <span class="dropdown-text">Publications Listing</span></a>
+ <span class="dropdown-text">Select Publications</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../publications.html">
- <span class="dropdown-text">Publications</span></a>
+ <span class="dropdown-text">Pre-Prints + Recent Publications</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=paper">
- <span class="dropdown-text">Selected Papers</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../projects.html">
- <span class="dropdown-text">Grants</span></a>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Software</span></a>
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="../../teaching.html"> 
-<span class="menu-text">Teaching</span></a>
-  </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-outreach" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Outreach</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-myself" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Myself</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-outreach">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-myself">    
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=presentation">
- <span class="dropdown-text">Presentations</span></a>
+    <a class="dropdown-item" href="../../america-travel-map.html">
+ <span class="dropdown-text">America Travel Map</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Music Portfolio</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Photography Portfolio</span></a>
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="../../people.html"> 
-<span class="menu-text">Group</span></a>
-  </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
@@ -227,8 +252,19 @@ https://badge.dimensions.ai/
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link active" data-scroll-target="#motivation">Motivation</a></li>
+  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
+  <li><a href="#the-monge-problem" id="toc-the-monge-problem" class="nav-link" data-scroll-target="#the-monge-problem">The Monge Problem</a></li>
+  <li><a href="#the-kantorovich-problem" id="toc-the-kantorovich-problem" class="nav-link" data-scroll-target="#the-kantorovich-problem">The Kantorovich Problem</a></li>
+  <li><a href="#transport-map-and-transport-plan-relationship" id="toc-transport-map-and-transport-plan-relationship" class="nav-link" data-scroll-target="#transport-map-and-transport-plan-relationship">Transport Map and Transport Plan Relationship</a></li>
+  <li><a href="#wasserstein-metric-earth-mover-distance" id="toc-wasserstein-metric-earth-mover-distance" class="nav-link" data-scroll-target="#wasserstein-metric-earth-mover-distance">Wasserstein Metric / Earth Mover Distance</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -273,9 +309,71 @@ https://badge.dimensions.ai/
 </header>
 
 
-<p>(Old post I have yet to bring to this website)</p>
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<p>These are my personal notes adapted from my final project in differential geometry. I want to motivate the Monge and Kantorovich problems in notation that I understand so that I have a reference for myself if I ever need these tools (although I doubt I will need it)</p>
+</section>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">Background</h2>
+<p>One needs to know the concept of abstract measures, what a measurable space is, abstract integration, and absolute continuity (radon-nikodym derivatives). I don’t have a background in calculus of variations, functional analysis, or optimization (I will ignore why being convex makes it easier to solve), so hopefully I will be able to get through this without those tools.</p>
+<p>I will introduce some definitions beyond this, like the pushforward measure, product spaces, and couplings, since these are less familiar definitions.</p>
+</section>
+<section id="the-monge-problem" class="level2">
+<h2 class="anchored" data-anchor-id="the-monge-problem">The Monge Problem</h2>
+<p>Gaspard Monge asked the following problem in 1781: If I have a pile of dirt and want to move it into a mound, what’s the most optimal way to bring each little bit of dirt into the mound, i.e.&nbsp;what’s the minimal amount of work I need to do? I will define this problem in the realm of probability spaces.</p>
+<p>Let <span class="math inline">\((X, \mathscr{B})\)</span> be a measurable space and denote <span class="math inline">\(\mathcal{P}(X)\)</span> the set of all probability measures defined on <span class="math inline">\((X, \mathscr{B})\)</span>. For a probability measure <span class="math inline">\(\mu \in \mathcal{P}(X)\)</span> and for an element of the <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(B \in \mathscr{B}\)</span>, <span class="math inline">\(\mu(B)\)</span> represents the amount of mass (or dirt) is in the set <span class="math inline">\(B\)</span>. The total mass of a probability distribution is <span class="math inline">\(1\)</span> by definition, so <span class="math inline">\(\forall \, \mu \in \mathcal{P}(X)\)</span>, <span class="math inline">\(\mu(X) = 1\)</span>.</p>
+<p><strong>Question 1:</strong> What does it mean to transport some mass from the pile of dirt to the mound?. We need a (measurable) (bijective) function <span class="math inline">\(T: X \rightarrow X\)</span> that moves the dirt pile <span class="math inline">\(x \in X\)</span> to the pile in location <span class="math inline">\(T(x) \in X\)</span>. However, since we are moving from one distribution to another, we need a new measure to properly count the mass in the mound. How do we do that?</p>
+<p>We define the <strong>pushforward measure</strong>: <span class="math inline">\(\forall B \in \mathscr{B}\)</span>, the pushforward measure $ T_{#} (B) = (T^{-1}(B))$. This preserves the mass of <span class="math inline">\(B\)</span> relative to the measure <span class="math inline">\(\mu\)</span> even after transforming <span class="math inline">\(B\)</span>. The reason it is defined with <span class="math inline">\(T^{-1}\)</span> is to guarantee the existence of an inverse function. We define <span class="math inline">\(\nu \in \mathcal{P}(X)\)</span> to be the pushforward measure. Furthermore, this means that <span class="math inline">\(T\)</span> is called the <strong>transport map</strong> from <span class="math inline">\(\mu\)</span> to <span class="math inline">\(\nu\)</span>.</p>
+<p><strong>Question 2</strong>: What is the amount of work that is done in transporting the amount of mass from the dirt to the mound? We define the cost function to do exactly this. Let <span class="math inline">\(c: X \times X \rightarrow [0, + \infty]\)</span> be the cost function, where <span class="math inline">\(c(x, T(x))\)</span> measures the cost from moving one element in <span class="math inline">\(x\)</span> to <span class="math inline">\(T(x)\)</span>. Common cost functions are the <span class="math inline">\(L_1\)</span> and <span class="math inline">\(L_2\)</span> norm, although <span class="math inline">\(L_2\)</span> norm is more often used because it’s easier to solve. However, we want to get the cost of moving all elements of <span class="math inline">\(X\)</span>. This means we want integration with respect to our measure <span class="math inline">\(\mu\)</span>, since that is the way we are measuring our masses. Thus, we are curious about the total cost, which we define as a functional (a map with a function as an input and a scalar as an output, in our case, the transport map is the input).</p>
+<p><span class="math display">\[
+\mathbb{M}(T) = \int_{X} c(x, T(x))\, d\mu(x)
+\]</span></p>
+<p>Now we can finally define the Monge problem as finding the infimum of the functional, which gives you the lowest cost out of all possible transport maps.</p>
+<p><span class="math display">\[
+\inf_{T: X \rightarrow X}  \{ \mathbb{M}(T) \mid T_{\#} \mu = \nu \}
+\]</span></p>
+<p>Now we can generalize this a bit more by going from one space <span class="math inline">\(X\)</span> to another space <span class="math inline">\(Y\)</span>. The idea is still the same: we require the transport map with <span class="math inline">\(T_{\#}\mu \in \mathcal{P}(Y)\)</span>, but we can define each <span class="math inline">\(y = T(x)\)</span> and the functional <span class="math inline">\(\mathbb{M}(T) = \int_{X \times Y} c(x, y)\, d\mu(x)\)</span>, since we need to integrate over two different spaces (not sure if the details here are correct…)</p>
+<p>This problem of the optimal transportation problem is good for a number of applications, but there are two key limitations:</p>
+<ol type="1">
+<li>We are not able to split up a mass into two since the pushforward measure requires <span class="math inline">\(T\)</span> to be injective</li>
+<li>Solutions may be not unique</li>
+</ol>
+<p>There are plenty of canonical examples here which I won’t really explain here. We will move to how these issues were addressed by Kantorovich.</p>
+</section>
+<section id="the-kantorovich-problem" class="level2">
+<h2 class="anchored" data-anchor-id="the-kantorovich-problem">The Kantorovich Problem</h2>
+<p>One motivation for Kantorovich’s problem is to address the splitting limitation in Monge’s problem. This will introduce some flexibility in optimally transporting all the mass from one region to another. Before we can do that, there is one important definition that a lot of notes seem to not touch on.</p>
+<p><strong>Definition, Coupling</strong>: For a measurable space <span class="math inline">\((X, \mathscr{B})\)</span>, let <span class="math inline">\(\mu, \nu \in \mathcal{P}(X)\)</span> be two measures, where <span class="math inline">\(\nu = T_{\#} \mu\)</span>. The coupling of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\nu\)</span> is a (probability) measure <span class="math inline">\(\gamma \in \mathcal{P}(X \times X)\)</span> on the product space <span class="math inline">\((X \times X, \mathscr{B} \times \mathscr{B})\)</span> such that the marginals of <span class="math inline">\(\gamma\)</span> coincide with <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\nu\)</span>. What I mean by that is: <span class="math inline">\(\gamma(A \times X) = \mu(A)\)</span> and <span class="math inline">\(\gamma(X \times A) = \nu(A)\)</span>.</p>
+<p>You can surmise that <span class="math inline">\(\forall B \in \mathscr{B}, \, \gamma(A \times B) \leq \gamma(A \times X) = \mu(A)\)</span>. The proof really is trivial, since <span class="math inline">\(B \subseteq X\)</span>. Now we can define the analogue to the transport map:</p>
+<p><strong>Definition, Transport Plan</strong> A transport plan is a coupling <span class="math inline">\(\gamma \in \mathcal{P}(X \times X)\)</span> of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\nu\)</span> such that for a map <span class="math inline">\(\pi_i: X \times X \rightarrow X\)</span>, where <span class="math inline">\(\pi_i(x_1, x_2) = x_i\)</span>, the pushforward measures:</p>
+<p><span class="math inline">\(\pi_{1\#} \gamma = \mu\)</span> and <span class="math inline">\(\pi_{2\#} \gamma = \nu\)</span>, i.e.&nbsp;<span class="math inline">\(\gamma(\pi_1^{-1}(B)) = \gamma(B \times X) = \mu (B)\)</span> and <span class="math inline">\(\gamma(\pi_2^{-1}(B)) = \gamma(X \times B) = \nu (B)\)</span>.</p>
+<p>The set of all transport plans from <span class="math inline">\(\mu\)</span> to <span class="math inline">\(\nu\)</span> is <span class="math inline">\(\Gamma(\mu, \nu)\)</span>, and <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\nu\)</span> are marginals of <span class="math inline">\(\gamma\)</span>.</p>
+<p>We can interpret <span class="math inline">\(\gamma(A \times B)\)</span> as the amount of mass sent from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span>, but a single mass from <span class="math inline">\(A\)</span> can be sent to many places in the mound. This is analogus to why we are allowed to split up the mass, since not all the mass is brought over (since <span class="math inline">\(\gamma(A \times B) \leq \mu(A)\)</span>)</p>
+<p>Now we finally define the Kantorovich problem: define the following functional of the total cost of transport given some transport plan <span class="math inline">\(\gamma\)</span>:</p>
+<p><span class="math display">\[
+\mathbb{K}(\gamma) = \int_{X \times X} c(x_1, x_2)\, d\gamma(x_1, x_2)
+\]</span></p>
+<p>and “minimize” (take the infimum) it once more to get the minimal cost of transport over all transport plans:</p>
+<p><span class="math display">\[
+\inf_{\gamma \in \Gamma(\mu, \nu)}  \{ \mathbb{K}(\gamma) \mid T_{\#} \mu = \nu \}
+\]</span></p>
+<p>The idea for two different sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is the exact same idea, but the cost function itself is something that needs to be thought of more. Having just one space allows us to use some sort of distance metric like <span class="math inline">\(l_1\)</span> or more commonly, <span class="math inline">\(l_2\)</span>.</p>
+</section>
+<section id="transport-map-and-transport-plan-relationship" class="level2">
+<h2 class="anchored" data-anchor-id="transport-map-and-transport-plan-relationship">Transport Map and Transport Plan Relationship</h2>
+<p>Given a transport map <span class="math inline">\(T: X \times X\)</span> with <span class="math inline">\(T_{\#} \mu = \nu\)</span>, then the corresponding transport plan is <span class="math inline">\((\text{id} \times T)_{\#} \mu \in \Gamma(\mu, \nu)\)</span>.</p>
+<p>However, this need not be the most optimal transport plan. In fact, there is a theorem that states:</p>
+<p><span class="math display">\[
+\inf_{\gamma \in \Gamma(\mu, \nu)}  \{ \mathbb{K}(\gamma) \mid T_{\#} \mu = \nu \} \leq \inf_{T: X \rightarrow X}  \{ \mathbb{M}(T) \mid T_{\#} \mu = \nu \}
+\]</span></p>
+<p>I will not be proving this. You cannot make me.</p>
+</section>
+<section id="wasserstein-metric-earth-mover-distance" class="level2">
+<h2 class="anchored" data-anchor-id="wasserstein-metric-earth-mover-distance">Wasserstein Metric / Earth Mover Distance</h2>
+<p>I need to fill this detail in from the project I did on Optimal Transport</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

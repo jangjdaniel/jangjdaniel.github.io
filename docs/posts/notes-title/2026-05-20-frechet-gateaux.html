@@ -105,6 +105,35 @@ https://badge.dimensions.ai/
 <script type="text/javascript" src="//cdn.plu.mx/widget-popup.js"></script>
 <meta name="quarto:status" content="draft">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="Frechet and Gateaux Derivatives – Daniel Jang">
@@ -135,21 +164,21 @@ https://badge.dimensions.ai/
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">About</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-posts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Posts</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-posts">    
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=news">
+    <a class="dropdown-item" href="../../posts.html#category=Notes">
+ <span class="dropdown-text">Notes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts.html#category=News">
  <span class="dropdown-text">News</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=event">
- <span class="dropdown-text">Events</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../contact.html">
- <span class="dropdown-text">Contact</span></a>
+    <a class="dropdown-item" href="../../posts.html#category=Projects">
+ <span class="dropdown-text">Projects</span></a>
   </li>  
     </ul>
   </li>
@@ -160,41 +189,37 @@ https://badge.dimensions.ai/
     <ul class="dropdown-menu" aria-labelledby="nav-menu-research">    
         <li>
     <a class="dropdown-item" href="../../pub-listing.html">
- <span class="dropdown-text">Publications Listing</span></a>
+ <span class="dropdown-text">Select Publications</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../publications.html">
- <span class="dropdown-text">Publications</span></a>
+ <span class="dropdown-text">Pre-Prints + Recent Publications</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=paper">
- <span class="dropdown-text">Selected Papers</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../projects.html">
- <span class="dropdown-text">Grants</span></a>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Software</span></a>
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="../../teaching.html"> 
-<span class="menu-text">Teaching</span></a>
-  </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-outreach" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Outreach</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-myself" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Myself</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-outreach">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-myself">    
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=presentation">
- <span class="dropdown-text">Presentations</span></a>
+    <a class="dropdown-item" href="../../america-travel-map.html">
+ <span class="dropdown-text">America Travel Map</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Music Portfolio</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Photography Portfolio</span></a>
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="../../people.html"> 
-<span class="menu-text">Group</span></a>
-  </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
@@ -227,8 +252,19 @@ https://badge.dimensions.ai/
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#in-calculus-of-variations" id="toc-in-calculus-of-variations" class="nav-link active" data-scroll-target="#in-calculus-of-variations">In Calculus of Variations</a></li>
+  <li><a href="#big-o-and-little-o-notation" id="toc-big-o-and-little-o-notation" class="nav-link" data-scroll-target="#big-o-and-little-o-notation">Big O and Little o-notation</a></li>
+  <li><a href="#multivariable-calculus-and-differentials" id="toc-multivariable-calculus-and-differentials" class="nav-link" data-scroll-target="#multivariable-calculus-and-differentials">Multivariable Calculus and Differentials</a></li>
+  <li><a href="#the-derivatives" id="toc-the-derivatives" class="nav-link" data-scroll-target="#the-derivatives">The Derivatives</a></li>
+  <li><a href="#example-of-a-frechet-gateaux-derivative" id="toc-example-of-a-frechet-gateaux-derivative" class="nav-link" data-scroll-target="#example-of-a-frechet-gateaux-derivative">Example of a Frechet / Gateaux Derivative</a></li>
+  <li><a href="#application-influence-functions" id="toc-application-influence-functions" class="nav-link" data-scroll-target="#application-influence-functions">Application: Influence Functions</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -273,9 +309,49 @@ https://badge.dimensions.ai/
 </header>
 
 
-<p>(Old post I have yet to bring to this website)</p>
+<section id="in-calculus-of-variations" class="level1">
+<h1>In Calculus of Variations</h1>
+<p>We first need to define what we mean by a “small change in a function <span class="math inline">\(f\)</span>”, which leads us to the concept of a variation.</p>
+<p>A pertubation of a function <span class="math inline">\(f(x)\)</span> is defined as <span class="math inline">\(f(x) \rightarrow f(x) + \epsilon h(x)\)</span>, where <span class="math inline">\(h(x)\)</span> is an arbitrary function and <span class="math inline">\(\epsilon &gt; 0\)</span> is some real parameter.</p>
+<p>A variation of a function <span class="math inline">\(f(x)\)</span>, denoted <span class="math inline">\(\delta f\)</span> is… (why do we take the derivative with respect to epsilon?)</p>
+</section>
+<section id="big-o-and-little-o-notation" class="level1">
+<h1>Big O and Little o-notation</h1>
+<p>Apparently this is common notation in math and stats when it comes to asymptotics (makes sense since we want to see the growth behavior when we approach infinity and see when that kicks in), so I might as well clear out any confusion, especially if I want to look at data structures in the future.</p>
+<p><span class="math inline">\(O(g)\)</span> refers to a set of functions such that for some <span class="math inline">\(f \in O(g)\)</span>, <span class="math inline">\(f(x) \leq kg(x)\)</span> (where <span class="math inline">\(k \in \mathbb{R}^{+}\)</span> is a constant) for all <span class="math inline">\(x &gt; a\)</span>. This basically means that the growth of <span class="math inline">\(f\)</span> to infinity is no faster than the growth of <span class="math inline">\(g\)</span>. Little o is similar, but with <span class="math inline">\(f(x) &lt; kg(x)\)</span>, (and with an extra condition that I am not sure about)</p>
+<p>In terms of a limit definition, big O is <span class="math inline">\(\limsup_{x \to \infty} \frac{f(x)}{g(x)} &lt; \infty\)</span> and little O is <span class="math inline">\(\limsup_{x \to \infty} \frac{f(x)}{g(x)} = 0\)</span>.</p>
+<p>Why the limit supremum? Because there are some functions where the limit does not exist (but recall from analysis that the <span class="math inline">\(\limsup\)</span> of a sequence always exists in the extended real number line).</p>
+<p>Here are some examples:</p>
+<p><span class="math display">\[400x^2 \in O(x^2)\]</span></p>
+<p><span class="math display">\[3 + (n \mod 2) \in O(1)\]</span></p>
+<p><span class="math display">\[3x \notin o(x) \text{, but } 3x \in O(x)\]</span></p>
+</section>
+<section id="multivariable-calculus-and-differentials" class="level1">
+<h1>Multivariable Calculus and Differentials</h1>
+<p>The gradient as the “total derivative”, we write that in terms of a vector. That is the linear map that is induced (which I know from differential geometry). We can extend that to vector fields by adding another dimension. In one dimension, the total derivative is literally just the derivative, so that’s where I was initially confused.</p>
+<p>Definition of a directional derivative in limit form: include because I don’t think I learned this</p>
+</section>
+<section id="the-derivatives" class="level1">
+<h1>The Derivatives</h1>
+<p>Let <span class="math inline">\(B\)</span> be a banach space (remember this can be a set of functions, but it doesn’t have to be), and let <span class="math inline">\(F: B \rightarrow \mathbb{R}\)</span> be some functional. The differential of <span class="math inline">\(F\)</span> at a point <span class="math inline">\(\rho \in B\)</span> is a linear functional <span class="math inline">\(\delta F_{\rho}[\cdot]\)</span> such that for all <span class="math inline">\(\phi \in B\)</span>,</p>
+<p><span class="math display">\[F[\rho + \phi] - F[\rho] = \delta F_{\rho}[\phi] + \epsilon \| \phi \|\]</span></p>
+<p>With the property that as <span class="math inline">\(\| \phi \| \rightarrow 0\)</span>, then <span class="math inline">\(\epsilon \rightarrow 0\)</span>. In fact, the Frechet derivative of <span class="math inline">\(F\)</span> at <span class="math inline">\(\rho\)</span> is given by this differential as the “total derivative”.</p>
+<p>(There is the limit form of this equation), we shrink the norm of an arbitrary <span class="math inline">\(\phi\)</span>, so it can approach zero from any direction.</p>
+<p>What if we fix an arbitrary direction <span class="math inline">\(\phi\)</span>? We shrink everything based on one direction, analogous to the directional derivative.</p>
+<p>In fact, if a Frechet derivative exists, it is equal to the gateaux derivative. One terminology thing: Frechet = Strong, Gateaux = Weak, Pathwise.</p>
+<p>Functional derivatives don’t need to be defined with a banach space, but that makes things a bit too complicated for my purposes.</p>
+</section>
+<section id="example-of-a-frechet-gateaux-derivative" class="level1">
+<h1>Example of a Frechet / Gateaux Derivative</h1>
+<p>Let <span class="math inline">\(J[f] = \int (f(x))^2 dx\)</span> be a functional. We want to compute its frechet derivative.</p>
+<p>Now a case where the Frechet derivative doesn’t exist but the Gateaux derivative does:</p>
+</section>
+<section id="application-influence-functions" class="level1">
+<h1>Application: Influence Functions</h1>
+<p>We are not trying to optimize some quantity, so we don’t need the tools from calculus of variations (although I would still like to cover Euler-Lagrange Equations). Instead, we want to see how much of a pertubation changes a statistical quantity (usually a target estimate) we are interested in, such as the mean or a treatment effect.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
