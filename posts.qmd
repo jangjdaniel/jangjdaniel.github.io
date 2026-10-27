@@ -1,6 +1,6 @@
 ---
-title: "Blog Posts"
-subtitle: "Updates about papers and posts on my understanding of certain topics"
+title: "Posts"
+subtitle: "Mostly my notes on topics I learned outside the classroom. These are constantly evolving and for my own understaanding, so many are drafts and quite messy."
 description-meta: "Posts about papers, events, news, and more"
 listing: 
   sort: "date desc"

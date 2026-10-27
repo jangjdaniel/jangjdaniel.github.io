@@ -12,10 +12,6 @@ about:
   template: trestles
   image-width: 70%
   links:
-    - icon: github
-      text: GitHub
-      href: https://github.com/jangjdaniel
-      target: _blank
     #- icon: globe
     #  text: Uprofile
     #  href: https://baruch.cuny.edu
@@ -64,13 +60,14 @@ listing:   # Comment the listing section and delete corresponding lines in the i
 
 Hello! :)
 
-I am currently a Ph.D. student in Biostatistics at the University of Pennsylvania (Perelman School of Medicine: Graduate Group in Epidemiology and Biostatistics in Biomedical Graduate Studies) with research interests in **causal inference**, **missing data**, and **semiparametric theory**. I hope to use my expertise to develop robust methods for the analysis of observational studies that can be used in collaborative projects across the biomedical and education fields. I also hope to grow as an educator in statistics. 
+I am currently a Ph.D. student in **Biostatistics** at the University of Pennsylvania (Perelman School of Medicine) with research interests in **causal inference**, **missing data**, and **semiparametric theory**. I hope to use my expertise to develop robust methods for the analysis of observational studies that can be used in collaborative projects across the biomedical and education fields. I also hope to grow as an educator in statistics. 
 
-## Collaboration Experience
+## Collaborative Experience
 
 - Biostatistics Student Analysis Core: University of Pennsylvania (2026-Present)
 - [QSURE Intern](https://www.mskcc.org/departments/epidemiology-biostatistics/educational-opportunities/quantitative-sciences-summer-undergraduate-research-experience-qsure): Memorial Sloan Kettering Cancer Center (2025)
 - [Statistics and Data Science Fellow](https://www.amherst.edu/academiclife/departments/statistics/major-in-statistics/statistics-fellows): Amherst College (2024-2026)
+- [Follette Education Lab](https://www.follettelab.com/education-research): Amherst College (2023-2026)
 
 ## Education
 

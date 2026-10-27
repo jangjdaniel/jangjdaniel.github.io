@@ -136,11 +136,11 @@ window.Quarto = {
 
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="The Radon-Nikodym Derivative – Daniel Jang">
-<meta property="og:description" content="How does this connect to derivatives in calculus?">
+<meta property="og:description" content="How does this connect to derivatives we learned in calculus?">
 <meta property="og:image" content="https://quarto.org/quarto.png">
 <meta property="og:site_name" content="Daniel Jang">
 <meta name="twitter:title" content="The Radon-Nikodym Derivative – Daniel Jang">
-<meta name="twitter:description" content="How does this connect to derivatives in calculus?">
+<meta name="twitter:description" content="How does this connect to derivatives we learned in calculus?">
 <meta name="twitter:image" content="https://quarto.org/quarto.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -163,21 +163,21 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">About</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-posts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Posts</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-posts">    
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=news">
+    <a class="dropdown-item" href="../../posts.html#category=Notes">
+ <span class="dropdown-text">Notes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts.html#category=News">
  <span class="dropdown-text">News</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=event">
- <span class="dropdown-text">Events</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../contact.html">
- <span class="dropdown-text">Contact</span></a>
+    <a class="dropdown-item" href="../../posts.html#category=Projects">
+ <span class="dropdown-text">Projects</span></a>
   </li>  
     </ul>
   </li>
@@ -188,41 +188,37 @@ window.Quarto = {
     <ul class="dropdown-menu" aria-labelledby="nav-menu-research">    
         <li>
     <a class="dropdown-item" href="../../pub-listing.html">
- <span class="dropdown-text">Publications Listing</span></a>
+ <span class="dropdown-text">Select Publications</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../publications.html">
- <span class="dropdown-text">Publications</span></a>
+ <span class="dropdown-text">Pre-Prints + Recent Publications</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=paper">
- <span class="dropdown-text">Selected Papers</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../projects.html">
- <span class="dropdown-text">Grants</span></a>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Software</span></a>
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="../../teaching.html"> 
-<span class="menu-text">Teaching</span></a>
-  </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-outreach" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Outreach</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-myself" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Myself</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-outreach">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-myself">    
         <li>
-    <a class="dropdown-item" href="../../posts.html#category=presentation">
- <span class="dropdown-text">Presentations</span></a>
+    <a class="dropdown-item" href="../../america-travel-map.html">
+ <span class="dropdown-text">America Travel Map</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Music Portfolio</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../publications.html">
+ <span class="dropdown-text">Photography Portfolio</span></a>
   </li>  
     </ul>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="../../people.html"> 
-<span class="menu-text">Group</span></a>
-  </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
@@ -280,7 +276,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    How does this connect to derivatives in calculus?
+    How does this connect to derivatives we learned in calculus?
   </div>
 </div>
 
@@ -335,7 +331,7 @@ window.Quarto = {
 = \lim_{h \to 0} \frac{F(x+h) - F(x)}{h}
 = F'(x)}
 \]</span></p>
-<p>In fact, by the **Lebesgue Differentiation Theorem*, if this integral function is absolutely continuous, its Radon-Nikodym Derivative equals the classical derivative almost everywhere.</p>
+<p>In fact, by the <strong>Lebesgue Differentiation Theorem</strong>, if this integral function is absolutely continuous, its Radon-Nikodym Derivative equals the classical derivative almost everywhere.</p>
 <hr>
 </section>
 <section id="example" class="level2">
@@ -351,8 +347,7 @@ window.Quarto = {
 <p><span class="math display">\[
 \mu(A) = \int_{A \cap (\mathbb{R} \setminus \mathbb{Q})} 2x \, dm(x) = x^2 \, \text{ m-a.e.}
 \]</span></p>
-<p>For example, with <span class="math inline">\(A = [0,2]\)</span>, <span class="math inline">\(\mu(A) = 4\)</span> and <span class="math inline">\(m(A) = 2\)</span>. With the derivative being simply <span class="math inline">\(\frac{d\mu}{dm}(x) = f(x)\)</span>, we have that ratio/density captured.[^improper]</p>
-<p>[^improper] I know that this is improper notation. Please cut me some slack.</p>
+<p>For example, with <span class="math inline">\(A = [0,2]\)</span>, <span class="math inline">\(\mu(A) = 4\)</span> and <span class="math inline">\(m(A) = 2\)</span>. With the derivative being simply <span class="math inline">\(\frac{d\mu}{dm}(x) = f(x)\)</span>, we have that ratio/density captured.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <p>The derivative of <span class="math inline">\(x^2\)</span> is unique up to a null set. That is, the derivative of <span class="math inline">\(x^2\)</span> can be the function <span class="math inline">\(2x\)</span> without the rationals, or just <span class="math inline">\(2x\)</span>, or <span class="math inline">\(2x\)</span> minus some point. Now if we were to do the same thing with <span class="math inline">\(g(x) = 2x \, \chi_{\mathbb{Q}}(x)\)</span>, the RN derivative would be 0, since the part with <span class="math inline">\(2x\)</span> mass is on a null set. Again, this goes back to how we do integration! The classical derivative could not do this.</p>
 <p>These derivatives have applications in probability theory, specifically when defining the PMF (integrate w.r.t the counting measure), doing changes in measure (not sure when this would become necessary), and some things in conditional expectation. Unlike with integration and learning some of the most important theorems (Monotone Convergence Theorem, Fatou’s Lemma, Dominated Convergence Theorem), I don’t know how these derivatives are useful (beyond taking out a null set) until I take a probability course. However, hopefully I understand it a bit better now.</p>
 <hr>
@@ -367,6 +362,7 @@ window.Quarto = {
 <ol>
 <li id="fn1"><p>This would not be the formal definition of the <span class="math inline">\(\mu\)</span> measure, since elementary measures are not measures. However, I think it is okay to work with pre-measures in this case because everything is behaved nicely, i.e.&nbsp;we have continuity (almost) everywhere.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p><span class="math inline">\(\mu\)</span> is a signed measure. This is consistent with classical calculus where integrals can be negative.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>I know that this is improper notation. Please cut me some slack.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

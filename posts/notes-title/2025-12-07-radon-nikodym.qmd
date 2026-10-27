@@ -1,6 +1,6 @@
 ---
 title: "The Radon-Nikodym Derivative"
-description: "How does this connect to derivatives in calculus?"
+description: "How does this connect to derivatives we learned in calculus?"
 author: "Daniel Jang"
 date: "2025-12-07"
 categories: [Notes, Math]
@@ -48,7 +48,7 @@ $$
 = F'(x)}
 $$
 
-In fact, by the **Lebesgue Differentiation Theorem*, if this integral function is absolutely continuous, its Radon-Nikodym Derivative equals the classical derivative almost everywhere.
+In fact, by the **Lebesgue Differentiation Theorem**, if this integral function is absolutely continuous, its Radon-Nikodym Derivative equals the classical derivative almost everywhere.
 
 ---
 
@@ -72,7 +72,7 @@ $$
 
 For example, with $A = [0,2]$, $\mu(A) = 4$ and $m(A) = 2$. With the derivative being simply $\frac{d\mu}{dm}(x) = f(x)$, we have that ratio/density captured.[^improper] 
 
-[^improper] I know that this is improper notation. Please cut me some slack.
+[^improper]: I know that this is improper notation. Please cut me some slack.
 
 The derivative of $x^2$ is unique up to a null set. That is, the derivative of $x^2$ can be the function $2x$ without the rationals, or just $2x$, or $2x$ minus some point. Now if we were to do the same thing with $g(x) = 2x \, \chi_{\mathbb{Q}}(x)$, the RN derivative would be 0, since the part with $2x$ mass is on a null set. Again, this goes back to how we do integration! The classical derivative could not do this.
 

@@ -23,9 +23,9 @@ where $f \in L_2$ is some fixed, unknown function of our vector of predictors wi
 
 I know the most basic form of this is training and testing data, where we first fit a model on some proportion of the data, then we see the accuracy of the predictions on data the model has not encountered. I know that there are more techniques than simply partitioning the data (e.g. 80% training / 20% testing).
 
-```python
-#this is the scikit-learn package, which is extensive. we only want one part of it which has the function we want
+```{python, eval=FALSE}
 
+#this is the scikit-learn package, which is extensive. we only want one part of it which has the function we want
 import pandas as pd
 from sklearn import model_selection as ms 
 
@@ -39,7 +39,7 @@ X_train, X_test, y_train, y_test = ms.train_test_split(X, y, test_size=0.2, rand
 
 
 What is important for these regressions in machine learning is **k-fold cross validation**, which means we are trying to extract the best **hyperparameter** to use in our model. I will describe what these are in practice, which will hopefully make sense. The idea with k-fold cross validation is that on our training data, we want to see which hyperparameter performs the best overall (you first need a set of hyperparameter values that you think are realistic to use, modern packages do this automatically for you, doing a ton of values and interpolating to fill in the gaps) by partitioning the training data into $k$ equal groups, training the model on $k-1$ groups with all the different hyperparameters, testing the model on the remaining group, and calculating a validation error for each hyperparameter value (in regression it's usually the MSE). This is repeated so that each partition is the testing group once. Then the average of the validation error for each hyperparameter value is found (known as cross-validation error, or CV), and the lowest one is our "best" hyperparameter. Packages will often interpolate between two of the lowest CVs to get a very specific hyperparameter value. After this hyperparameter value is extracted, it is used to specify the regression for the full training dataset, then we check it with the testing dataset as normal to ensure we have good predictions.
----
+
 ## Regularization and Loss Functions
 
 I like the definition of regularization as "convert an 'answer to a question' to a simpler one". The answer to our question comes in the form of our predictors and the answer is the outcome variable. We want to make the predictors simpler to avoid overfitting. Thank goodness I remember what overfitting is from my intermediate statistics course. To do so, we need to do something with a loss function to "penalize" the model. This concept always confused me because there was no concrete example to illustrate with what I knew. So for an example, I looked at in classical linear regression, the loss function is the sum of squared errors, or mean square error. What we want to do is minimize this error to get the most accurate model. What I didn't know is that you can use different loss functions. I'm not entirely sure what the consequence of this is in terms of parameter estimation or the interpretation of parameters. 
@@ -91,7 +91,7 @@ where $x_1$ and $x_2$ are highly correlated. This means that the nondiagonals of
 
 Note that in python, the $\lambda$ hyperparameter is called $\alpha$
 
-```python
+```{python, eval=FALSE}
 import numpy as np
 from sklearn.linear_model import Ridge
 from sklearn.model_selection import train_test_split
@@ -119,7 +119,7 @@ If you want the k-fold cross validation built in, here's the documentation: http
 
 In R, it looks like:
 
-```R
+```{r}
 library("glmnet")
 ```
 
@@ -136,11 +136,11 @@ However, the model is said to **saturate** at the sample size $n$, which I think
 
 ### Python and R stuff here to run code
 
-```python
+```{python, eval=FALSE}
 from sklearn import model_selection as ms 
 ```
 
-```R
+```{r}
 library("glmnet")
 ```
 

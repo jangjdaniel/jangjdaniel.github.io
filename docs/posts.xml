@@ -1552,57 +1552,47 @@ font-style: inherit;">)</span></span></code></pre></div></div>
   <title>Ridge and LASSO Regression</title>
   <dc:creator>Daniel Jang</dc:creator>
   <link>https://drganghe.github.io/quarto-academic-website-template/posts/notes-title/2025-12-20-ridge-LASSO.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<section id="why-am-i-writing-about-this" class="level2">
-<h2 class="anchored" data-anchor-id="why-am-i-writing-about-this">Why am I writing about this?</h2>
+  <description><![CDATA[ <section id="why-am-i-writing-about-this" class="level2"><h2 class="anchored" data-anchor-id="why-am-i-writing-about-this">Why am I writing about this?</h2>
 <p>One thing I felt that was missing from my undergraduate training was a comprehensive look at machine learning / high-dimensional statistics. I often confused the two together, which in hindsight is silly of me. Right now, I am going through some of the more popular methods for supervised learning (where we have access to an outcome variable <img src="https://latex.codecogs.com/png.latex?Y">) that have connections to high-dimensional statistics. Hopefully this will serve as a foundation for things I explore in the future.</p>
-</section>
-<section id="notation" class="level2">
-<h2 class="anchored" data-anchor-id="notation">Notation</h2>
+</section><section id="notation" class="level2"><h2 class="anchored" data-anchor-id="notation">Notation</h2>
 <p>Let <img src="https://latex.codecogs.com/png.latex?Y"> be an endogenous variable and let <img src="https://latex.codecogs.com/png.latex?X%20=%20(X_1,%20%5Cdots,%20X_p)"> be a vector of exogenous variables. We describe the functional form of the exogenous variables to the endogenous variable as</p>
 <p><img src="https://latex.codecogs.com/png.latex?Y%20=%20f(X)%20+%20%5Cvarepsilon"></p>
 <p>where <img src="https://latex.codecogs.com/png.latex?f%20%5Cin%20L_2"> is some fixed, unknown function of our vector of predictors with finite variance and the <strong>irreducible error</strong> <img src="https://latex.codecogs.com/png.latex?%5Cvarepsilon%20%5Csim%20%5Cmathcal%7BN%7D(0,%5Csigma%5E2)">. In machine learning, we are trying to find the best estimated function <img src="https://latex.codecogs.com/png.latex?%5Chat%7Bf%7D"> for “high-quality” predictions <img src="https://latex.codecogs.com/png.latex?%5Chat%7BY%7D"> that are generalizable to new data. Unlike statistical inference, we do not care about individual parameter values in <img src="https://latex.codecogs.com/png.latex?%5Chat%7Bf%7D">: they can have some bias as long as the variance of the model lowers in a process called the <strong>Bias-Variance Tradeoff</strong>. Furthermore, <img src="https://latex.codecogs.com/png.latex?%5Chat%7Bf%7D"> is said to be a black box.</p>
-</section>
-<section id="cross-validation" class="level2">
-<h2 class="anchored" data-anchor-id="cross-validation">Cross-Validation</h2>
+</section><section id="cross-validation" class="level2"><h2 class="anchored" data-anchor-id="cross-validation">Cross-Validation</h2>
 <p>I know the most basic form of this is training and testing data, where we first fit a model on some proportion of the data, then we see the accuracy of the predictions on data the model has not encountered. I know that there are more techniques than simply partitioning the data (e.g.&nbsp;80% training / 20% testing).</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#this is the scikit-learn package, which is extensive. we only want one part of it which has the function we want</span></span>
-<span id="cb1-2"></span>
-<span id="cb1-3"><span class="im" style="color: #00769E;
+<span id="cb1-2"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">as</span> pd</span>
-<span id="cb1-4"><span class="im" style="color: #00769E;
+<span id="cb1-3"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> sklearn <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> model_selection <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">as</span> ms </span>
-<span id="cb1-5"></span>
-<span id="cb1-6"><span class="co" style="color: #5E5E5E;
+<span id="cb1-4"></span>
+<span id="cb1-5"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># load in the data</span></span>
-<span id="cb1-7">df <span class="op" style="color: #5E5E5E;
+<span id="cb1-6">df <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> pd.read_csv(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"data.csv"</span>)</span>
-<span id="cb1-8"></span>
-<span id="cb1-9"><span class="co" style="color: #5E5E5E;
+<span id="cb1-7"></span>
+<span id="cb1-8"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># training and test split: make sure data only has features X (predictors) and a specified outcome y</span></span>
-<span id="cb1-10"><span class="co" style="color: #5E5E5E;
+<span id="cb1-9"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># this produces four datasets. of course you should rename to other than X and y</span></span>
-<span id="cb1-11">X_train, X_test, y_train, y_test <span class="op" style="color: #5E5E5E;
+<span id="cb1-10">X_train, X_test, y_train, y_test <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ms.train_test_split(X, y, test_size<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -1615,26 +1605,17 @@ background-color: null;
 font-style: inherit;">42</span>) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#like setting seed (80/20 split)</span></span></code></pre></div></div>
-</section>
-<section id="what-is-important-for-these-regressions-in-machine-learning-is-k-fold-cross-validation-which-means-we-are-trying-to-extract-the-best-hyperparameter-to-use-in-our-model.-i-will-describe-what-these-are-in-practice-which-will-hopefully-make-sense.-the-idea-with-k-fold-cross-validation-is-that-on-our-training-data-we-want-to-see-which-hyperparameter-performs-the-best-overall-you-first-need-a-set-of-hyperparameter-values-that-you-think-are-realistic-to-use-modern-packages-do-this-automatically-for-you-doing-a-ton-of-values-and-interpolating-to-fill-in-the-gaps-by-partitioning-the-training-data-into-k-equal-groups-training-the-model-on-k-1-groups-with-all-the-different-hyperparameters-testing-the-model-on-the-remaining-group-and-calculating-a-validation-error-for-each-hyperparameter-value-in-regression-its-usually-the-mse.-this-is-repeated-so-that-each-partition-is-the-testing-group-once.-then-the-average-of-the-validation-error-for-each-hyperparameter-value-is-found-known-as-cross-validation-error-or-cv-and-the-lowest-one-is-our-best-hyperparameter.-packages-will-often-interpolate-between-two-of-the-lowest-cvs-to-get-a-very-specific-hyperparameter-value.-after-this-hyperparameter-value-is-extracted-it-is-used-to-specify-the-regression-for-the-full-training-dataset-then-we-check-it-with-the-testing-dataset-as-normal-to-ensure-we-have-good-predictions." class="level2">
-<h2 class="anchored" data-anchor-id="what-is-important-for-these-regressions-in-machine-learning-is-k-fold-cross-validation-which-means-we-are-trying-to-extract-the-best-hyperparameter-to-use-in-our-model.-i-will-describe-what-these-are-in-practice-which-will-hopefully-make-sense.-the-idea-with-k-fold-cross-validation-is-that-on-our-training-data-we-want-to-see-which-hyperparameter-performs-the-best-overall-you-first-need-a-set-of-hyperparameter-values-that-you-think-are-realistic-to-use-modern-packages-do-this-automatically-for-you-doing-a-ton-of-values-and-interpolating-to-fill-in-the-gaps-by-partitioning-the-training-data-into-k-equal-groups-training-the-model-on-k-1-groups-with-all-the-different-hyperparameters-testing-the-model-on-the-remaining-group-and-calculating-a-validation-error-for-each-hyperparameter-value-in-regression-its-usually-the-mse.-this-is-repeated-so-that-each-partition-is-the-testing-group-once.-then-the-average-of-the-validation-error-for-each-hyperparameter-value-is-found-known-as-cross-validation-error-or-cv-and-the-lowest-one-is-our-best-hyperparameter.-packages-will-often-interpolate-between-two-of-the-lowest-cvs-to-get-a-very-specific-hyperparameter-value.-after-this-hyperparameter-value-is-extracted-it-is-used-to-specify-the-regression-for-the-full-training-dataset-then-we-check-it-with-the-testing-dataset-as-normal-to-ensure-we-have-good-predictions.">What is important for these regressions in machine learning is <strong>k-fold cross validation</strong>, which means we are trying to extract the best <strong>hyperparameter</strong> to use in our model. I will describe what these are in practice, which will hopefully make sense. The idea with k-fold cross validation is that on our training data, we want to see which hyperparameter performs the best overall (you first need a set of hyperparameter values that you think are realistic to use, modern packages do this automatically for you, doing a ton of values and interpolating to fill in the gaps) by partitioning the training data into <img src="https://latex.codecogs.com/png.latex?k"> equal groups, training the model on <img src="https://latex.codecogs.com/png.latex?k-1"> groups with all the different hyperparameters, testing the model on the remaining group, and calculating a validation error for each hyperparameter value (in regression it’s usually the MSE). This is repeated so that each partition is the testing group once. Then the average of the validation error for each hyperparameter value is found (known as cross-validation error, or CV), and the lowest one is our “best” hyperparameter. Packages will often interpolate between two of the lowest CVs to get a very specific hyperparameter value. After this hyperparameter value is extracted, it is used to specify the regression for the full training dataset, then we check it with the testing dataset as normal to ensure we have good predictions.</h2>
-</section>
-<section id="regularization-and-loss-functions" class="level2">
-<h2 class="anchored" data-anchor-id="regularization-and-loss-functions">Regularization and Loss Functions</h2>
+</div>
+<p>What is important for these regressions in machine learning is <strong>k-fold cross validation</strong>, which means we are trying to extract the best <strong>hyperparameter</strong> to use in our model. I will describe what these are in practice, which will hopefully make sense. The idea with k-fold cross validation is that on our training data, we want to see which hyperparameter performs the best overall (you first need a set of hyperparameter values that you think are realistic to use, modern packages do this automatically for you, doing a ton of values and interpolating to fill in the gaps) by partitioning the training data into <img src="https://latex.codecogs.com/png.latex?k"> equal groups, training the model on <img src="https://latex.codecogs.com/png.latex?k-1"> groups with all the different hyperparameters, testing the model on the remaining group, and calculating a validation error for each hyperparameter value (in regression it’s usually the MSE). This is repeated so that each partition is the testing group once. Then the average of the validation error for each hyperparameter value is found (known as cross-validation error, or CV), and the lowest one is our “best” hyperparameter. Packages will often interpolate between two of the lowest CVs to get a very specific hyperparameter value. After this hyperparameter value is extracted, it is used to specify the regression for the full training dataset, then we check it with the testing dataset as normal to ensure we have good predictions.</p>
+</section><section id="regularization-and-loss-functions" class="level2"><h2 class="anchored" data-anchor-id="regularization-and-loss-functions">Regularization and Loss Functions</h2>
 <p>I like the definition of regularization as “convert an ‘answer to a question’ to a simpler one”. The answer to our question comes in the form of our predictors and the answer is the outcome variable. We want to make the predictors simpler to avoid overfitting. Thank goodness I remember what overfitting is from my intermediate statistics course. To do so, we need to do something with a loss function to “penalize” the model. This concept always confused me because there was no concrete example to illustrate with what I knew. So for an example, I looked at in classical linear regression, the loss function is the sum of squared errors, or mean square error. What we want to do is minimize this error to get the most accurate model. What I didn’t know is that you can use different loss functions. I’m not entirely sure what the consequence of this is in terms of parameter estimation or the interpretation of parameters.</p>
-</section>
-<section id="connection-to-l_p-norms-from-measure-theory" class="level2">
-<h2 class="anchored" data-anchor-id="connection-to-l_p-norms-from-measure-theory">Connection to <img src="https://latex.codecogs.com/png.latex?L_p"> norms from Measure Theory</h2>
+</section><section id="connection-to-l_p-norms-from-measure-theory" class="level2"><h2 class="anchored" data-anchor-id="connection-to-l_p-norms-from-measure-theory">Connection to <img src="https://latex.codecogs.com/png.latex?L_p"> norms from Measure Theory</h2>
 <p>I need to explicitly write this down to avoid my confusion. <img src="https://latex.codecogs.com/png.latex?L_p"> norms describe a function space (i.e.&nbsp;a function in <img src="https://latex.codecogs.com/png.latex?L_1"> norm means that the function is integrable), whereas <img src="https://latex.codecogs.com/png.latex?%5Cell_p"> norms describe the geometry of distance. The reason why they have almost identical names is because they follow a similar concept of raising each element to the power of p and taking the pth-root of the sum of all those elements. For example, for distances of an element <img src="https://latex.codecogs.com/png.latex?x%20=%20(x_1,%5Cdots,x_n)%20%5Cin%20%5Cmathbb%7BR%7D%5En">, we typically think of the Euclidean norm <img src="https://latex.codecogs.com/png.latex?%5C%7Cx%5C%7C_2%20=%20(x_1%5E2%20+%20%5Ccdots%20+%20x_n%5E2)%5E%7B1/2%7D">. To generalize this notion, for <img src="https://latex.codecogs.com/png.latex?p%20%5Cge%201"> we define <img src="https://latex.codecogs.com/png.latex?%5C%7Cx%5C%7C_p%20=%20(x_1%5Ep%20+%20%5Ccdots%20+%20x_n%5Ep)%5E%7B1/p%7D">. For example, the <img src="https://latex.codecogs.com/png.latex?%5Cell_1"> norm describes taxicab geometry (high school flashbacks: it looks like a square). The idea is that each value of <img src="https://latex.codecogs.com/png.latex?p"> induces a different geometry on <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BR%7D%5En">, with <img src="https://latex.codecogs.com/png.latex?%5Cell_2"> being the most familiar to us and <img src="https://latex.codecogs.com/png.latex?%5Cell_1"> somewhat less so.</p>
-</section>
-<section id="the-goal-of-these-regressions" class="level2">
-<h2 class="anchored" data-anchor-id="the-goal-of-these-regressions">The goal of these regressions</h2>
+</section><section id="the-goal-of-these-regressions" class="level2"><h2 class="anchored" data-anchor-id="the-goal-of-these-regressions">The goal of these regressions</h2>
 <p>The idea with both Ridge and LASSO is we add a penalty to the original regression equation to dampen the effect of certain variables, especially when two variables are highly correlated with one another or if there is a very weak / nonexistent relationship between the variable and the outcome. For linear regression, the best linear unbiased estimator (BLUE) or the minimum variance unbiased estimator (MVUE) is ordinary least squares (OLS) because of the Gauss-Markov Theorem. In the aforementioned cases, however, the variance will be unnecessarily huge. Even if in the long run we have an unbiased estimator, it is too unstable to be reliable in a statistical analysis (or for a machine learning model). As a refresher, we are trying to minimize the following:</p>
 <p><img src="https://latex.codecogs.com/png.latex?%5Chat%7B%5Cvec%7B%5Cbeta%7D%7D_%7BOLS%7D%20=%20%5Cmin_%7B%5Cvec%7B%5Cbeta%7D%7D%20%5C%7Cy%20-%20X%5Cbeta%5C%7C_2%5E2%20=%20(%5Ctextbf%7BX%7D%5E%5Ctop%20%5Ctextbf%7BX%7D)%5E%7B-1%7D%20%5Ctextbf%7BX%7D%5E%5Ctop%20%5Cvec%7By%7D"> (note that this notation states that we are in <img src="https://latex.codecogs.com/png.latex?%5Cell_2"> norm)</p>
 <p>Instead, what we can do is look at some slightly biased estimators that have drastically lower variance! In fact, the amount of reduced variance can make up for the fact that we bias the estimators slightly to the point where our MSE for ridge or lasso is less than our MSE for OLS. The question becomes “how much bias are we willing to take to reduce variance so we have more”consistent” results?”</p>
-</section>
-<section id="ridge-regression" class="level2">
-<h2 class="anchored" data-anchor-id="ridge-regression">Ridge Regression</h2>
+</section><section id="ridge-regression" class="level2"><h2 class="anchored" data-anchor-id="ridge-regression">Ridge Regression</h2>
 <p>The most common use case of ridge regression is when we know that all variables are important and should remain. The math behind ridge regression is not terribly complicated. It is very similar to the loss function in OLS, but we add a constraint as follows:</p>
 <p><img src="https://latex.codecogs.com/png.latex?%5Cmin_%5Cbeta%20%5C%7C%7By%7D%20-%20%7BX%7D%7B%5Cbeta%7D%5C%7C_2%5E2%20%5Cquad%20%5Ctext%7Bs.t.%7D%20%5Cquad%20%5C%7C%7B%5Cbeta%7D%5C%7C_2%5E2%20%5Cle%20c"></p>
 <p>What is this <img src="https://latex.codecogs.com/png.latex?c">? It relates to the geometrical visualizations of ridge regression, aka the radius of the ball. So on the graphs we see, we have <img src="https://latex.codecogs.com/png.latex?%5Cbeta_0"> on the x-axis and <img src="https://latex.codecogs.com/png.latex?%5Cbeta_1"> on the y-axis as a 2-tuple for <img src="https://latex.codecogs.com/png.latex?%5Cmathbf%7B%5Cbeta%7D"> (realistically, there should be at least three dimensions, but this is just to build our intuition). The constraint is a circle, because that is the <img src="https://latex.codecogs.com/png.latex?%5Cell_2"> norm. What we are saying is that given the contour plot of <img src="https://latex.codecogs.com/png.latex?(%5Cbeta_0,%20%5Cbeta_1)">, which values minimize the output while respecting the constraint. In other words, we are trying to find a minimum subject to a constraint in a multivariable setting… sound familiar? It’s Lagrange Multipliers! We can set up the Lagrangian as the following for some <img src="https://latex.codecogs.com/png.latex?%5Clambda%20%5Cge%200">:</p>
@@ -1648,10 +1629,10 @@ font-style: inherit;">#like setting seed (80/20 split)</span></span></code></pre
 <p><strong>Example</strong>: Consider the following toy example with OLS:</p>
 <p><img src="https://latex.codecogs.com/png.latex?Y%20=%200.5%20+%200.3*x_1%20+%200.6*x_2%20+%20%5Cepsilon"></p>
 <p>where <img src="https://latex.codecogs.com/png.latex?x_1"> and <img src="https://latex.codecogs.com/png.latex?x_2"> are highly correlated. This means that the nondiagonals of the matrix <img src="https://latex.codecogs.com/png.latex?X%5E%5Ctop%20X"> will be pretty high, whereas the diagonals are exactly 1 (a variable <img src="https://latex.codecogs.com/png.latex?x"> is perfectly correlated with itself). The hyperparameter adds a certain value to the diagonals, so mathematically when we calculate <img src="https://latex.codecogs.com/png.latex?%5Chat%7B%5Cbeta%7D_%7B%5Ctext%7Bridge%7D%7D">, all effects are dampened to some extent. I also realized that I would need to brush up on linear models to fully internalize what’s going on under the hood, but I don’t have time for that right now.</p>
-<section id="python-and-r-stuff-here-to-run-code" class="level3">
-<h3 class="anchored" data-anchor-id="python-and-r-stuff-here-to-run-code">Python and R stuff here to run code</h3>
+<section id="python-and-r-stuff-here-to-run-code" class="level3"><h3 class="anchored" data-anchor-id="python-and-r-stuff-here-to-run-code">Python and R stuff here to run code</h3>
 <p>Note that in python, the <img src="https://latex.codecogs.com/png.latex?%5Clambda"> hyperparameter is called <img src="https://latex.codecogs.com/png.latex?%5Calpha"></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
 background-color: null;
@@ -1713,46 +1694,63 @@ font-style: inherit;"># Evaluate the model</span></span>
 <span id="cb2-20">mse <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> mean_squared_error(y_test, y_pred)</span></code></pre></div></div>
+</div>
 <p>If you want the k-fold cross validation built in, here’s the documentation: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeCV.html.</p>
 <p>In R, it looks like:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw" style="color: #003B4F;
 background-color: null;
-font-style: inherit;">library</span>(<span class="st" style="color: #20794D;
+font-weight: bold;
+font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">"glmnet"</span>)</span></code></pre></div></div>
-</section>
-</section>
-<section id="lasso-least-absolute-shrinkage-and-selection-operator-regression-ell_1-regularization" class="level2">
-<h2 class="anchored" data-anchor-id="lasso-least-absolute-shrinkage-and-selection-operator-regression-ell_1-regularization">LASSO (Least Absolute Shrinkage and Selection Operator) Regression (<img src="https://latex.codecogs.com/png.latex?%5Cell_1"> Regularization)</h2>
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"><a href="https://glmnet.stanford.edu">"glmnet"</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loaded glmnet 5.1</code></pre>
+</div>
+</div>
+</section></section><section id="lasso-least-absolute-shrinkage-and-selection-operator-regression-ell_1-regularization" class="level2"><h2 class="anchored" data-anchor-id="lasso-least-absolute-shrinkage-and-selection-operator-regression-ell_1-regularization">LASSO (Least Absolute Shrinkage and Selection Operator) Regression (<img src="https://latex.codecogs.com/png.latex?%5Cell_1"> Regularization)</h2>
 <p>LASSO is quite similar to Ridge Regression, but instead of the <img src="https://latex.codecogs.com/png.latex?%5Cell_2"> norm, we use the <img src="https://latex.codecogs.com/png.latex?%5Cell_1"> norm as the loss function (taxicab geometry), so we have (I NEED TO CHECK THIS)</p>
 <p><img src="https://latex.codecogs.com/png.latex?%5Cmin_%5Cbeta%20%5C%7Cy%20-%20X%5Cbeta%5C%7C_2%5E2%20%5Cquad%20%5Ctext%7Bs.t.%7D%20%5Cquad%20%5C%7C%5Cbeta%5C%7C_1%20%5Cle%20c"></p>
 <p>This loss function is unique to all other <img src="https://latex.codecogs.com/png.latex?%5Cell_p"> norms because of non-differentiability. I think that’s related to why it can send some parameters directly to zero, and how this version can automatically do variable selection, which is dimension reduction.</p>
 <p>However, the model is said to <strong>saturate</strong> at the sample size <img src="https://latex.codecogs.com/png.latex?n">, which I think means that <img src="https://latex.codecogs.com/png.latex?f(X)"> will contain at most <img src="https://latex.codecogs.com/png.latex?n"> features out of the <img src="https://latex.codecogs.com/png.latex?p"> available predictors.</p>
-<section id="python-and-r-stuff-here-to-run-code-1" class="level3">
-<h3 class="anchored" data-anchor-id="python-and-r-stuff-here-to-run-code-1">Python and R stuff here to run code</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
+<section id="python-and-r-stuff-here-to-run-code-1" class="level3"><h3 class="anchored" data-anchor-id="python-and-r-stuff-here-to-run-code-1">Python and R stuff here to run code</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#' eval: false</span></span>
+<span id="cb6-2"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> sklearn <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> model_selection <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">as</span> ms </span></code></pre></div></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw" style="color: #003B4F;
 background-color: null;
-font-style: inherit;">library</span>(<span class="st" style="color: #20794D;
+font-weight: bold;
+font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">"glmnet"</span>)</span></code></pre></div></div>
-</section>
-</section>
-<section id="elastic-net-best-of-both-worlds" class="level2">
-<h2 class="anchored" data-anchor-id="elastic-net-best-of-both-worlds">Elastic Net (best of both worlds)</h2>
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"><a href="https://glmnet.stanford.edu">"glmnet"</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div></div>
+</div>
+</section></section><section id="elastic-net-best-of-both-worlds" class="level2"><h2 class="anchored" data-anchor-id="elastic-net-best-of-both-worlds">Elastic Net (best of both worlds)</h2>
 <p>Elastic net combines ridge and lasso using another hyperparameter <img src="https://latex.codecogs.com/png.latex?%5Calpha">, called the mixing parameter, which weights the strength of <img src="https://latex.codecogs.com/png.latex?%5Cell_1"> or <img src="https://latex.codecogs.com/png.latex?%5Cell_2"> regularization in the regression model. For time-saving sakes, I am not going to write it out, but basically we add the <img src="https://latex.codecogs.com/png.latex?%5Cell_1"> and <img src="https://latex.codecogs.com/png.latex?%5Cell_2"> penalties to the original loss function, then weight each with <img src="https://latex.codecogs.com/png.latex?%5Calpha"> and <img src="https://latex.codecogs.com/png.latex?1-%5Calpha">. I assume we need to do more cross-validation to get this hyperparameter.</p>
 <p>Also from a cursory reading of material online, it seems that this has the most applications, which makes sense because it combines the best of both worlds without sacrificing much from choosing ridge or LASSO. I think the main appeal is that the ridge part makes the LASSO part more stable. Anyways, if I end up needing to use this in the future, I can do some more digging, but I need to move onto other things now.</p>
 
 
-</section>
-
- ]]></description>
+</section> ]]></description>
   <category>Notes</category>
   <category>Regression</category>
   <category>Machine Learning</category>
@@ -1784,7 +1782,7 @@ font-style: inherit;">"glmnet"</span>)</span></code></pre></div></div>
 <p><img src="https://latex.codecogs.com/png.latex?%0A%5Cmu(%5Bx,%20x+h%5D)%20=%20%5Cint_%7B%5Bx,x+h%5D%7D%20f(x)%20%5C,%20dm(x)%0A"></p>
 <p>Taking <img src="https://latex.codecogs.com/png.latex?h%5Cto%200"> gives us:</p>
 <p><img src="https://latex.codecogs.com/png.latex?%0A%5Cboxed%7B%5Clim_%7Bh%20%5Cto%200%7D%20%5Cfrac%7B%5Cmu(%5Bx,%20x+h%5D)%7D%7Bm(%5Bx,%20x+h%5D)%7D%0A=%20%5Clim_%7Bh%20%5Cto%200%7D%20%5Cfrac%7BF(x+h)%20-%20F(x)%7D%7Bh%7D%0A=%20F'(x)%7D%0A"></p>
-<p>In fact, by the **Lebesgue Differentiation Theorem*, if this integral function is absolutely continuous, its Radon-Nikodym Derivative equals the classical derivative almost everywhere.</p>
+<p>In fact, by the <strong>Lebesgue Differentiation Theorem</strong>, if this integral function is absolutely continuous, its Radon-Nikodym Derivative equals the classical derivative almost everywhere.</p>
 <hr>
 </section>
 <section id="example" class="level2">
@@ -1794,8 +1792,7 @@ font-style: inherit;">"glmnet"</span>)</span></code></pre></div></div>
 <p><img src="https://latex.codecogs.com/png.latex?%0A%5Cint_A%202x%20%5C,%20dm(x)%0A=%20%5Cint_%7BA%20%5Ccap%20(%5Cmathbb%7BR%7D%20%5Csetminus%20%5Cmathbb%7BQ%7D)%7D%202x%20%5C,%20dm(x)%0A+%20%5Cint_%7BA%20%5Ccap%20%5Cmathbb%7BQ%7D%7D%202x%20%5C,%20dm(x)%0A"></p>
 <p>The FoTC result is unavailable here so we must actually evaluate the integral if we want to know the “antiderivative”. Recall that <img src="https://latex.codecogs.com/png.latex?A%20%5Ccap%20%5Cmathbb%7BQ%7D"> forms a null set w.r.t Lebesgue measure. Thus, the second integral is just zero. We are left with:</p>
 <p><img src="https://latex.codecogs.com/png.latex?%0A%5Cmu(A)%20=%20%5Cint_%7BA%20%5Ccap%20(%5Cmathbb%7BR%7D%20%5Csetminus%20%5Cmathbb%7BQ%7D)%7D%202x%20%5C,%20dm(x)%20=%20x%5E2%20%5C,%20%5Ctext%7B%20m-a.e.%7D%0A"></p>
-<p>For example, with <img src="https://latex.codecogs.com/png.latex?A%20=%20%5B0,2%5D">, <img src="https://latex.codecogs.com/png.latex?%5Cmu(A)%20=%204"> and <img src="https://latex.codecogs.com/png.latex?m(A)%20=%202">. With the derivative being simply <img src="https://latex.codecogs.com/png.latex?%5Cfrac%7Bd%5Cmu%7D%7Bdm%7D(x)%20=%20f(x)">, we have that ratio/density captured.[^improper]</p>
-<p>[^improper] I know that this is improper notation. Please cut me some slack.</p>
+<p>For example, with <img src="https://latex.codecogs.com/png.latex?A%20=%20%5B0,2%5D">, <img src="https://latex.codecogs.com/png.latex?%5Cmu(A)%20=%204"> and <img src="https://latex.codecogs.com/png.latex?m(A)%20=%202">. With the derivative being simply <img src="https://latex.codecogs.com/png.latex?%5Cfrac%7Bd%5Cmu%7D%7Bdm%7D(x)%20=%20f(x)">, we have that ratio/density captured.<sup>3</sup></p>
 <p>The derivative of <img src="https://latex.codecogs.com/png.latex?x%5E2"> is unique up to a null set. That is, the derivative of <img src="https://latex.codecogs.com/png.latex?x%5E2"> can be the function <img src="https://latex.codecogs.com/png.latex?2x"> without the rationals, or just <img src="https://latex.codecogs.com/png.latex?2x">, or <img src="https://latex.codecogs.com/png.latex?2x"> minus some point. Now if we were to do the same thing with <img src="https://latex.codecogs.com/png.latex?g(x)%20=%202x%20%5C,%20%5Cchi_%7B%5Cmathbb%7BQ%7D%7D(x)">, the RN derivative would be 0, since the part with <img src="https://latex.codecogs.com/png.latex?2x"> mass is on a null set. Again, this goes back to how we do integration! The classical derivative could not do this.</p>
 <p>These derivatives have applications in probability theory, specifically when defining the PMF (integrate w.r.t the counting measure), doing changes in measure (not sure when this would become necessary), and some things in conditional expectation. Unlike with integration and learning some of the most important theorems (Monotone Convergence Theorem, Fatou’s Lemma, Dominated Convergence Theorem), I don’t know how these derivatives are useful (beyond taking out a null set) until I take a probability course. However, hopefully I understand it a bit better now.</p>
 <hr>
@@ -1810,21 +1807,13 @@ font-style: inherit;">"glmnet"</span>)</span></code></pre></div></div>
 <ol>
 <li id="fn1"><p>This would not be the formal definition of the <img src="https://latex.codecogs.com/png.latex?%5Cmu"> measure, since elementary measures are not measures. However, I think it is okay to work with pre-measures in this case because everything is behaved nicely, i.e.&nbsp;we have continuity (almost) everywhere.↩︎</p></li>
 <li id="fn2"><p><img src="https://latex.codecogs.com/png.latex?%5Cmu"> is a signed measure. This is consistent with classical calculus where integrals can be negative.↩︎</p></li>
+<li id="fn3"><p>I know that this is improper notation. Please cut me some slack.↩︎</p></li>
 </ol>
 </section></div> ]]></description>
   <category>Notes</category>
   <category>Math</category>
   <guid>https://drganghe.github.io/quarto-academic-website-template/posts/notes-title/2025-12-07-radon-nikodym.html</guid>
   <pubDate>Sun, 07 Dec 2025 05:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Quarto Academic Website Examples and Tips</title>
-  <link>https://drganghe.github.io/quarto-academic-website-template/</link>
-  <description>Examples and tips for Quarto Academic Website</description>
-  <category>news</category>
-  <guid>https://drganghe.github.io/quarto-academic-website-template/</guid>
-  <pubDate>Tue, 15 Oct 2024 04:00:00 GMT</pubDate>
-  <media:content url="https://drganghe.github.io/quarto-academic-website-template/files/images/placeholder1.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>News item</title>
